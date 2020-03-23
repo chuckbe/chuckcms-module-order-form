@@ -90,7 +90,7 @@ class InstallModuleOrderForm extends Command
                 'fourth' => array(
                     'name' => 'Instellingen',
                     'icon' => true,
-                    'icon_data' => 'thumbnail',
+                    'icon_data' => 'cpu',
                     'route' => 'dashboard.module.order_form.settings.index',
                     'has_submenu' => false,
                     'submenu' => null

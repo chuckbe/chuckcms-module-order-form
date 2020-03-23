@@ -22,7 +22,7 @@ input[type=number] {
 }
 </style>
 <div class="cof_cartIconLeftCorner" style="background:blue;height:60px;width:60px;border-radius:50%;position:fixed;bottom:40px;left:40px;z-index:9999;cursor:pointer;" onclick="scrollToCart()">
-	<i class="icon-cart" style="color:white;font-size:30px;margin-left:10px;margin-top:10px;"></i>
+	<img src="{{ asset('chuckbe/chuckcms-module-order-form/cart.svg') }}" width="33" alt="Shopping Cart" style="color:white;margin-left:12px;margin-top:15px;cursor:pointer;filter: invert(100%) sepia(0%) saturate(7448%) hue-rotate(95deg) brightness(97%) contrast(101%);">
 	<span style="background:red;font-size:10px;position:fixed;padding:1px 6px;border-radius:50%;color:white;margin-top:40px;" class="cof_cartTotalQuanity">0</span>
 </div>
 <section class="section" id="cof_orderFormGlobalSection" data-site-domain="{{ URL::to('/') }}">
