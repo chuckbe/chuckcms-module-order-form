@@ -7,6 +7,7 @@ Route::group(['middleware' => ['web']], function() {
 		
 		//START OF: ORDERS ROUTES
 		Route::get('/dashboard/order-form/orders', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\OrderController@index')->name('dashboard.module.order_form.orders.index');
+		Route::get('/dashboard/order-form/orders/{order}/detail', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\OrderController@detail')->name('dashboard.module.order_form.orders.detail');
 		//END OF: ORDERS ROUTES
 		
 		//START OF: PRODUCTS ROUTES

@@ -213,22 +213,23 @@ input[type=number] {
 
 
 
-		<div class="row" style="margin-top:15px">
-			<div class="col-sm-12">
-				<h5>Producten</h5>
-			</div>
-		</div>
 
-
+		@foreach(config('chuckcms-module-order-form.categories') as $catKey => $category)
 		<div class="row equal">
+			<div class="col-sm-12">
+				<h4 class="mt-4">{{ $category['name'] }}</h4>
+			</div>
 			@foreach($products as $product)
+			@if($product->json['category'] == $catKey)
 			<div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 mb-4 chuck_ofm_product_tile" data-product-id="{{ $product->id }}" data-product-name="{{ $product->json['name'][app()->getLocale()] }}">
 				<div class="thumbnail d-flex align-items-start flex-column" style="border: 1px solid #ddd;border-radius: 4px;padding:10px;height:100%;">
 					@if(config('chuckcms-module-order-form.form.display_images'))
 					<img src="{{ $product->json['featured_image'] ?? 'https://via.placeholder.com/500x333.jpg?text=No+Image+Found' }}" class="cof_productImage" data-product-id="{{ $product->id }}" alt="">
 					@endif
 					<h3 class="mb-1 mt-1">{{ $product->json['name'][app()->getLocale()] }}</h3>
+					@if(config('chuckcms-module-order-form.form.display_description'))
 					<p class="mb-3">{{ $product->json['description'][app()->getLocale()] }}</p>
+					@endif
 
 					<div class="row mt-auto">
 						<div class="col-sm-12" style="margin-right:15px;">
@@ -276,7 +277,9 @@ input[type=number] {
 					</div>
 				</div>
 			</div>
+			@endif
 			@endforeach
 		</div>
+		@endforeach
 	</div>
 </section>

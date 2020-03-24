@@ -13,9 +13,18 @@ return [
 		'page' => 'chuckcms-module-order-form::frontend.products.detail'
 	],
 
+	'categories' => [
+		'category_1' 	=> [
+			'name' => 'Categorie 1'
+		],
+		'category_2' 	=> [
+			'name' => 'Categorie 2'
+		],
+	],
+
 	'form' => [
 		'display_images' 	=> true,
-		'display_description' => false,
+		'display_description' => true,
 		'page' => 'chuckcms-module-order-form::frontend.products.detail'
 	],
 

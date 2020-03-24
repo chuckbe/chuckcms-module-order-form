@@ -40,6 +40,7 @@ class ProductRepository
             $json['description'][$langKey] = $values->get('description')[$langKey];
         }
 
+        $json['category'] = $values->get('category');
         $json['is_displayed'] = ($values->get('is_displayed') == '1' ? true : false);
         $json['is_buyable'] = ($values->get('is_buyable') == '1' ? true : false);
 
@@ -78,6 +79,7 @@ class ProductRepository
             $json['description'][$langKey] = $values->get('description')[$langKey];
         }
 
+        $json['category'] = $values->get('category');
         $json['is_displayed'] = ($values->get('is_displayed') == '1' ? true : false);
         $json['is_buyable'] = ($values->get('is_buyable') == '1' ? true : false);
 

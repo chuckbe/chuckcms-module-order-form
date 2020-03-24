@@ -45,6 +45,7 @@ class ProductController extends Controller
     {
         $this->validate(request(), [ //@todo create custom Request class for product validation
             'name.*' => 'required',
+            'category' => 'required',
             'is_displayed' => 'required',
             'is_buyable' => 'required',
             'price.final' => 'required'
@@ -71,6 +72,7 @@ class ProductController extends Controller
         $this->validate(request(), [ //@todo create custom Request class for product validation
             'product_id' => 'required',
             'name.*' => 'required',
+            'category' => 'required',
             'is_displayed' => 'required',
             'is_buyable' => 'required',
             'price.final' => 'required'

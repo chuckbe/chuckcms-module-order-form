@@ -24,7 +24,13 @@ class OrderController extends Controller
 
     public function index()
     {
-        return view('chuckcms-module-order-form::backend.orders.index');
+        $orders = FormEntry::where('slug', config('chuckcms-module-order-form.products.slug'))->get();
+        return view('chuckcms-module-order-form::backend.orders.index', compact('orders'));
+    }
+
+    public function detail(FormEntry $order)
+    {
+        return view('chuckcms-module-order-form::backend.orders.detail', compact('order'));
     }
 
     /**

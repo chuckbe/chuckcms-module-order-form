@@ -66,6 +66,20 @@
       <div class="card card-default">
         <div class="card-block">
           <div class="row">
+            <div class="col-sm-12">
+
+              <div class="form-group form-group-default required ">
+                <label>Categorie</label>
+                <select class="full-width" data-init-plugin="select2" name="category" data-minimum-results-for-search="-1">
+                  @foreach(config('chuckcms-module-order-form.categories') as $categoryKey => $category)
+                    <option value="{{ $categoryKey }}">{{ $category['name'] }}</option>
+                  @endforeach
+                </select>
+              </div>
+
+            </div>
+          </div>
+          <div class="row">
             <div class="col-sm-6">
               <div class="form-group form-group-default input-group">
                 <div class="form-input-group">

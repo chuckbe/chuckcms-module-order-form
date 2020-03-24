@@ -35,17 +35,17 @@ class ChuckModuleOrderForm
         return $this->orderFormRepository->styles();
     }
 
-    public function followupContent($order_number)
+    public function followupContent(string $order_number)
     {
         return $this->orderFormRepository->followup($order_number);
     }
 
-    public function followupScripts($order_number)
+    public function followupScripts(string $order_number)
     {
         return $this->orderFormRepository->followupScripts($order_number);
     }
 
-    public function followupStyles($order_number)
+    public function followupStyles(string $order_number)
     {
         return $this->orderFormRepository->followupStyles($order_number);
     }
@@ -58,6 +58,21 @@ class ChuckModuleOrderForm
     public function firstAvailableDateInDaysFromNow(string $locationKey)
     {
         return $this->orderFormRepository->firstAvailableDateInDaysFromNow($locationKey);
+    }
+
+    public function totalSales()
+    {
+        return $this->orderFormRepository->totalSales();
+    }
+
+    public function totalSalesLast7Days()
+    {
+        return $this->orderFormRepository->totalSalesLast7Days();
+    }
+
+    public function totalSalesLast7DaysQty()
+    {
+        return $this->orderFormRepository->totalSalesLast7DaysQty();
     }
 
 }

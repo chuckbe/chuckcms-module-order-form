@@ -5,6 +5,7 @@ namespace Chuckbe\ChuckcmsModuleOrderForm\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Chuckbe\Chuckcms\Models\FormEntry;
 
 class OrderFormController extends Controller
 {
@@ -20,6 +21,16 @@ class OrderFormController extends Controller
 
     public function index()
     {
-        return view('chuckcms-module-order-form::backend.dashboard.index');
+        if (config('chuckcms-module-order-form.order.payment_upfront')) {
+            $orders = FormEntry::where('slug', config('chuckcms-module-order-form.products.slug'))
+                                    ->where('entry->status', 'paid')
+                                    ->get();
+        } else {
+            $orders = FormEntry::where('slug', config('chuckcms-module-order-form.products.slug'))
+                                    ->where('entry->status', 'awaiting')
+                                    ->get();
+        }
+        
+        return view('chuckcms-module-order-form::backend.dashboard.index', compact('orders'));
     }
 }

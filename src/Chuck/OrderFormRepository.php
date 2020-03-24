@@ -6,6 +6,7 @@ use Chuckbe\Chuckcms\Models\FormEntry;
 use Chuckbe\Chuckcms\Models\Repeater;
 use ChuckSite;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class OrderFormRepository
 {
@@ -97,6 +98,35 @@ class OrderFormRepository
     public function followupStyles($order_number)
     {
         return view('chuckcms-module-order-form::frontend.followup_css')->render();
+    }
+
+    public function totalSales()
+    {
+        if(config('chuckcms-module-order-form.order.payment_upfront')) {
+            $total = $this->formEntry->where('slug', config('chuckcms-module-order-form.products.slug'))->where('entry->status', 'paid')->sum('entry->order_price');
+        } else {
+            $total = $this->formEntry->where('slug', config('chuckcms-module-order-form.products.slug'))->where('entry->status', 'awaiting')->sum('entry->order_price');
+        }
+        return number_format((float)$total, 2, ',', '.');
+    }
+
+    public function totalSalesLast7Days()
+    {
+        if(config('chuckcms-module-order-form.order.payment_upfront')) {
+            $total = $this->formEntry->where('slug', config('chuckcms-module-order-form.products.slug'))->where('entry->status', 'paid')->where('entry->order_date', '>', Carbon::today()->subDays(7)->toDateString())->sum('entry->order_price');
+        } else {
+            $total = $this->formEntry->where('slug', config('chuckcms-module-order-form.products.slug'))->where('entry->status', 'awaiting')->where('entry->order_date', '>', Carbon::today()->subDays(7)->toDateString())->sum('entry->order_price');
+        }
+        return number_format((float)$total, 2, ',', '.');
+    }
+
+    public function totalSalesLast7DaysQty()
+    {
+        if(config('chuckcms-module-order-form.order.payment_upfront')) {
+            return $this->formEntry->where('slug', config('chuckcms-module-order-form.products.slug'))->where('entry->status', 'paid')->where('entry->order_date', '>', Carbon::today()->subDays(7)->toDateString())->count();
+        } else {
+            return $this->formEntry->where('slug', config('chuckcms-module-order-form.products.slug'))->where('entry->status', 'awaiting')->where('entry->order_date', '>', Carbon::today()->subDays(7)->toDateString())->count();
+        }
     }
 
 }

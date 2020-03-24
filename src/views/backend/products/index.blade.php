@@ -98,10 +98,11 @@
 						<table class="table table-hover table-condensed" id="condensedTable">
 						<thead>
 							<tr>
-								<th style="width:5%">ID</th>
-								<th style="width:25%">Naam</th>
+								<th style="width:7%">ID</th>
+								<th style="width:23%">Naam</th>
 								<th style="width:20%">Slug</th>
-								<th style="width:35%">Actions</th>
+								<th style="width:20%">Categorie</th>
+								<th style="width:30%">Actions</th>
 							</tr>
 						</thead>
 							<tbody>
@@ -110,6 +111,7 @@
 									<td class="v-align-middle">{{ $product->id }}</td>
 							    	<td class="v-align-middle semi-bold">{{ $product->json['name'][ChuckSite::getFeaturedLocale()] }}</td>
 							    	<td class="v-align-middle">{{$product->slug}}</td>
+							    	<td class="v-align-middle">{{config('chuckcms-module-order-form.categories')[$product->json['category']]['name']}}</td>
 							    	<td class="v-align-middle semi-bold">
 							    		<a href="{{ route('dashboard.module.order_form.products.edit', ['product' => $product->id]) }}" class="btn btn-primary btn-sm btn-rounded m-r-20">
 							    			<i data-feather="edit-2"></i> edit
