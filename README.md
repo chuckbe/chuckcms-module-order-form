@@ -10,13 +10,21 @@
 ### Installation
 
 - Use composer to install
-``` composer require chuckbe/chuckcms-module-order-form ```
+``` 
+composer require chuckbe/chuckcms-module-order-form 
+```
 - Install module in ChuckCMS
-``` php artisan chuckcms-module-order-form:install ```
+``` 
+php artisan chuckcms-module-order-form:install 
+```
 - Publish assets
-``` php artisan vendor:publish --tag=chuckcms-module-order-form-public --force ```
+``` 
+php artisan vendor:publish --tag=chuckcms-module-order-form-public --force 
+```
 - Publish config
-``` php artisan vendor:publish --tag=chuckcms-module-order-form-config --force ```
+``` 
+php artisan vendor:publish --tag=chuckcms-module-order-form-config --force 
+```
 
 ### Usage
 
@@ -50,23 +58,29 @@
 
 ### Methods
 
-``` ChuckModuleOrderForm::firstAvailableDate(string $location) ```
-
+``` 
+ChuckModuleOrderForm::firstAvailableDate(string $location) 
+```
 This method accepts a location key as used in the config file and will return the first available date for ordering
 
-``` ChuckModuleOrderForm::firstAvailableDateInDaysFromNow(string $location) ```
-
+``` 
+ChuckModuleOrderForm::firstAvailableDateInDaysFromNow(string $location) 
+```
 This method accepts a location key as used in the config file and will return the first available date for ordering in number of days from now
 
-``` ChuckModuleOrderForm::totalSales() ```
-
+``` 
+ChuckModuleOrderForm::totalSales() 
+```
 The total amount of sales returned as formatted (no thousands separator, 2 decimals, ',' as a decimal separator) result
 
-``` ChuckModuleOrderForm::totalSalesLast7Days() ```
-
+``` 
+ChuckModuleOrderForm::totalSalesLast7Days() 
+```
 The total amount of sales of the last 7 days returned as formatted result
 
-``` ChuckModuleOrderForm::totalSalesLast7DaysQty() ```
+``` 
+ChuckModuleOrderForm::totalSalesLast7DaysQty() 
+```
 The total number of sales of the last 7 days returned as integer
 
 ### Security 
