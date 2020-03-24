@@ -51,16 +51,28 @@
 ### Methods
 
 ``` ChuckModuleOrderForm::firstAvailableDate(string $location) ```
+
 This method accepts a location key as used in the config file and will return the first available date for ordering
 
 ``` ChuckModuleOrderForm::firstAvailableDateInDaysFromNow(string $location) ```
+
 This method accepts a location key as used in the config file and will return the first available date for ordering in number of days from now
 
 ``` ChuckModuleOrderForm::totalSales() ```
+
 The total amount of sales returned as formatted (no thousands separator, 2 decimals, ',' as a decimal separator) result
 
 ``` ChuckModuleOrderForm::totalSalesLast7Days() ```
+
 The total amount of sales of the last 7 days returned as formatted result
 
 ``` ChuckModuleOrderForm::totalSalesLast7DaysQty() ```
 The total number of sales of the last 7 days returned as integer
+
+### Security 
+
+Any security bugs discovered, please email to karel@chuck.be instead of using the issue reporter.
+
+### License
+
+© MIT License
