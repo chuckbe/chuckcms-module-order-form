@@ -234,7 +234,7 @@ class OrderController extends Controller
         if ($payment->isPaid()) {
             $json = $order->entry;
             $json['status'] = 'paid';
-            $order->json = $json;
+            $order->entry = $json;
             $order->save();
             $order = $order->fresh();
             
@@ -243,7 +243,7 @@ class OrderController extends Controller
         } else {
             $json = $order->entry;
             $json['status'] = $payment->status;
-            $order->json = $json;
+            $order->entry = $json;
             $order->save();
         }
 

@@ -68,12 +68,12 @@ return [
 		'afhalen' 	=> [
 			'type' => 'takeout',
 			'name' => 'Afhalen',
-			'days_of_week_disabled' => '1,2', //comma seperated numbers representing day of week eg: to disable monday and tuesday: '1,2'
+			'days_of_week_disabled' => '0,6', //comma seperated numbers representing day of week eg: to disable sunder and tuesday: '0,2'
 		],
 		'leveren' 	=> [
 			'type' => 'delivery',
 			'name' => 'Leveren',
-			'days_of_week_disabled' => '',
+			'days_of_week_disabled' => '1,2',
 		]
 	],
 

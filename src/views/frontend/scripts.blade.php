@@ -43,7 +43,7 @@ $(document).ready(function() {
 	    startDate: cof_dp_startdate[OGlocationKey],
 	    weekStart: 1,
 	    language: "{{ config('chuckcms-module-order-form.datepicker.js.locale') }}",
-	    daysOfWeekDisabled: "{{ config('chuckcms-module-order-form.locations.afhalen.days_of_week_disabled') }}"
+	    daysOfWeekDisabled: $('.cof_location_radio:checked').attr('data-days-of-week-disabled')
 	});
 
 	$('body').on('change', '.cof_location_radio', function (event) {
