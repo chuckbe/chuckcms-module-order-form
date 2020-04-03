@@ -72,12 +72,12 @@ class OrderFormRepository
             return (string) $starting_day;
         }
 
-        if($starting_day == 0 && strpos($days_of_week_disabled, date('N')) !== false) {
+        if($starting_day == 0 && strpos($days_of_week_disabled, date('w')) !== false) {
             return '0';
         }
 
-        for ($i=$starting_day; $i < 8; $i++) { 
-            if(strpos($days_of_week_disabled, date('N', strtotime('+'.$i.' day'))) === false) {
+        for ($i=$starting_day; $i < 7; $i++) { 
+            if(strpos($days_of_week_disabled, date('w', strtotime('+'.$i.' day'))) === false) {
                 return ''.$i.'';
             }
         }
