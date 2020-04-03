@@ -28,6 +28,7 @@ php artisan vendor:publish --tag=chuckcms-module-order-form-config --force
 
 ### Usage
 
+- After installing and publishing the config file, fill in the required details
 - Create a page for the order form in ChuckCMS and use a custom template file
 - Inside that custom template file you can use the following method to call the necessary files
 ``` 
@@ -44,13 +45,19 @@ php artisan vendor:publish --tag=chuckcms-module-order-form-config --force
 - Inside that custom template file you can use the following method to call the necessary files
 ``` 
 //use this to load css and styles
-{!! ChuckModuleOrderForm::followupStyles() !!}
+@if(session('order_number'))
+{!! ChuckModuleOrderForm::followupStyles(session('order_number')) !!}
+@endif
 
 //use this to load js and scripts
-{!! ChuckModuleOrderForm::followupScripts() !!}
+@if(session('order_number'))
+{!! ChuckModuleOrderForm::followupScripts(session('order_number')) !!}
+@endif
 
 //use this to load the followup content itself - do not wrap it in a container
-{!! ChuckModuleOrderForm::followupContent() !!}
+@if(session('order_number'))
+{!! ChuckModuleOrderForm::followupContent(session('order_number')) !!}
+@endif
 ```
 - Update config file for necessary settings
 - Add products
