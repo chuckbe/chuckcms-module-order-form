@@ -15,10 +15,12 @@ return [
 
 	'categories' => [
 		'category_1' 	=> [
-			'name' => 'Categorie 1'
+			'name' => 'Categorie 1',
+			'is_displayed' => true
 		],
 		'category_2' 	=> [
-			'name' => 'Categorie 2'
+			'name' => 'Categorie 2',
+			'is_displayed' => true
 		],
 	],
 

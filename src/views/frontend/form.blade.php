@@ -225,12 +225,13 @@ input[type=number] {
 
 
 		@foreach(config('chuckcms-module-order-form.categories') as $catKey => $category)
+		@if($category['is_displayed'])
 		<div class="row equal">
 			<div class="col-sm-12">
 				<h4 class="mt-4">{{ $category['name'] }}</h4>
 			</div>
 			@foreach($products as $product)
-			@if($product->json['category'] == $catKey)
+			@if($product->json['category'] == $catKey && $product->json['is_displayed'])
 			<div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 mb-4 chuck_ofm_product_tile" data-product-id="{{ $product->id }}" data-product-name="{{ $product->json['name'][app()->getLocale()] }}">
 				<div class="thumbnail d-flex align-items-start flex-column" style="border: 1px solid #ddd;border-radius: 4px;padding:10px;height:100%;">
 					@if(config('chuckcms-module-order-form.form.display_images'))
@@ -298,6 +299,7 @@ input[type=number] {
 			@endif
 			@endforeach
 		</div>
+		@endif
 		@endforeach
 	</div>
 </section>
