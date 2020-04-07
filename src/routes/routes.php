@@ -25,6 +25,7 @@ Route::group(['middleware' => ['web']], function() {
 
 	Route::post('/cof/place-order', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\OrderController@postOrder')->name('cof.place_order');
 	Route::post('/cof/get-status', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\OrderController@orderStatus')->name('cof.status');
+	Route::post('/cof/is-address-eligible', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\ShippingController@isAddressEligible')->name('cof.is_address_eligible');
 
 	Route::get('{order_number}/bedankt-voor-uw-bestelling', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\OrderController@orderFollowup')->name('cof.followup');
 	Route::get('{order_number}/online-betalen', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\OrderController@orderPay')->name('cof.pay');

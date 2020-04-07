@@ -168,20 +168,33 @@
                                         </tr>
                                         <tr>
                                             <td style="padding: 20px 0 0 0; font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding">
-                                                <b>Locatie:</b> {{ config('chuckcms-module-order-form.locations')[$order->entry['location']]['name'] }} — {{ $order->entry['order_date'] }} <br><br>
+                                                
+                                                <b>Locatie:</b> {{ config('chuckcms-module-order-form.locations')[$order->entry['location']]['name'] }} op {{ $order->entry['order_date'] }}
+                                                    @if(config('chuckcms-module-order-form.locations')[$order->entry['location']]['time_required'] == true)
+                                                    om {{ $order->entry['order_time'] }}
+                                                    @endif <br><br>
+                                                
+
                                                 @foreach($order->entry['items'] as $itemID => $item)
-                                                    @if($item['attributes'])
-                                                        @foreach($item['attributes_list'] as $attrKey => $attribute)
-                                                            <p>{{ $attribute['qty'] }}x "{{ $attribute['name'] }}" (€ {{ number_format((float)$attribute['price'], 2, ',', '.') }}) => € {{ number_format((float)$attribute['totprice'], 2, ',', '.') }}</p>
-                                                        @endforeach
-                                                    @else
-                                                    <p>{{ $item['qty'] }}x "{{ $item['name'] }}" (€ {{ number_format((float)$item['price'], 2, ',', '.') }}) => € {{ number_format((float)$item['totprice'], 2, ',', '.') }}</p>
+                                                    <p>{{ $item['qty'] }}x "{{ $item['attributes'] == false ? $item['name'] : $item['name'] . ' - ' . $item['attributes'] }}" (€ {{ number_format((float)$item['price'], 2, ',', '.') }}) => € {{ number_format((float)$item['totprice'], 2, ',', '.') }}</p>
+                                                    @if($item['options'] !== false)
+                                                    <small>
+                                                    @foreach($item['options'] as $option)
+                                                    {{ $option['name'] }}: {{ $option['value'] }}<br>
+                                                    @endforeach
+                                                    </small>
                                                     @endif
+                                                    <hr>
                                                 @endforeach
 
                                                 <br>
-                                                
-                                                <b>Totaal</b>: € {{ number_format((float)$order->entry['order_price'], 2, ',', '.') }}</small> 
+                                                @if(config('chuckcms-module-order-form.locations')[$order->entry['location']]['type'] == 'delivery')
+                                                <b>Subtotaal</b>: € {{ number_format((float)$order->entry['order_price'], 2, ',', '.') }} <br>
+                                                <b>Verzending</b>: € {{ number_format((float)$order->entry['order_shipping'], 2, ',', '.') }} <br><br>
+                                                <b>Totaal</b>: € {{ number_format((float)$order->entry['order_price_with_shipping'], 2, ',', '.') }}
+                                                @else
+                                                <b>Totaal</b>: € {{ number_format((float)$order->entry['order_price'], 2, ',', '.') }}
+                                                @endif
                                                 <br><br>
                                                 Naam: {{ $order->entry['first_name'] . ' ' . $order->entry['last_name'] }} <br>
                                                 Adres: {{ $order->entry['street'] . ' ' . $order->entry['housenumber'] }}, {{ $order->entry['postalcode'] . ' ' . $order->entry['city'] }} <br>

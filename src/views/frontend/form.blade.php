@@ -21,10 +21,7 @@ input[type=number] {
 	font-style: italic;
 }
 </style>
-<div class="cof_cartIconLeftCorner" style="background:blue;height:60px;width:60px;border-radius:50%;position:fixed;bottom:40px;left:40px;z-index:9999;cursor:pointer;" onclick="scrollToCart()">
-	<img src="{{ asset('chuckbe/chuckcms-module-order-form/cart.svg') }}" width="33" alt="Shopping Cart" style="color:white;margin-left:12px;margin-top:15px;cursor:pointer;filter: invert(100%) sepia(0%) saturate(7448%) hue-rotate(95deg) brightness(97%) contrast(101%);">
-	<span style="background:red;font-size:10px;position:fixed;padding:1px 6px;border-radius:50%;color:white;margin-top:40px;" class="cof_cartTotalQuanity">0</span>
-</div>
+@include('chuckcms-module-order-form::frontend.includes.cart_icon')
 <section class="section" id="cof_orderFormGlobalSection" data-site-domain="{{ URL::to('/') }}">
 	<div class="container">
 		<div class="row">
@@ -43,11 +40,18 @@ input[type=number] {
 						<div style="padding: 7px 15px 7px 0px;">
 							<img src="{{ asset('chuckbe/chuckcms-module-order-form/trash-solid.svg') }}" class="cof_deleteProductFromListButton" height="12" width="12" alt="Verwijder product" style="cursor:pointer;">
 						</div>
-						<div class="flex-fill">
+						<div class="flex-fill cof_cartProductListDetails">
 							<h6 class="my-0 cof_cartProductListItemFullName">Product name</h6>
-							<small class="text-muted"><span class="cof_cartProductListItemQuantity">1</span> x <span class="cof_cartProductListItemUnitPrice">€ 0,00</span></small>
+							<small class="text-muted d-block"><span class="cof_cartProductListItemQuantity">1</span> x <span class="cof_cartProductListItemUnitPrice">€ 0,00</span></small>
+							<small class="text-muted d-none cof_cartProductListItemOptions">
+								<span class="cof_cartProductListItemOptionName">Optie 1</span>: <span class="cof_cartProductListItemOptionValue">Waarde</span>
+							</small>
 						</div>
 						<span class="text-muted cof_cartProductListItemTotalPrice">€ 0,00</span>
+					</li>
+					<li class="list-group-item d-flex justify-content-between" id="cof_CartProductListShippingLine">
+						<span>Verzending (EUR)</span>
+						<strong class="cof_cartShippingPrice">€ 0,00</strong>
 					</li>
 					<li class="list-group-item d-flex justify-content-between" id="cof_CartProductListPriceLine">
 						<span>Totaal (EUR)</span>
@@ -95,17 +99,23 @@ input[type=number] {
 					@foreach(config('chuckcms-module-order-form.locations') as $key => $location)
 					<div class="col">
 						<div class="form-group">
-		                    <label><input type="radio" class="cof_location_radio" data-location-key="{{ $key }}" data-first-available-date="{{ ChuckModuleOrderForm::firstAvailableDate($key) }}" data-days-of-week-disabled="{{ config('chuckcms-module-order-form.locations.'.$key.'.days_of_week_disabled') }}" name="location" value="{{ $key }}" {{ $loop->first ? 'checked' : '' }}> {{ $location['name'] }}</label><br>
+		                    <label><input type="radio" class="cof_location_radio" data-location-key="{{ $key }}" data-first-available-date="{{ ChuckModuleOrderForm::firstAvailableDate($key) }}" data-days-of-week-disabled="{{ config('chuckcms-module-order-form.locations.'.$key.'.days_of_week_disabled') }}" data-location-type="{{ config('chuckcms-module-order-form.locations.'.$key.'.type') }}" data-delivery-cost="{{ config('chuckcms-module-order-form.locations.'.$key.'.delivery_cost') }}" data-time-required="{{ config('chuckcms-module-order-form.locations.'.$key.'.time_required') }}" data-time-min="{{ config('chuckcms-module-order-form.locations.'.$key.'.time_min') }}" data-time-max="{{ config('chuckcms-module-order-form.locations.'.$key.'.time_max') }}" data-time-default="{{ config('chuckcms-module-order-form.locations.'.$key.'.time_default') }}" name="location" value="{{ $key }}" {{ $loop->first ? 'checked' : '' }}> {{ $location['name'] }}</label><br>
 				        </div>
 					</div>
 					@endforeach
 				</div>
 
 				<div class="row">
-					<div class="col-sm-12">
+					<div class="col-sm-12 cof_datepicker_group">
 						<div class="form-group">
 							<label for="">Datum* </label><br>
 		                    <input type="text" class="form-control cof_datepicker" name="order_date" id="order_date" readonly required>
+				        </div>
+					</div>
+					<div class="col-sm-4 d-none hidden cof_datetimepicker_group">
+						<div class="form-group">
+							<label for="">Tijd* </label><br>
+		                    <input type="text" class="form-control cof_datetimepicker datetimepicker-input" name="order_time" value="00:00" id="order_time" data-toggle="datetimepicker" data-target="#order_time" readonly required>
 				        </div>
 					</div>
 				</div>
@@ -263,14 +273,22 @@ input[type=number] {
 									@endforeach
 								</select>
 								<div class="input-group-append">
+									@if(array_key_exists('options', $product->json) && count($product->json['options']) > 0)
+									<button class="btn btn-outline-primary cof_btnAddProductAttributeOptionsToCart" data-product-id="{{ $product->id }}" data-product-options="{{ json_encode($product->json['options']) }}">Toevoegen</button>
+									@else
 									<button class="btn btn-outline-primary cof_btnAddProductAttributeToCart" data-product-id="{{ $product->id }}">Toevoegen</button>
+									@endif
 								</div>
 							</div>
 						</div>
 						@else
 						<div class="col-sm-6 col-6">
 							<div class="input-group mb-3">
+								@if(array_key_exists('options', $product->json) && count($product->json['options']) > 0)
+								<button class="btn btn-outline-primary btn-block cof_btnAddProductOptionsToCart" data-product-id="{{ $product->id }}" data-product-options="{{ json_encode($product->json['options']) }}">Toevoegen</button>
+								@else
 								<button class="btn btn-outline-primary btn-block cof_btnAddProductToCart" data-product-id="{{ $product->id }}">Toevoegen</button>
+								@endif
 							</div>
 						</div>
 						@endif
@@ -283,3 +301,46 @@ input[type=number] {
 		@endforeach
 	</div>
 </section>
+<div class="modal fade" id="optionsModal" tabindex="-1" role="dialog" aria-labelledby="optionsModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <form action="" id="options-form">
+            <div class="modal-header">
+                <h5 class="modal-title font-cera-bold" id="optionsModalLabel">Selecteer de opties voor: <span class="options_product_name"></span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="optionsModalBody">
+                
+                <div class="row options_modal_row">
+                    
+                    <div class="col-sm-12 options_modal_item_radio">
+                    	<label for="" class="options_item_name">Radio</label>
+                        <div class="form-group cof_options_radio_item_input_group mb-2">
+                            <div class="form-check cof_options_radio_item_input">
+								<label class="form-check-label" for="exampleRadios1">
+								<input class="form-check-input" type="radio" name="cof_options_radio" id="exampleRadios1" value="option1">
+								<span> Default radio</span>
+								</label>
+							</div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 options_modal_item_select">
+                        <div class="form-group">
+                            <label for="cofOptionsSelect" class="options_item_name">Select</label>
+                            <select name="cof_options_select" class="custom-select cof_options_select_item_input" required>
+                                <option value="default" class="cof_options_option_input">Default</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-block" id="addProductWithOptionsToCartButton">Toevoegen</button>
+            </div>
+        </form>
+    </div>
+  </div>
+</div>

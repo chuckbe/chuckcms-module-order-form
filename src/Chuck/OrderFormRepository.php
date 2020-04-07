@@ -54,18 +54,45 @@ class OrderFormRepository
     {
         $initial_day = 0;
         $days_of_week_disabled = config('chuckcms-module-order-form.locations.'.$locationKey.'.days_of_week_disabled');
-
+        
+        //is same day delivery possible?
         if(config('chuckcms-module-order-form.delivery.same_day') == true) {
-            $until_hour = config('chuckcms-module-order-form.delivery.same_day_until_hour');
+            //yes see until what hour
+            $until_hour = config('chuckcms-module-order-form.delivery.same_day_until_hour'); ////////// 15 (now: 18)
+            if(date('H') < $until_hour) { ////////// fail (18 < 15)
+                //nice, same day delivery is possible and it's not too late
+                $starting_day = $initial_day;
+            } elseif (date('H') >= $until_hour) { ////////// pass (18 >= 15)
+                //oh snap, we're too late for same day delivery...
+                //let's see if next_day delivery is possible
+                if (config('chuckcms-module-order-form.delivery.next_day') == true) {
+                    //yay next day delivery is possible, let's see until what hour
+                    $nd_until_hour = config('chuckcms-module-order-form.delivery.next_day_until_hour');
+                    if(date('H') < $nd_until_hour) { ////////// fail (18 < 15)
+                        //nice, not too late for next day delivery
+                        $starting_day = $initial_day + 1;
+                    } elseif (date('H') >= $nd_until_hour) {
+                        //snap, too late for next day delivery so set the day after tomorrow
+                        $starting_day = $initial_day + 2;
+                    }
+                } else {
+                    //Snap, too late for same day delivery and no orders for next day deliveries so set the day after tomorrow
+                    $starting_day = $initial_day + 2;
+                }
+            }
         } elseif (config('chuckcms-module-order-form.delivery.next_day') == true) {
-            $until_hour = config('chuckcms-module-order-form.delivery.next_day_until_hour');
-            $initial_day = $initial_day + 1;
-        }
-
-        if(date('H') < $until_hour) {
-            $starting_day = $initial_day;
-        } elseif (date('H') >= $until_hour) {
-            $starting_day = $initial_day + 1;
+            //woops, same day deliveries not possible, but yay next day deliveries are, let's see until when
+            $nd_until_hour = config('chuckcms-module-order-form.delivery.next_day_until_hour');
+            if(date('H') < $nd_until_hour) { ////////// fail (18 < 15)
+                //nice, just in time for next day delivery
+                $starting_day = $initial_day + 1;
+            } elseif (date('H') >= $nd_until_hour) {
+                //snap, too late for next day delivery so set the day after tomorrow
+                $starting_day = $initial_day + 2;
+            }
+        } else {
+            //damn, nor same day nor next day deliveries possible so set the day after tomorrow
+            $starting_day = $initial_day + 2;
         }
 
         if($days_of_week_disabled == '') {

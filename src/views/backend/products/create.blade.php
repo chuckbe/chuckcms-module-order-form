@@ -204,6 +204,58 @@
 </div>
 
 <div class="card card-transparent">
+  <div class="card-header ">
+    <div class="card-title">Opties
+    </div>
+  </div>
+</div>
+
+<div class="card-block options-row">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card card-default">
+        <div class="card-block optionInputContainer">
+
+          <div class="row option_input_row">
+            <div class="col-sm-2" style="padding-top:10px;">
+              <button class="btn btn-danger btn-round removeOptionRowButton" style="display:none;">-</button>
+              <button class="btn btn-success btn-round addOptionRowButton">+</button>
+            </div>
+
+            <div class="col-sm-3">
+              <div class="form-group form-group-default">
+                <label>Naam</label>
+                <input type="text" class="form-control" placeholder="Naam" name="option_name[]">
+              </div>
+            </div>
+
+            <div class="col-sm-3">
+              <div class="form-group form-group-default">
+                <label>Type</label>
+                <select class="full-width" data-init-plugin="select2" name="option_type[]" data-minimum-results-for-search="-1">
+                    <option value="select">Dropdown Selectie</option>
+                    <option value="radio">Radio Buttons</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="col-sm-4">
+              <div class="form-group form-group-default">
+                <label>Waarden</label>
+                <input type="text" class="form-control" placeholder="Waarden,gescheiden,door,kommas" name="option_values[]">
+              </div>
+            </div>
+
+            <hr>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card card-transparent">
   <br>
   <p class="pull-right">
     <input type="hidden" name="_token" value="{{ Session::token() }}">
@@ -283,6 +335,36 @@ $( document ).ready(function() {
     toggleRemoveButton();
   });
 
+
+
+  $('body').on('click', '.addOptionRowButton', function (event) {
+    event.preventDefault();
+    console.log('help');
+    $('.option_input_row:first').clone().appendTo('.optionInputContainer');
+
+    vardatainput = $('.option_input_row:last').find('.img_lfm_link').attr('data-input');
+    vardatapreview = $('.option_input_row:last').find('.img_lfm_link').attr('data-preview');
+
+    $('.option_input_row:last').find('.img_lfm_link').attr('data-input', vardatainput+'_'+$('.option_input_row').length);
+    $('.option_input_row:last').find('.img_lfm_link').attr('data-preview', vardatapreview+'_'+$('.option_input_row').length);
+    inputid = $('.option_input_row:last').find('.img_lfm_input').attr('id');
+    $('.option_input_row:last').find('.img_lfm_input').attr('id',inputid+'_'+$('.option_input_row').length);
+    holderid = $('.option_input_row:last').find('.img_lfm_holder').attr('id');
+    $('.option_input_row:last').find('.img_lfm_holder').attr('id',holderid+'_'+$('.option_input_row').length);
+
+    toggleRemoveOptionButton();
+
+    init();
+  });
+
+  $('body').on('click', '.removeOptionRowButton', function (event) {
+    event.preventDefault();
+    console.log('helpmee');
+    $(this).parents('.option_input_row').remove();
+
+    toggleRemoveOptionButton();
+  });
+
     
 
   function toggleRemoveButton() {
@@ -290,6 +372,14 @@ $( document ).ready(function() {
       $('.removeAttributeRowButton').show();
     } else {
       $('.removeAttributeRowButton').hide();
+    }
+  }
+
+  function toggleRemoveOptionButton() {
+    if($('.option_input_row').length > 1) {
+      $('.removeOptionRowButton').show();
+    } else {
+      $('.removeOptionRowButton').hide();
     }
   }
 	

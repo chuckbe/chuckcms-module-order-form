@@ -241,6 +241,94 @@
   </div>
 </div>
 
+
+<div class="card card-transparent">
+  <div class="card-header ">
+    <div class="card-title">Opties
+    </div>
+  </div>
+</div>
+
+<div class="card-block options-row">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card card-default">
+        <div class="card-block optionInputContainer">
+          @if( (array_key_exists('options', $product->json) && count($product->json['options']) == 0) || !array_key_exists('options', $product->json))
+          <div class="row option_input_row">
+            <div class="col-sm-2" style="padding-top:10px;">
+              <button class="btn btn-danger btn-round removeOptionRowButton" style="display:none;">-</button>
+              <button class="btn btn-success btn-round addOptionRowButton">+</button>
+            </div>
+
+            <div class="col-sm-3">
+              <div class="form-group form-group-default">
+                <label>Naam</label>
+                <input type="text" class="form-control" placeholder="Naam" name="option_name[]">
+              </div>
+            </div>
+
+            <div class="col-sm-3">
+              <div class="form-group form-group-default">
+                <label>Type</label>
+                <select class="full-width" data-init-plugin="select2" name="option_type[]" data-minimum-results-for-search="-1">
+                    <option value="select">Dropdown Selectie</option>
+                    <option value="radio">Radio Buttons</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="col-sm-4">
+              <div class="form-group form-group-default">
+                <label>Waarden</label>
+                <input type="text" class="form-control" placeholder="Waarden,gescheiden,door,kommas" name="option_values[]">
+              </div>
+            </div>
+
+            <hr>
+          </div>
+          @else
+          @foreach($product->json['options'] as $option)
+          <div class="row option_input_row">
+            <div class="col-sm-2" style="padding-top:10px;">
+              <button class="btn btn-danger btn-round removeOptionRowButton" @if(count($product->json['options']) == 1) style="display:none;" @endif>-</button>
+              <button class="btn btn-success btn-round addOptionRowButton">+</button>
+            </div>
+
+            <div class="col-sm-3">
+              <div class="form-group form-group-default">
+                <label>Naam</label>
+                <input type="text" class="form-control" placeholder="Naam" name="option_name[]" value="{{ $option['name'] }}">
+              </div>
+            </div>
+
+            <div class="col-sm-3">
+              <div class="form-group form-group-default">
+                <label>Type</label>
+                <select class="full-width" data-init-plugin="select2" name="option_type[]" data-minimum-results-for-search="-1">
+                    <option value="select" @if($option['type'] == 'select') selected @endif>Dropdown Selectie</option>
+                    <option value="radio" @if($option['type'] == 'radio') selected @endif>Radio Buttons</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="col-sm-4">
+              <div class="form-group form-group-default">
+                <label>Waarden</label>
+                <input type="text" class="form-control" placeholder="Waarden,gescheiden,door,kommas" name="option_values[]" value="{{ $option['values'] }}">
+              </div>
+            </div>
+
+            <hr>
+          </div>
+          @endforeach
+          @endif
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="card card-transparent">
   <br>
   <p class="pull-right">
@@ -321,6 +409,35 @@ $( document ).ready(function() {
     toggleRemoveButton();
   });
 
+
+  $('body').on('click', '.addOptionRowButton', function (event) {
+    event.preventDefault();
+    console.log('help');
+    $('.option_input_row:first').clone().appendTo('.optionInputContainer');
+
+    vardatainput = $('.option_input_row:last').find('.img_lfm_link').attr('data-input');
+    vardatapreview = $('.option_input_row:last').find('.img_lfm_link').attr('data-preview');
+
+    $('.option_input_row:last').find('.img_lfm_link').attr('data-input', vardatainput+'_'+$('.option_input_row').length);
+    $('.option_input_row:last').find('.img_lfm_link').attr('data-preview', vardatapreview+'_'+$('.option_input_row').length);
+    inputid = $('.option_input_row:last').find('.img_lfm_input').attr('id');
+    $('.option_input_row:last').find('.img_lfm_input').attr('id',inputid+'_'+$('.option_input_row').length);
+    holderid = $('.option_input_row:last').find('.img_lfm_holder').attr('id');
+    $('.option_input_row:last').find('.img_lfm_holder').attr('id',holderid+'_'+$('.option_input_row').length);
+
+    toggleRemoveOptionButton();
+
+    init();
+  });
+
+  $('body').on('click', '.removeOptionRowButton', function (event) {
+    event.preventDefault();
+    console.log('helpmee');
+    $(this).parents('.option_input_row').remove();
+
+    toggleRemoveOptionButton();
+  });
+
     
 
   
@@ -330,6 +447,14 @@ $( document ).ready(function() {
       $('.removeAttributeRowButton').show();
     } else {
       $('.removeAttributeRowButton').hide();
+    }
+  }
+
+  function toggleRemoveOptionButton() {
+    if($('.option_input_row').length > 1) {
+      $('.removeOptionRowButton').show();
+    } else {
+      $('.removeOptionRowButton').hide();
     }
   }
   

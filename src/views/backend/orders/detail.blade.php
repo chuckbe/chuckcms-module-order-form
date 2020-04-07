@@ -46,22 +46,20 @@ Bestelling #{{ $order->entry['order_number'] }}
               <div class="col-sm-12">
                   <table class="table table-inline">
                     <tbody>
-                      @foreach($order->entry['items'] as $entryValue)
-                        @if($entryValue['attributes'])
-                          @foreach($entryValue['attributes_list'] as $item)
+                      @foreach($order->entry['items'] as $item)
                           <tr>
-                            <td>{{ $item['name'] }}</td>
+                            <td>{{ $item['attributes'] == false ? $item['name'] : $item['name'] . ' - ' . $item['attributes'] }} <br>
+                              @if($item['options'] !== false)
+                              <small>
+                              @foreach($item['options'] as $option)
+                              {{ $option['name'] }}: {{ $option['value'] }}<br>
+                              @endforeach
+                              </small>
+                              @endif
+                            </td>
                             <td>{{ $item['qty'] }}x</td>
                             <td>{{ $item['totprice'] }}</td>
                           </tr>
-                          @endforeach
-                        @else
-                        <tr>
-                          <td>{{ $entryValue['name'] }}</td>
-                          <td>{{ $entryValue['qty'] }}x</td>
-                          <td>{{ $entryValue['totprice'] }}</td>
-                        </tr>
-                        @endif
                       @endforeach
                       <tr>
                           <td><b>Totaal</b></td>
