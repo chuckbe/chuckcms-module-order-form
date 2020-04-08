@@ -60,7 +60,7 @@ $(document).ready(function() {
 		datetime_default = $('.cof_location_radio:checked').attr('data-time-default');
 		datetime_min = $('.cof_location_radio:checked').attr('data-time-min');
 		datetime_max = $('.cof_location_radio:checked').attr('data-time-max');
-		$('.cof_location_radio:checked').val(datetime_default);
+		$('.cof_datetimepicker').val(datetime_default);
 		$('.cof_datetimepicker').datetimepicker({
             format: 'HH:mm',
             date: moment(datetime_default, 'HH:mm'),

@@ -140,7 +140,7 @@ class OrderController extends Controller
         if($order->save()){
 
             if(config('chuckcms-module-order-form.order.payment_upfront')) {
-                $amount = number_format( ( (float)$order->entry['order_price'] ), 2, '.', '');
+                $amount = number_format( ( (float)$order->entry['order_price_with_shipping'] ), 2, '.', '');
 
                 $payment = Mollie::api()->payments()->create([
                 'amount' => [
@@ -224,7 +224,7 @@ class OrderController extends Controller
             return redirect()->route('cof.followup', ['order_number' => $order_number]);
         }
 
-        $amount = number_format( ( (float)$order->entry['order_price'] ), 2, '.', '');
+        $amount = number_format( ( (float)$order->entry['order_price_with_shipping'] ), 2, '.', '');
 
         $payment = Mollie::api()->payments()->create([
             'amount' => [
