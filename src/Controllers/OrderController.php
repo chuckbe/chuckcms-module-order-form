@@ -81,6 +81,12 @@ class OrderController extends Controller
         $all_json['order_price'] = round($request['total'], 2);
         $all_json['order_shipping'] = round($request['shipping'], 2);
         $all_json['order_price_with_shipping'] = round(($request['total'] + $request['shipping']), 2);
+
+        if($request['total'] <= config('chuckcms-module-order-form.order.minimum_order_price')) {
+            return response()->json([
+                'status' => 'error'
+            ]);
+        }
         
         $items = [];
 
