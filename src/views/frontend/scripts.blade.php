@@ -332,7 +332,6 @@ $(document).ready(function() {
 		//reset original product tile qty input to 1
 		$('.cof_productQuantityInput[data-product-id='+product_id+']').val(1);
 
-
         var cart = $('.cof_cartIconLeftCorner');
         var imgtodrag = $('.cof_productImage[data-product-id='+product_id+']').eq(0);
         if (imgtodrag.length) {
@@ -1015,7 +1014,7 @@ $(document).ready(function() {
             cart.effect("shake", {
                 times: 2
             }, 200);
-            $('.cof_cartTotalQuanity').text(cart_count + parseInt(quantity));
+            $('.cof_cartTotalQuanity').text(parseInt(quantity));
         }, 1500);
 
         imgclone.animate({

@@ -283,10 +283,12 @@ class OrderController extends Controller
             $this->sendNotification($order);
             $this->sendConfirmation($order);
         } else {
-            $json = $order->entry;
-            $json['status'] = $payment->status;
-            $order->entry = $json;
-            $order->save();
+            if($order->entry['status'] !== 'paid') {
+                $json = $order->entry;
+                $json['status'] = $payment->status;
+                $order->entry = $json;
+                $order->save();
+            }
         }
 
         return response()->json(['status' => 'success'], 200);
