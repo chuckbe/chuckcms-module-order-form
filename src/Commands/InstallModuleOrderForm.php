@@ -52,7 +52,7 @@ class InstallModuleOrderForm extends Command
         $hintpath = 'chuckcms-module-order-form';
         $path = 'chuckbe/chuckcms-module-order-form';
         $type = 'module';
-        $version = '0.1.7';
+        $version = '0.1.9';
         $author = 'Karel Brijs (karel@chuck.be)';
 
         $json = [];
