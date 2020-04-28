@@ -31,7 +31,7 @@ Bestelling #{{ $order->entry['order_number'] }}
                       @if(!is_array($entryValue))
                       <tr>
                         <td>{{ $entryKey }}</td>
-                        <td>{{ $entryValue }}</td>
+                        <td>{{ $entryValue }} @if($entryKey == 'order_date') <button class="btn btn-xs float-right btn-primary editDateModal"><i data-feather="edit"></i></button> @endif </td>
                       </tr>
                       @endif
                       @endforeach
@@ -78,6 +78,7 @@ Bestelling #{{ $order->entry['order_number'] }}
 
 </div>
 <!-- END CONTAINER FLUID -->
+@include('chuckcms-module-order-form::backend.orders._edit_date_modal')
 @endsection
 
 @section('css')
@@ -115,7 +116,14 @@ $( document ).ready(function() {
       ['height', ['height']]
     ]
   });
+
+  $('.editDateModal').on('click', function() {
+    $('#editDateModal').modal('show');
+  });
   
 });
 </script>
+@if (session('notification'))
+  @include('chuckcms::backend.includes.notification')
+@endif
 @endsection

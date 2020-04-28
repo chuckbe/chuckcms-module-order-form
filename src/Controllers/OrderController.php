@@ -33,6 +33,25 @@ class OrderController extends Controller
         return view('chuckcms-module-order-form::backend.orders.detail', compact('order'));
     }
 
+    public function updateDate(Request $request)
+    {
+        $this->validate(request(), [
+            'order_date' => 'required'
+        ]);
+
+        $id = $request['edit_order_id'];
+        $order = FormEntry::where('id', $id)->first();
+        
+        $entry = $order->entry;
+        $entry['order_date'] = $request['order_date'];
+        $order->entry = $entry;
+        if ( $order->save() ) {
+            return redirect()->route('dashboard.module.order_form.orders.detail', ['order' => $order->id])->with('notification', 'Datum gewijzigd!');
+        } 
+
+        return redirect()->route('dashboard.module.order_form.orders.detail', ['order' => $order->id]);
+    }
+
     /**
      * Store the order in the database.
      *

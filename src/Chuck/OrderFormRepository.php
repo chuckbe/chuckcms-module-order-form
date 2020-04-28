@@ -140,9 +140,9 @@ class OrderFormRepository
     public function totalSalesLast7Days()
     {
         if(config('chuckcms-module-order-form.order.payment_upfront')) {
-            $total = $this->formEntry->where('slug', config('chuckcms-module-order-form.products.slug'))->where('entry->status', 'paid')->where('entry->order_date', '>', Carbon::today()->subDays(7)->toDateString())->sum('entry->order_price');
+            $total = $this->formEntry->where('slug', config('chuckcms-module-order-form.products.slug'))->where('entry->status', 'paid')->whereDate('entry->order_date', '>', Carbon::today()->subDays(7)->toDateString())->sum('entry->order_price');
         } else {
-            $total = $this->formEntry->where('slug', config('chuckcms-module-order-form.products.slug'))->where('entry->status', 'awaiting')->where('entry->order_date', '>', Carbon::today()->subDays(7)->toDateString())->sum('entry->order_price');
+            $total = $this->formEntry->where('slug', config('chuckcms-module-order-form.products.slug'))->where('entry->status', 'awaiting')->whereDate('entry->order_date', '>', Carbon::today()->subDays(7)->toDateString())->sum('entry->order_price');
         }
         return number_format((float)$total, 2, ',', '.');
     }

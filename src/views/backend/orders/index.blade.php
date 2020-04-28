@@ -40,16 +40,21 @@
 						<a class="reload" href="javascript:;"></a>
 						<a class="remove" href="javascript:;"></a>
 					</div>
+					<div class="pull-right">
+				    	<div class="col-xs-12">
+				    		<input type="text" id="search-table" class="form-control pull-right" placeholder="Search">
+				    	</div>
+				    </div>
+				    <div class="clearfix"></div>
 				</div>
 				<div class="card-block">
 					<div class="table-responsive">
-						<table class="table table-hover table-condensed" id="condensedTable">
+						<table class="table table-hover table-condensed" id="condensedTable" data-table-count="30">
 						<thead>
 							<tr>
 								<th style="width:12%">Order #</th>
-								<th style="width:14%">Locatie</th>
 								<th style="width:13%">Datum</th>
-								<th style="width:20%">Naam</th>
+								<th style="width:34%">Naam & Adres</th>
 								<th style="width:12%">Totaal</th>
 								<th style="width:13%">Status</th>
 								<th style="width:16%">Actions</th>
@@ -59,9 +64,8 @@
 								@foreach($orders as $order)
 								<tr class="order_line" data-id="{{ $order->id }}">
 							    	<td class="v-align-middle semi-bold">{{ $order->entry['order_number'] }}</td>
-							    	<td class="v-align-middle">{{ config('chuckcms-module-order-form.locations')[$order->entry['location']]['name'] }}</td>
 							    	<td class="v-align-middle">{{ $order->entry['order_date'] }}</td>
-							    	<td class="v-align-middle">{{ $order->entry['first_name'] . ' ' . $order->entry['last_name'] }}</td>
+							    	<td class="v-align-middle">{{ $order->entry['first_name'] . ' ' . $order->entry['last_name'] }} <br> <a href="mailto:{{ $order->entry['email'] }}">{{ $order->entry['email'] }}</a> <br> @if($order->entry['tel'] !== null) <a href="tel:{{ $order->entry['tel'] }}">{{ $order->entry['tel'] }}</a> <br> @endif <small>{{ $order->entry['street'].' '.$order->entry['housenumber'].', '.$order->entry['postalcode'].' '.$order->entry['city'] }}</small></td>
 							    	<td class="v-align-middle semi-bold">€ {{ number_format((float)$order->entry['order_price'], 2, ',', '.') }}</td>
 							    	<td class="v-align-middle">
 							    		@if( (config('chuckcms-module-order-form.order.payment_upfront') && $order->entry['status'] == 'paid') || (config('chuckcms-module-order-form.order.payment_upfront') == false && $order->entry['status'] == 'awaiting') )
