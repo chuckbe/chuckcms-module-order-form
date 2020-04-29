@@ -31,7 +31,9 @@ Bestelling #{{ $order->entry['order_number'] }}
                       @if(!is_array($entryValue))
                       <tr>
                         <td>{{ $entryKey }}</td>
-                        <td>{{ $entryValue }} @if($entryKey == 'order_date') <button class="btn btn-xs float-right btn-primary editDateModal"><i data-feather="edit"></i></button> @endif </td>
+                        <td>{{ $entryValue }} 
+                          @if($entryKey == 'order_date') <button class="btn btn-xs float-right btn-primary editDateModal"><i data-feather="edit"></i></button> @endif
+                          @if($entryKey == 'street') <button class="btn btn-xs float-right btn-primary editAddressModal"><i data-feather="edit"></i></button> @endif </td>
                       </tr>
                       @endif
                       @endforeach
@@ -79,6 +81,8 @@ Bestelling #{{ $order->entry['order_number'] }}
 </div>
 <!-- END CONTAINER FLUID -->
 @include('chuckcms-module-order-form::backend.orders._edit_date_modal')
+@include('chuckcms-module-order-form::backend.orders._edit_address_modal')
+
 @endsection
 
 @section('css')
@@ -119,6 +123,10 @@ $( document ).ready(function() {
 
   $('.editDateModal').on('click', function() {
     $('#editDateModal').modal('show');
+  });
+
+  $('.editAddressModal').on('click', function() {
+    $('#editAddressModal').modal('show');
   });
   
 });

@@ -41,12 +41,37 @@ class OrderController extends Controller
 
         $id = $request['edit_order_id'];
         $order = FormEntry::where('id', $id)->first();
-        
+
         $entry = $order->entry;
         $entry['order_date'] = $request['order_date'];
         $order->entry = $entry;
         if ( $order->save() ) {
             return redirect()->route('dashboard.module.order_form.orders.detail', ['order' => $order->id])->with('notification', 'Datum gewijzigd!');
+        } 
+
+        return redirect()->route('dashboard.module.order_form.orders.detail', ['order' => $order->id]);
+    }
+
+    public function updateAddress(Request $request)
+    {
+        $this->validate(request(), [
+            'street' => 'required',
+            'housenumber' => 'required',
+            'postalcode' => 'required',
+            'city' => 'required',
+        ]);
+
+        $id = $request['edit_order_id'];
+        $order = FormEntry::where('id', $id)->first();
+        
+        $entry = $order->entry;
+        $entry['street'] = $request['street'];
+        $entry['housenumber'] = $request['housenumber'];
+        $entry['postalcode'] = $request['postalcode'];
+        $entry['city'] = $request['city'];
+        $order->entry = $entry;
+        if ( $order->save() ) {
+            return redirect()->route('dashboard.module.order_form.orders.detail', ['order' => $order->id])->with('notification', 'Adres gewijzigd!');
         } 
 
         return redirect()->route('dashboard.module.order_form.orders.detail', ['order' => $order->id]);

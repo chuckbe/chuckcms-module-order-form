@@ -9,6 +9,7 @@ Route::group(['middleware' => ['web']], function() {
 		Route::get('/dashboard/order-form/orders', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\OrderController@index')->name('dashboard.module.order_form.orders.index');
 		Route::get('/dashboard/order-form/orders/{order}/detail', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\OrderController@detail')->name('dashboard.module.order_form.orders.detail');
 		Route::post('/dashboard/order-form/orders/update_date', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\OrderController@updateDate')->name('dashboard.module.order_form.products.update_date');
+		Route::post('/dashboard/order-form/orders/update_address', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\OrderController@updateAddress')->name('dashboard.module.order_form.products.update_address');
 		//END OF: ORDERS ROUTES
 		
 		//START OF: PRODUCTS ROUTES
