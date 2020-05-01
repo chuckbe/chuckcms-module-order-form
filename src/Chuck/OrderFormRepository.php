@@ -103,7 +103,7 @@ class OrderFormRepository
             return '0';
         }
 
-        for ($i=$starting_day; $i < 8; $i++) { 
+        for ($i=$starting_day; $i < 9; $i++) { 
             if(strpos($days_of_week_disabled, date('w', strtotime('+'.$i.' day'))) === false) {
                 return ''.$i.'';
             }
