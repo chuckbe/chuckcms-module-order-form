@@ -256,6 +256,48 @@
 </div>
 
 <div class="card card-transparent">
+  <div class="card-header ">
+    <div class="card-title">Extras
+    </div>
+  </div>
+</div>
+
+<div class="card-block extras-row">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card card-default">
+        <div class="card-block extraInputContainer">
+
+          <div class="row extra_input_row">
+            <div class="col-sm-2" style="padding-top:10px;">
+              <button class="btn btn-danger btn-round removeExtraRowButton" style="display:none;">-</button>
+              <button class="btn btn-success btn-round addExtraRowButton">+</button>
+            </div>
+
+            <div class="col-sm-6">
+              <div class="form-group form-group-default">
+                <label>Naam</label>
+                <input type="text" class="form-control" placeholder="Naam" name="extra_name[]">
+              </div>
+            </div>
+
+            <div class="col-sm-4">
+              <div class="form-group form-group-default">
+                <label>Prijs</label>
+                <input type="text" data-a-dec="." data-a-sep="" data-m-dec="6" data-a-pad=true class="autonumeric form-control" name="extra_price[]">
+              </div>
+            </div>
+
+            <hr>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card card-transparent">
   <br>
   <p class="pull-right">
     <input type="hidden" name="_token" value="{{ Session::token() }}">
@@ -365,6 +407,35 @@ $( document ).ready(function() {
     toggleRemoveOptionButton();
   });
 
+
+  $('body').on('click', '.addExtraRowButton', function (event) {
+    event.preventDefault();
+    console.log('help');
+    $('.extra_input_row:first').clone().appendTo('.extraInputContainer');
+
+    vardatainput = $('.extra_input_row:last').find('.img_lfm_link').attr('data-input');
+    vardatapreview = $('.extra_input_row:last').find('.img_lfm_link').attr('data-preview');
+
+    $('.extra_input_row:last').find('.img_lfm_link').attr('data-input', vardatainput+'_'+$('.extra_input_row').length);
+    $('.extra_input_row:last').find('.img_lfm_link').attr('data-preview', vardatapreview+'_'+$('.extra_input_row').length);
+    inputid = $('.extra_input_row:last').find('.img_lfm_input').attr('id');
+    $('.extra_input_row:last').find('.img_lfm_input').attr('id',inputid+'_'+$('.extra_input_row').length);
+    holderid = $('.extra_input_row:last').find('.img_lfm_holder').attr('id');
+    $('.extra_input_row:last').find('.img_lfm_holder').attr('id',holderid+'_'+$('.extra_input_row').length);
+
+    toggleRemoveExtraButton();
+
+    init();
+  });
+
+  $('body').on('click', '.removeExtraRowButton', function (event) {
+    event.preventDefault();
+    console.log('helpmee');
+    $(this).parents('.extra_input_row').remove();
+
+    toggleRemoveExtraButton();
+  });
+
     
 
   function toggleRemoveButton() {
@@ -380,6 +451,14 @@ $( document ).ready(function() {
       $('.removeOptionRowButton').show();
     } else {
       $('.removeOptionRowButton').hide();
+    }
+  }
+
+  function toggleRemoveExtraButton() {
+    if($('.extra_input_row').length > 1) {
+      $('.removeExtraRowButton').show();
+    } else {
+      $('.removeExtraRowButton').hide();
     }
   }
 	

@@ -57,6 +57,17 @@ Bestelling #{{ $order->entry['order_number'] }}
                               {{ $option['name'] }}: {{ $option['value'] }}<br>
                               @endforeach
                               </small>
+                                @if($item['extras'] !== false)
+                                <br>
+                                @endif
+                              @endif
+
+                              @if($item['extras'] !== false)
+                              <small>
+                              @foreach($item['extras'] as $option)
+                              {{ $option['name'] }} (€ {{ $option['value'] }})<br>
+                              @endforeach
+                              </small>
                               @endif
                             </td>
                             <td>{{ $item['qty'] }}x</td>

@@ -95,6 +95,7 @@ class OrderController extends Controller
             'housenumber' => 'required|max:10',
             'postalcode' => 'required|max:4',
             'city' => 'required',
+            'remarks' => 'nullable',
             'order' => 'required',
             'total' => 'required',
             'shipping' => 'required',
@@ -118,6 +119,7 @@ class OrderController extends Controller
         $all_json['housenumber'] = $request['housenumber'];
         $all_json['postalcode'] = $request['postalcode'];
         $all_json['city'] = $request['city'];
+        $all_json['remarks'] = $request['remarks'];
 
         $all_json['location'] = $request['location'];
         $all_json['order_date'] = $request['order_date'];
@@ -156,34 +158,31 @@ class OrderController extends Controller
                 $item['options'] = false;
             }
 
+            if($product['extras'] !== false){
+                $item_extras = json_decode($product['extras']);
+                $extras = [];
+                if($item_extras !== false) {
+                    foreach($item_extras as $item_extra) {
+                        if(count((array)$item_extra) > 0) {
+                            $extras[] = $item_extra;
+                        }
+                    }
+                }
+
+                if(count($extras) > 0) {
+                    $item['extras'] = $extras;
+                } else {
+                    $item['extras'] = false;
+                }
+            } else {
+                $item['extras'] = false;
+            }
+
             $items[] = $item;
             
         }
 
         $all_json['items'] = $items;
-
-
-        // foreach($request['order'] as $prodKey => $prodVal){
-        //     if($prodVal['attributes'] == 'false'){
-        //         $all_json['items'][$prodKey]['attributes'] = false;
-        //         $all_json['items'][$prodKey]['name'] = $prodVal['name'];
-        //         $all_json['items'][$prodKey]['price'] = $prodVal['price'];
-        //         $all_json['items'][$prodKey]['qty'] = $prodVal['qty'];
-        //         $all_json['items'][$prodKey]['totprice'] = round($prodVal['totprice'], 2);
-        //     }
-        //     if($prodVal['attributes'] == 'true'){
-        //         $all_json['items'][$prodKey]['attributes'] = true;
-        //         foreach($prodVal as $attrKey => $attrVal){
-        //             if($attrKey !== 'attributes'){
-        //                     $all_json['items'][$prodKey]['attributes_list'][$attrKey]['name'] = $attrVal['name'];
-        //                 $all_json['items'][$prodKey]['attributes_list'][$attrKey]['price'] = $attrVal['price'];
-        //                 $all_json['items'][$prodKey]['attributes_list'][$attrKey]['qty'] = $attrVal['qty'];
-        //                 $all_json['items'][$prodKey]['attributes_list'][$attrKey]['totprice'] = round($attrVal['totprice'], 2);
-        //             }
-        //         }
-        //     }
-            
-        // }
 
         $order->entry = $all_json;
 

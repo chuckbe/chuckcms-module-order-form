@@ -69,6 +69,15 @@ class ProductRepository
         }
         $json['options'] = $options;
 
+        $extras = [];
+        if($values->get('extra_name')[0] !== '' && $values->get('extra_name')[0] !== null) {
+            foreach ($values->get('extra_name') as $key => $extraName) {
+                $extras[$key]['name'] = $values->get('extra_name')[$key];
+                $extras[$key]['price'] = $values->get('extra_price')[$key];
+            }
+        }
+        $json['extras'] = $extras;
+
         $input['json'] = $json;
 
         $product = $this->repeater->create($input);
@@ -117,6 +126,15 @@ class ProductRepository
             }
         }
         $json['options'] = $options;
+
+        $extras = [];
+        if($values->get('extra_name')[0] !== '' && $values->get('extra_name')[0] !== null) {
+            foreach ($values->get('extra_name') as $key => $optionName) {
+                $extras[$key]['name'] = $values->get('extra_name')[$key];
+                $extras[$key]['price'] = $values->get('extra_price')[$key];
+            }
+        }
+        $json['extras'] = $extras;
 
         $of_product->json = $json;
 

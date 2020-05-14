@@ -173,12 +173,28 @@
                                                     om {{ $order->entry['order_time'] }}
                                                     @endif <br><br>
 
+                                                @if($order->entry['remarks'] !== null && $order->entry['remarks'] !== '')
+                                                <b>Opmerking: </b>
+                                                <p style="white-space:pre-line!important">{{ $order->entry['remarks'] }}</p> <br><br>
+                                                @endif
+
                                                 @foreach($order->entry['items'] as $itemID => $item)
                                                     <p>{{ $item['qty'] }}x "{{ $item['attributes'] == false ? $item['name'] : $item['name'] . ' - ' . $item['attributes'] }}" (€ {{ number_format((float)$item['price'], 2, ',', '.') }}) => € {{ number_format((float)$item['totprice'], 2, ',', '.') }}</p>
                                                     @if($item['options'] !== false)
                                                     <small>
                                                     @foreach($item['options'] as $option)
                                                     {{ $option['name'] }}: {{ $option['value'] }}<br>
+                                                    @endforeach
+                                                    </small>
+                                                        @if($item['extras'] !== false)
+                                                        <br>
+                                                        @endif
+                                                    @endif
+
+                                                    @if($item['extras'] !== false)
+                                                    <small>
+                                                    @foreach($item['extras'] as $option)
+                                                    {{ $option['name'] }} (€ {{ $option['value'] }})<br>
                                                     @endforeach
                                                     </small>
                                                     @endif
