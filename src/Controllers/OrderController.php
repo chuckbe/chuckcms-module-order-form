@@ -24,6 +24,9 @@ class OrderController extends Controller
 
     public function index()
     {
+        // $data = json_decode(DB::table('modules')->pluck('json'), true);
+        // dd($data['products']['slug'][0]);
+
         $orders = FormEntry::where('slug', config('chuckcms-module-order-form.products.slug'))->get();
         return view('chuckcms-module-order-form::backend.orders.index', compact('orders'));
     }
