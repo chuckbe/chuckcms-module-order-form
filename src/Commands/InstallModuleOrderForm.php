@@ -86,15 +86,15 @@ class InstallModuleOrderForm extends Command
                     'route' => 'dashboard.module.order_form.products.index',
                     'has_submenu' => false,
                     'submenu' => null
+                ),
+                'fourth' => array(
+                    'name' => 'Instellingen',
+                    'icon' => true,
+                    'icon_data' => 'cpu',
+                    'route' => 'dashboard.module.order_form.settings.index',
+                    'has_submenu' => false,
+                    'submenu' => null
                 )
-                // 'fourth' => array(
-                //     'name' => 'Instellingen',
-                //     'icon' => true,
-                //     'icon_data' => 'cpu',
-                //     'route' => 'dashboard.module.order_form.settings.index',
-                //     'has_submenu' => false,
-                //     'submenu' => null
-                // )
             )
         );
         $json['admin']['settings'] = array(
