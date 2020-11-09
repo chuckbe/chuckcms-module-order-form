@@ -317,7 +317,7 @@ $( document ).ready(function() {
       ['height', ['height']]
     ]
   });
-
+// add extra categories
   $('#add_extra_field_btn').click(function(){
     $('.field_row_container:first').clone().appendTo('.field_container_wrapper');
     $('.field_container_wrapper').append('<hr />');
