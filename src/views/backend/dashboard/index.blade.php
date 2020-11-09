@@ -30,7 +30,7 @@
           <div class="col-xs-height col-top">
             <div class="card-header  top-left top-right">
               <div class="card-title">
-                <span class="font-montserrat fs-11 all-caps">Opbrengst Laatste 7 Dagen <i class="fa fa-chevron-right"></i>
+                <span class="font-montserrat fs-11 all-caps">Opbrengst Laatste 7. Dagen <i class="fa fa-chevron-right"></i>
 	                        </span>
               </div>
               <div class="card-controls">

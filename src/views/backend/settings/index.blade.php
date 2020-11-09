@@ -12,7 +12,7 @@
 
 @section('content')
 <div class="container p-3">
-  <form action="{{ route('dashboard.module.order_form.products.update') }}" method="POST">
+  <form action="{{ route('dashboard.module.order_form.settings.update') }}" method="POST">
     <div class="row">
       <div class="col-sm-12">
         <nav aria-label="breadcumb mt-3">
@@ -70,19 +70,20 @@
       {{-- categories-tab-starts --}}
       <div class="col-sm-12 tab-pane fade show active" id="tab_resource_categories_setup" role="tabpanel" aria-labelledby="categories_setup-tab">
         <h4>Categories</h4>
+        <div class="field_container_wrapper">
         @foreach ($settings["categories"] as $categoryName => $categoryValue)
-          <div class="row column-seperation">
+          <div class="row column-seperation field_row_container" data-order="{{ $loop->iteration }}">
             <div class="col">
               <div class="form-group form-group-default required ">
                 <label>Name</label>
-                <input type="text" class="form-control" placeholder="name" name="{{$categoryValue["name"]}}" value="{{$categoryValue["name"]}}" required>
+                <input type="text" class="form-control categoryNameInput" placeholder="name" name="{{$categoryName}}" value="{{$categoryValue["name"]}}" data-order="{{ $loop->iteration }}" required>
               </div>
             </div>
             <div class="col">
               <div class="form-group form-group-default required ">
                 <label>Deze categorie tonen</label>
                 <div class="form-check">
-                  <input type="checkbox" class="form-check-input" id="is_displayed" @if($categoryValue["is_displayed"] == 1) checked @endif>
+                  <input type="checkbox" class="form-check-input categoryNameCheckbox" id="is_displayed" name="{{$categoryName}}_is_displayed" @if($categoryValue["is_displayed"] == 1) checked @endif data-order="{{ $loop->iteration }}">
                   <label class="form-check-label" for="is_displayed">is displayed</label>
                 </div>
               </div>
@@ -90,6 +91,15 @@
           </div>
           <hr>
         @endforeach
+        </div>
+        <div class="row">
+          <div class="col-lg-6">
+            <button class="btn btn-primary btn-lg" type="button" id="add_extra_field_btn"><i class="fa fa-plus"></i> Extra veld toevoegen</button>
+          </div>
+          <div class="col-lg-6">
+            <button class="btn btn-warning btn-lg" type="button" id="remove_last_field_btn" @if(count($settings["categories"]) == 1) style="display:none;" @endif><i class="fa fa-minus"></i> Laatste veld verwijderen</button>
+          </div>
+        </div>
       </div>{{-- categories-tab-ends --}}
       {{-- form-tab-starts --}}
       <div class="col-sm-12 tab-pane fade" id="tab_resource_form_setup" role="tabpanel" aria-labelledby="form_setup-tab">
@@ -283,6 +293,16 @@ $( document ).ready(function() {
     //init media manager inputs 
     var domain = "{{ URL::to('dashboard/media')}}";
     $('.img_lfm_link').filemanager('image', {prefix: domain});
+
+    $('.categoryNameInput').keyup(function(){
+    console.log('This is the index of the element : ',$('.field_row_container').index($(this)));
+    var text = $(this).val();
+    var iOrder = $(this).attr('data-order');
+    slug_text = text.toLowerCase().replace(/ /g,'_').replace(/[^\w-]+/g,'');
+    $(".categoryNameInput[data-order="+iOrder+"]").prop('name', slug_text);
+    $(".categoryNameCheckbox[data-order="+iOrder+"]").prop('name', slug_text+'_is_displayed'); 
+  });
+
   }
     
   $('.summernote-text-editor').summernote({
@@ -296,6 +316,34 @@ $( document ).ready(function() {
       ['para', ['ul', 'ol', 'paragraph']],
       ['height', ['height']]
     ]
+  });
+
+  $('#add_extra_field_btn').click(function(){
+    $('.field_row_container:first').clone().appendTo('.field_container_wrapper');
+    $('.field_container_wrapper').append('<hr />');
+    let order = $('.field_row_container').length;
+    if($('.field_row_container').length > 1){
+      $('#remove_last_field_btn').show();
+    }
+    $('.field_row_container:last').attr('data-order', order);
+    $('.field_row_container:last input[type="text"]').attr('data-order', order);
+    $('.field_row_container:last input[type="checkbox"]').attr('data-order', order);
+    $('.field_row_container:last input[type="text"]').val('');
+    $('.field_row_container:last input[type="text"]').prop('name', '');
+    $('.field_row_container:last input[type="checkbox"]').prop('checked', false);
+    $('.field_row_container:last input[type="checkbox"]').prop('name', '');
+    
+    init();
+  });
+  
+  $('#remove_last_field_btn').click(function(){
+    if($('.field_row_container').length > 1){
+      $('.field_row_container:last').remove();
+      $('.field_container_wrapper hr:last').remove();
+      if($('.field_row_container').length == 1){
+        $('#remove_last_field_btn').hide();
+      }
+    }
   });
   
 });
