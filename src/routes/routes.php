@@ -23,6 +23,7 @@ Route::group(['middleware' => ['web']], function() {
 		
 		//START OF: SETTINGS ROUTES
 		Route::get('/dashboard/order-form/settings', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\SettingsController@index')->name('dashboard.module.order_form.settings.index');
+		Route::post('/dashboard/order-form/settings', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\SettingsController@update')->name('dashboard.module.order_form.settings.update');
 	});
 
 	Route::post('/cof/place-order', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\OrderController@postOrder')->name('cof.place_order');

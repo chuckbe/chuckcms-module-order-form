@@ -26,4 +26,11 @@ class SettingsController extends Controller
 
         return view('chuckcms-module-order-form::backend.settings.index')->with(compact('settings'));
     }
+
+    public function update(Request $request)
+    {
+        
+        
+        
+    }
 }

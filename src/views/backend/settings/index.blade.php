@@ -76,14 +76,14 @@
             <div class="col">
               <div class="form-group form-group-default required ">
                 <label>Name</label>
-                <input type="text" class="form-control categoryNameInput" placeholder="name" name="{{$categoryName}}" value="{{$categoryValue["name"]}}" data-order="{{ $loop->iteration }}" required>
+                <input type="text" class="form-control categoryNameInput" placeholder="name" name="categories[{{strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '_', $categoryValue["name"]), '_'))}}][name]" value="{{$categoryValue["name"]}}" data-order="{{ $loop->iteration }}" required>
               </div>
             </div>
             <div class="col">
               <div class="form-group form-group-default required ">
                 <label>Deze categorie tonen</label>
                 <div class="form-check">
-                  <input type="checkbox" class="form-check-input categoryNameCheckbox" id="is_displayed" name="{{$categoryName}}_is_displayed" @if($categoryValue["is_displayed"] == 1) checked @endif data-order="{{ $loop->iteration }}">
+                  <input type="checkbox" class="form-check-input categoryNameCheckbox" id="is_displayed" name="categories[{{strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '_', $categoryValue["name"]), '_'))}}][is_displayed]" @if($categoryValue["is_displayed"] == 1) checked @endif data-order="{{ $loop->iteration }}">
                   <label class="form-check-label" for="is_displayed">is displayed</label>
                 </div>
               </div>
@@ -111,7 +111,7 @@
               @if (is_bool($formOptionValue))
                 <div class="form-group form-group-default required ">
                   <label>{{$formOption}}</label>
-                  <select class="full-width select2" data-init-plugin="select2" name="{{$formOption}}">
+                  <select class="full-width select2" data-init-plugin="select2" name="form[{{$formOption}}]">
                     <option value="true" @if($formOptionValue == true) selected @endif>Ja</option>
                     <option value="false" @if($formOptionValue !== true) selected @endif>Nee</option>
                   </select>
@@ -119,7 +119,7 @@
               @else
                 <div class="form-group form-group-default required ">
                   <label>{{$formOption}}</label>
-                  <input type="text" class="form-control" placeholder="{{$formOption}} name" name="{{$formOption}}" value="{{$formOptionValue}}" required>
+                  <input type="text" class="form-control" placeholder="{{$formOption}} name" name="form[{{$formOption}}]" value="{{$formOptionValue}}" required>
                 </div>
               @endif
             </div>
@@ -134,7 +134,7 @@
           <div class="col"> 
             <div class="form-group form-group-default required ">
               <label>Use ui</label>
-              <select class="full-width select2" data-init-plugin="select2" name="use_ui">
+              <select class="full-width select2" data-init-plugin="select2" name="cart[use_ui]">
                 <option value="true" @if($settings["cart"]["use_ui"] == true) selected @endif>Ja</option>
                 <option value="false" @if($settings["cart"]["use_ui"] !== true) selected @endif>Nee</option>
               </select>
@@ -151,7 +151,7 @@
               <div class="col"> 
                 <div class="form-group form-group-default required ">
                   <label>{{$order}}</label>
-                  <select class="full-width select2" data-init-plugin="select2" name="{{$order}}">
+                  <select class="full-width select2" data-init-plugin="select2" name="order[{{$order}}]">
                     <option value="true" @if($orderValue == true) selected @endif>Ja</option>
                     <option value="false" @if($orderValue !== true) selected @endif>Nee</option>
                   </select>
@@ -161,7 +161,7 @@
           @else
             <div class="form-group form-group-default required ">
               <label>{{$order}}</label>
-              <input type="text" class="form-control" placeholder="{{$orderValue}} name" name="{{$order}}" value="{{$orderValue}}" required>
+              <input type="text" class="form-control" placeholder="{{$orderValue}} name" name="order[{{$order}}]" value="{{$orderValue}}" required>
             </div>
           @endif
         @endforeach
@@ -175,7 +175,7 @@
               <div class="col"> 
                 <div class="form-group form-group-default required ">
                   <label>{{$emailOption}}</label>
-                  <select class="full-width select2" data-init-plugin="select2" name="{{$emailOption}}">
+                  <select class="full-width select2" data-init-plugin="select2" name="emails[{{$emailOption}}]">
                     <option value="true" @if($emailOptionValue == true) selected @endif>Ja</option>
                     <option value="false" @if($emailOptionValue !== true) selected @endif>Nee</option>
                   </select>
@@ -185,7 +185,7 @@
           @else
             <div class="form-group form-group-default required ">
               <label>{{$emailOption}}</label>
-              <input type="text" class="form-control" placeholder="{{$emailOptionValue}} name" name="{{$order}}" value="{{$emailOptionValue}}" required>
+              <input type="text" class="form-control" placeholder="{{$emailOptionValue}} name" name="emails[{{$emailOption}}]" value="{{$emailOptionValue}}" required>
             </div>
           @endif
         @endforeach
@@ -201,7 +201,7 @@
                 @if (is_bool($locationOptionTypeValue))
                   <div class="form-group form-group-default required ">
                     <label>{{$locationOptionType}}</label>
-                    <select class="full-width select2" data-init-plugin="select2" name="{{$locationOptionType}}">
+                    <select class="full-width select2" data-init-plugin="select2" name="locations[{{$locationOption}}][{{$locationOptionType}}]">
                       <option value="true" @if($locationOptionTypeValue == true) selected @endif>Ja</option>
                       <option value="false" @if($locationOptionTypeValue !== true) selected @endif>Nee</option>
                     </select>
@@ -209,21 +209,20 @@
                 @elseif (is_null($locationOptionTypeValue))
                   <div class="form-group form-group-default required ">
                     <label>{{$locationOptionType}}</label>
-                    <input type="text" class="form-control" placeholder="N/A" name="{{$locationOptionType}}" 
-                    value=""
-                    required>
+                    <input type="text" class="form-control" placeholder="N/A" name="locations[{{$locationOption}}][{{$locationOptionType}}]" 
+                    value="null">
                   </div>
                 @elseif (is_array($locationOptionTypeValue))
                   <div class="form-group form-group-default required ">
                     <label>{{$locationOptionType}}</label>
-                    <input type="text" class="form-control" placeholder="voer elke postcode in met een komma" name="{{$locationOptionType}}" 
+                    <input type="text" class="form-control" placeholder="voer elke postcode in met een komma" name="locations[{{$locationOption}}][{{$locationOptionType}}]" 
                     value="{{implode(",", $locationOptionTypeValue)}}"
-                    required>
+                    >{{-- if null submit an empty array --}}
                   </div>
                 @else
                   <div class="form-group form-group-default required ">
                     <label>{{$locationOptionType}}</label>
-                    <input type="text" class="form-control" placeholder="{{$locationOptionTypeValue}} name" name="{{$locationOptionType}}" value="{{$locationOptionTypeValue}}" required>
+                    <input type="text" class="form-control" placeholder="{{$locationOptionTypeValue}} name" name="locations[{{$locationOption}}][{{$locationOptionType}}]" value="{{$locationOptionTypeValue}}" required>
                   </div>
                 @endif 
               @endforeach 
@@ -241,7 +240,7 @@
               @if (is_bool($deliveryOptionValue))
                 <div class="form-group form-group-default required ">
                   <label>{{$deliveryOption}}</label>
-                  <select class="full-width select2" data-init-plugin="select2" name="{{$deliveryOption}}">
+                  <select class="full-width select2" data-init-plugin="select2" name="leveren[{{$deliveryOption}}]">
                     <option value="true" @if($deliveryOptionValue == true) selected @endif>Ja</option>
                     <option value="false" @if($deliveryOptionValue !== true) selected @endif>Nee</option>
                   </select>
@@ -249,9 +248,8 @@
               @else
                 <div class="form-group form-group-default required ">
                   <label>{{$deliveryOption}}</label>
-                  <input type="text" class="form-control" placeholder="{{$deliveryOption}} details" name="{{$deliveryOption}}" value="{{$deliveryOptionValue}}" required>
+                  <input type="text" class="form-control" placeholder="{{$deliveryOption}} details" name="leveren[{{$deliveryOption}}]" value="{{$deliveryOptionValue}}" >
                 </div>
-                {{-- {{gettype($deliveryOptionValue)}} --}}
               @endif
             </div>
           </div>
@@ -262,8 +260,8 @@
       <div class="col">
         <p class="pull-right">
           <input type="hidden" name="_token" value="{{ Session::token() }}">
-          <input type="hidden" name="product_id" value="">
-          <button type="submit" name="create" class="btn btn-success btn-cons pull-right m-1" value="1">Opslaan</button>
+          <input type="hidden" name="settings_id" value="">
+          <button type="submit" name="settings_save" class="btn btn-success btn-cons pull-right m-1" value="1">Opslaan</button>
           <a href="{{ route('dashboard.module.order_form.products.index') }}" class="pull-right m-1"><button type="button" class="btn btn-info btn-cons">Annuleren</button></a>
         </p>
       </div>
@@ -317,7 +315,7 @@ $( document ).ready(function() {
       ['height', ['height']]
     ]
   });
-// add extra categories
+
   $('#add_extra_field_btn').click(function(){
     $('.field_row_container:first').clone().appendTo('.field_container_wrapper');
     $('.field_container_wrapper').append('<hr />');
@@ -329,9 +327,7 @@ $( document ).ready(function() {
     $('.field_row_container:last input[type="text"]').attr('data-order', order);
     $('.field_row_container:last input[type="checkbox"]').attr('data-order', order);
     $('.field_row_container:last input[type="text"]').val('');
-    $('.field_row_container:last input[type="text"]').prop('name', '');
     $('.field_row_container:last input[type="checkbox"]').prop('checked', false);
-    $('.field_row_container:last input[type="checkbox"]').prop('name', '');
     
     init();
   });
