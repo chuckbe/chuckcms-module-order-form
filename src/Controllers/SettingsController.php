@@ -2,6 +2,8 @@
 
 namespace Chuckbe\ChuckcmsModuleOrderForm\Controllers;
 
+use Chuckbe\ChuckcmsModuleOrderForm\Chuck\SettingsRepository;
+
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -29,7 +31,11 @@ class SettingsController extends Controller
 
     public function update(Request $request)
     {
-        
+        $this->validate(request(), [
+
+        ]);
+    
+        $settings = $this->settingsRepository->update($request);
         
         
     }
