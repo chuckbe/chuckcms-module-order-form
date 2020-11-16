@@ -83,7 +83,8 @@
               <div class="form-group form-group-default required ">
                 <label>Deze categorie tonen</label>
                 <div class="form-check">
-                  <input type="checkbox" class="form-check-input categoryNameCheckbox" id="is_displayed" name="categories[{{strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '_', $categoryValue["name"]), '_'))}}][is_displayed]" @if($categoryValue["is_displayed"] == 1) checked @endif data-order="{{ $loop->iteration }}">
+                  <input id="is_displayedHidden" type="hidden" value=false name="categories[{{strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '_', $categoryValue["name"]), '_'))}}][is_displayed]">
+                  <input type="checkbox" class="form-check-input categoryNameCheckbox" value=true id="is_displayed" name="categories[{{strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '_', $categoryValue["name"]), '_'))}}][is_displayed]" @if($categoryValue["is_displayed"] == 1) checked @endif data-order="{{ $loop->iteration }}">
                   <label class="form-check-label" for="is_displayed">is displayed</label>
                 </div>
               </div>
@@ -111,7 +112,7 @@
               @if (is_bool($formOptionValue))
                 <div class="form-group form-group-default required ">
                   <label>{{$formOption}}</label>
-                  <select class="full-width select2" data-init-plugin="select2" name="form[{{$formOption}}]">
+                  <select class="full-width select2 form-control" data-init-plugin="select2" name="form[{{$formOption}}]">
                     <option value="true" @if($formOptionValue == true) selected @endif>Ja</option>
                     <option value="false" @if($formOptionValue !== true) selected @endif>Nee</option>
                   </select>
@@ -134,7 +135,7 @@
           <div class="col"> 
             <div class="form-group form-group-default required ">
               <label>Use ui</label>
-              <select class="full-width select2" data-init-plugin="select2" name="cart[use_ui]">
+              <select class="full-width select2 form-control" data-init-plugin="select2" name="cart[use_ui]">
                 <option value="true" @if($settings["cart"]["use_ui"] == true) selected @endif>Ja</option>
                 <option value="false" @if($settings["cart"]["use_ui"] !== true) selected @endif>Nee</option>
               </select>
@@ -151,7 +152,7 @@
               <div class="col"> 
                 <div class="form-group form-group-default required ">
                   <label>{{$order}}</label>
-                  <select class="full-width select2" data-init-plugin="select2" name="order[{{$order}}]">
+                  <select class="full-width select2 form-control" data-init-plugin="select2" name="order[{{$order}}]">
                     <option value="true" @if($orderValue == true) selected @endif>Ja</option>
                     <option value="false" @if($orderValue !== true) selected @endif>Nee</option>
                   </select>
@@ -175,7 +176,7 @@
               <div class="col"> 
                 <div class="form-group form-group-default required ">
                   <label>{{$emailOption}}</label>
-                  <select class="full-width select2" data-init-plugin="select2" name="emails[{{$emailOption}}]">
+                  <select class="full-width select2 form-control" data-init-plugin="select2" name="emails[{{$emailOption}}]">
                     <option value="true" @if($emailOptionValue == true) selected @endif>Ja</option>
                     <option value="false" @if($emailOptionValue !== true) selected @endif>Nee</option>
                   </select>
@@ -201,7 +202,7 @@
                 @if (is_bool($locationOptionTypeValue))
                   <div class="form-group form-group-default required ">
                     <label>{{$locationOptionType}}</label>
-                    <select class="full-width select2" data-init-plugin="select2" name="locations[{{$locationOption}}][{{$locationOptionType}}]">
+                    <select class="full-width select2 form-control" data-init-plugin="select2" name="locations[{{$locationOption}}][{{$locationOptionType}}]">
                       <option value="true" @if($locationOptionTypeValue == true) selected @endif>Ja</option>
                       <option value="false" @if($locationOptionTypeValue !== true) selected @endif>Nee</option>
                     </select>
@@ -209,8 +210,7 @@
                 @elseif (is_null($locationOptionTypeValue))
                   <div class="form-group form-group-default required ">
                     <label>{{$locationOptionType}}</label>
-                    <input type="text" class="form-control" placeholder="N/A" name="locations[{{$locationOption}}][{{$locationOptionType}}]" 
-                    value="null">
+                    <input type="text" class="form-control" placeholder="N/A" name="locations[{{$locationOption}}][{{$locationOptionType}}]">
                   </div>
                 @elseif (is_array($locationOptionTypeValue))
                   <div class="form-group form-group-default required ">
@@ -240,7 +240,7 @@
               @if (is_bool($deliveryOptionValue))
                 <div class="form-group form-group-default required ">
                   <label>{{$deliveryOption}}</label>
-                  <select class="full-width select2" data-init-plugin="select2" name="leveren[{{$deliveryOption}}]">
+                  <select class="full-width select2 form-control" data-init-plugin="select2" name="leveren[{{$deliveryOption}}]">
                     <option value="true" @if($deliveryOptionValue == true) selected @endif>Ja</option>
                     <option value="false" @if($deliveryOptionValue !== true) selected @endif>Nee</option>
                   </select>
@@ -296,9 +296,10 @@ $( document ).ready(function() {
     console.log('This is the index of the element : ',$('.field_row_container').index($(this)));
     var text = $(this).val();
     var iOrder = $(this).attr('data-order');
-    slug_text = text.toLowerCase().replace(/ /g,'_').replace(/[^\w-]+/g,'');
-    $(".categoryNameInput[data-order="+iOrder+"]").prop('name', slug_text);
-    $(".categoryNameCheckbox[data-order="+iOrder+"]").prop('name', slug_text+'_is_displayed'); 
+    //categories[][name]
+    slug_text = 'categories['+text.toLowerCase().replace(/ /g,'_').replace(/[^\w-]+/g,'')+']';
+    $(".categoryNameInput[data-order="+iOrder+"]").prop('name', slug_text+'[name]');
+    $(".categoryNameCheckbox[data-order="+iOrder+"]").prop('name', slug_text+'[is_displayed]'); 
   });
 
   }
