@@ -109,9 +109,7 @@
 			<p class="no-margin ">Totaalomzet</p>
         	<div class="clearfix"></div>
         	<h3 class=" semi-bold">
-        		<sup>
-					<small class="semi-bold">€</small>
-				</sup> {{ ChuckModuleOrderForm::totalSales() }}
+        	€ {{ ChuckModuleOrderForm::totalSales() }}
 			</h3>
 		</div>
       </div>
