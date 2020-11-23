@@ -29,14 +29,14 @@ class ShippingController extends Controller
         $limited_to = config('chuckcms-module-order-form.locations.'.$locationKey.'.delivery_limited_to');
 
         if($limited_to == null) {
-            return true;
+            return response()->json(['status' => 'success']);
         } elseif ($limited_to == 'radius') {
             return $this->checkRadius($request);
         } elseif ($limited_to == 'postalcode') {
             return $this->checkPostalcode($request);
         }
 
-        return false;
+        return response()->json(['status' => 'error']);
     }
 
     public function checkRadius(Request $request)
