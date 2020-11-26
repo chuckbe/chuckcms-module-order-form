@@ -144,7 +144,7 @@
                       </div>
                     </div>
                     <div class="col-sm-4">
-                      <div class="form-group">
+                      <div class="form-group pt-5">
                         <div class="input-group">
                           <span class="input-group-btn">
                             <a id="lfm" data-input="featured_image_x_input" data-preview="featured_image_x_holder" class="btn btn-primary img_lfm_link" style="color:#FFF">
@@ -201,7 +201,7 @@
                 </div>
                 <div class="col-sm-12">
                   <div class="extraInputContainer">
-                    <div class="row" style="align-items: center;">
+                    <div class="row extra_input_row" style="align-items: center;">
                       <div class="col-sm-2">
                         <button class="btn btn-danger btn-round removeExtraRowButton" style="display:none;">-</button>
                         <button class="btn btn-success btn-round addExtraRowButton">+</button>
