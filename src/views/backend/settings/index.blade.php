@@ -83,8 +83,8 @@
               <div class="form-group form-group-default required ">
                 <label>Deze categorie tonen</label>
                 <div class="form-check">
-                  <input id="is_displayedHidden" type="hidden" value=0 name="categories[{{strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '_', $categoryValue["name"]), '_'))}}][is_displayed]">
-                  <input type="checkbox" class="form-check-input categoryNameCheckbox" value=1 id="is_displayed" name="categories[{{strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '_', $categoryValue["name"]), '_'))}}][is_displayed]" @if($categoryValue["is_displayed"] == '1' || $categoryValue["is_displayed"] == 'true') checked @endif data-order="{{ $loop->iteration }}">
+                  <input id="is_displayedHidden" class="categoryNameCheckboxHidden" type="hidden" value="0" name="categories[{{strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '_', $categoryValue["name"]), '_'))}}][is_displayed]" data-order="{{ $loop->iteration }}">
+                  <input type="checkbox" class="form-check-input categoryNameCheckbox" value="1" id="is_displayed" name="categories[{{strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '_', $categoryValue["name"]), '_'))}}][is_displayed]" @if($categoryValue["is_displayed"] == "true" OR $categoryValue["is_displayed"] == "1" ) checked @endif data-order="{{ $loop->iteration }}">
                   <label class="form-check-label" for="is_displayed">is displayed</label>
                 </div>
               </div>
@@ -299,6 +299,7 @@ $( document ).ready(function() {
     //categories[][name]
     slug_text = 'categories['+text.toLowerCase().replace(/ /g,'_').replace(/[^\w-]+/g,'')+']';
     $(".categoryNameInput[data-order="+iOrder+"]").prop('name', slug_text+'[name]');
+    $(".categoryNameCheckboxHidden[data-order="+iOrder+"]").prop('name', slug_text+'[is_displayed]')
     $(".categoryNameCheckbox[data-order="+iOrder+"]").prop('name', slug_text+'[is_displayed]'); 
     });
 
@@ -326,6 +327,7 @@ $( document ).ready(function() {
     }
     $('.field_row_container:last').attr('data-order', order);
     $('.field_row_container:last input[type="text"]').attr('data-order', order);
+    $('.field_row_container:last input[type="hidden"]').attr('data-order', order);
     $('.field_row_container:last input[type="checkbox"]').attr('data-order', order);
     $('.field_row_container:last input[type="text"]').val('');
     $('.field_row_container:last input[type="checkbox"]').prop('checked', false);

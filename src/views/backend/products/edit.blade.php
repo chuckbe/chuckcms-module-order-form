@@ -12,6 +12,7 @@
       </nav>
     </div>
   </div>
+  {{-- {{dd(Chuckbe\Chuckcms\Models\Module::where('slug', 'chuckcms-module-order-form')->firstOrFail()->json['admin']['settings']['categories'])}} --}}
   <form action="{{ route('dashboard.module.order_form.products.update') }}" method="POST">
     <div class="row">
       @if ($errors->any())
@@ -57,9 +58,12 @@
                   <div class="form-group form-group-default required ">
                     <label>Categorie</label>
                     <select class="full-width select2 w-100" data-init-plugin="select2" name="category" data-minimum-results-for-search="-1">
-                      @foreach(config('chuckcms-module-order-form.categories') as $categoryKey => $category)
-                        <option value="{{ $categoryKey }}" @if(array_key_exists('category', $product->json)) @if($categoryKey == $product->json['category']) selected @endif @endif>{{ $category['name'] }}</option>
+                      @foreach (Chuckbe\Chuckcms\Models\Module::where('slug', 'chuckcms-module-order-form')->firstOrFail()->json['admin']['settings']['categories'] as $categoryKey => $category )
+                          <option value="{{ $categoryKey }}" @if(array_key_exists('category', $product->json)) @if($categoryKey == $product->json['category']) selected @endif @endif>{{ $category['name'] }}</option>
                       @endforeach
+                      {{-- @foreach(config('chuckcms-module-order-form.categories') as $categoryKey => $category)
+                        <option value="{{ $categoryKey }}" @if(array_key_exists('category', $product->json)) @if($categoryKey == $product->json['category']) selected @endif @endif>{{ $category['name'] }}</option>
+                      @endforeach --}}
                     </select>
                   </div>
                 </div>

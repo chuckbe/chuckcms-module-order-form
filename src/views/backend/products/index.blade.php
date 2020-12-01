@@ -51,7 +51,8 @@
 								<td>{{ $product->id }}</td>
 						    	<td class="semi-bold">{{ $product->json['name'][ChuckSite::getFeaturedLocale()] }}</td>
 						    	<td>{{$product->slug}}</td>
-						    	<td>{{config('chuckcms-module-order-form.categories')[$product->json['category']]['name']}}</td>
+								<td>{{ucfirst(str_replace('_', ' ', $product->json['category']))}}</td>
+						    	{{-- <td>{{config('chuckcms-module-order-form.categories')[$product->json['category']]['name']}}</td> --}}
 						    	<td class="semi-bold">
 						    		<a href="{{ route('dashboard.module.order_form.products.edit', ['product' => $product->id]) }}" class="btn btn-primary btn-sm btn-rounded m-r-20">
 						    			<i class="fa fa-pencil"></i> edit

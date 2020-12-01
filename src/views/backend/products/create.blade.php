@@ -58,7 +58,7 @@
                   <div class="form-group form-group-default required ">
                     <label>Categorie</label><br>
                     <select class="full-width select2 w-100" data-init-plugin="select2" name="category" data-minimum-results-for-search="-1">
-                      @foreach(config('chuckcms-module-order-form.categories') as $categoryKey => $category)
+                      @foreach (Chuckbe\Chuckcms\Models\Module::where('slug', 'chuckcms-module-order-form')->firstOrFail()->json['admin']['settings']['categories'] as $categoryKey => $category )
                         <option value="{{ $categoryKey }}">{{ $category['name'] }}</option>
                       @endforeach
                     </select>

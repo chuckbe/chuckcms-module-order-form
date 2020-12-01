@@ -33,4 +33,5 @@ class SettingsRepository
         return $module;
 
     }
+    
 }
