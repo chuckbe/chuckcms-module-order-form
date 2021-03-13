@@ -40,7 +40,7 @@
 						@endforeach
 					</select>
 					<div class="input-group-append">
-						@if(array_key_exists('options', $product->json) && count($product->json['options']) > 0)
+						@if( (array_key_exists('options', $product->json) && count($product->json['options']) > 0) || (array_key_exists('extras', $product->json) && count($product->json['extras']) > 0) )
 						<button class="btn btn-outline-primary cof_btnAddProductAttributeOptionsToCart" data-product-id="{{ $product->id }}" data-product-options="{{ json_encode($product->json['options']) }}" @if(array_key_exists('extras', $product->json)) data-product-extras="{{ json_encode($product->json['extras']) }}" @endif>Toevoegen</button>
 						@else
 						<button class="btn btn-outline-primary cof_btnAddProductAttributeToCart" data-product-id="{{ $product->id }}">Toevoegen</button>
