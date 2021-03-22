@@ -45,29 +45,31 @@ class OrderFormRepository
         return view('chuckcms-module-order-form::frontend.css')->render();
     }
 
-    public function firstAvailableDate(string $locationKey)
+    public function firstAvailableDate($locationId)
     {
-        return date('d/m/Y', strtotime('+' . $this->firstAvailableDateInDaysFromNow($locationKey) . ' day'));
+        return date('d/m/Y', strtotime('+' . $this->firstAvailableDateInDaysFromNow($locationId) . ' day'));
     }
 
-    public function firstAvailableDateInDaysFromNow(string $locationKey)
+    public function firstAvailableDateInDaysFromNow($locationId)
     {
         $initial_day = 0;
-        $days_of_week_disabled = config('chuckcms-module-order-form.locations.'.$locationKey.'.days_of_week_disabled');
+        $location = $this->repeater->where('id', $locationId)->first();
+        $days_of_week_disabled = is_null($location->days_of_week_disabled) ? '' : $location->days_of_week_disabled;
         
+        $settings = ChuckSite::module('chuckcms-module-order-form')->settings;
         //is same day delivery possible?
-        if(config('chuckcms-module-order-form.delivery.same_day') == true) {
+        if($settings['delivery']['same_day'] == true) {
             //yes see until what hour
-            $until_hour = config('chuckcms-module-order-form.delivery.same_day_until_hour'); ////////// 15 (now: 18)
+            $until_hour = $settings['delivery']['same_day_until_hour']; /// 15 (now: 18)
             if(date('H') < $until_hour) { ////////// fail (18 < 15)
                 //nice, same day delivery is possible and it's not too late
                 $starting_day = $initial_day;
             } elseif (date('H') >= $until_hour) { ////////// pass (18 >= 15)
                 //oh snap, we're too late for same day delivery...
                 //let's see if next_day delivery is possible
-                if (config('chuckcms-module-order-form.delivery.next_day') == true) {
+                if ($settings['delivery']['next_day'] == true) {
                     //yay next day delivery is possible, let's see until what hour
-                    $nd_until_hour = config('chuckcms-module-order-form.delivery.next_day_until_hour');
+                    $nd_until_hour = $settings['delivery']['next_day_until_hour'];
                     if(date('H') < $nd_until_hour) { ////////// fail (18 < 15)
                         //nice, not too late for next day delivery
                         $starting_day = $initial_day + 1;
@@ -80,9 +82,9 @@ class OrderFormRepository
                     $starting_day = $initial_day + 2;
                 }
             }
-        } elseif (config('chuckcms-module-order-form.delivery.next_day') == true) {
+        } elseif ($settings['delivery']['next_day'] == true) {
             //woops, same day deliveries not possible, but yay next day deliveries are, let's see until when
-            $nd_until_hour = config('chuckcms-module-order-form.delivery.next_day_until_hour');
+            $nd_until_hour = $settings['delivery']['next_day_until_hour'];
             if(date('H') < $nd_until_hour) { ////////// fail (18 < 15)
                 //nice, just in time for next day delivery
                 $starting_day = $initial_day + 1;
@@ -129,7 +131,7 @@ class OrderFormRepository
 
     public function totalSales()
     {
-        if(config('chuckcms-module-order-form.order.payment_upfront')) {
+        if(ChuckSite::module('chuckcms-module-order-form')->getSetting('order.payment_upfront')) {
             $total = $this->formEntry->where('slug', config('chuckcms-module-order-form.products.slug'))->where('entry->status', 'paid')->sum('entry->order_price');
         } else {
             $total = $this->formEntry->where('slug', config('chuckcms-module-order-form.products.slug'))->where('entry->status', 'awaiting')->sum('entry->order_price');
@@ -139,7 +141,7 @@ class OrderFormRepository
 
     public function totalSalesLast7Days()
     {
-        if(config('chuckcms-module-order-form.order.payment_upfront')) {
+        if(ChuckSite::module('chuckcms-module-order-form')->getSetting('order.payment_upfront')) {
             $total = $this->formEntry->where('slug', config('chuckcms-module-order-form.products.slug'))->where('entry->status', 'paid')->whereDate('entry->order_date', '>', Carbon::today()->subDays(7)->toDateString())->sum('entry->order_price');
         } else {
             $total = $this->formEntry->where('slug', config('chuckcms-module-order-form.products.slug'))->where('entry->status', 'awaiting')->whereDate('entry->order_date', '>', Carbon::today()->subDays(7)->toDateString())->sum('entry->order_price');
@@ -149,7 +151,7 @@ class OrderFormRepository
 
     public function totalSalesLast7DaysQty()
     {
-        if(config('chuckcms-module-order-form.order.payment_upfront')) {
+        if(ChuckSite::module('chuckcms-module-order-form')->getSetting('order.payment_upfront')) {
             return $this->formEntry->where('slug', config('chuckcms-module-order-form.products.slug'))->where('entry->status', 'paid')->where('entry->order_date', '>', Carbon::today()->subDays(7)->toDateString())->count();
         } else {
             return $this->formEntry->where('slug', config('chuckcms-module-order-form.products.slug'))->where('entry->status', 'awaiting')->where('entry->order_date', '>', Carbon::today()->subDays(7)->toDateString())->count();

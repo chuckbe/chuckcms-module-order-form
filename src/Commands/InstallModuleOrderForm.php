@@ -52,7 +52,7 @@ class InstallModuleOrderForm extends Command
         $hintpath = 'chuckcms-module-order-form';
         $path = 'chuckbe/chuckcms-module-order-form';
         $type = 'module';
-        $version = '0.1.13';
+        $version = '0.1.15';
         $author = 'Karel Brijs (karel@chuck.be)';
 
         $json = [];
@@ -80,6 +80,14 @@ class InstallModuleOrderForm extends Command
                     'submenu' => null
                 ),
                 'third' => array(
+                    'name' => 'Categorieën',
+                    'icon' => true,
+                    'icon_data' => 'tag',
+                    'route' => 'dashboard.module.order_form.categories.index',
+                    'has_submenu' => false,
+                    'submenu' => null
+                ),
+                'fourth' => array(
                     'name' => 'Producten',
                     'icon' => true,
                     'icon_data' => 'tag',
@@ -87,27 +95,43 @@ class InstallModuleOrderForm extends Command
                     'has_submenu' => false,
                     'submenu' => null
                 ),
-                'fourth' => array(
+                'fifth' => array(
+                    'name' => 'Locaties',
+                    'icon' => true,
+                    'icon_data' => 'tag',
+                    'route' => 'dashboard.module.order_form.locations.index',
+                    'has_submenu' => false,
+                    'submenu' => null
+                ),
+                'sixth' => array(
                     'name' => 'Instellingen',
                     'icon' => true,
                     'icon_data' => 'cpu',
                     'route' => 'dashboard.module.order_form.settings.index',
                     'has_submenu' => false,
                     'submenu' => null
+                ),
+                'seventh' => array(
+                    'name' => 'POS',
+                    'icon' => true,
+                    'icon_data' => 'cpu',
+                    'route' => 'dashboard.module.order_form.pos.index',
+                    'has_submenu' => false,
+                    'submenu' => null
                 )
             )
         );
         $json['admin']['settings'] = array(
-            'categories' => array(
-                'category_1' => array(
-                    'name' => 'Categorie 1',
-                    'is_displayed' => true
-                ),
-                'category_2' => array(
-                    'name' => 'Categorie 2',
-                    'is_displayed' => true
-                ),
-            ),
+            // 'categories' => array(
+            //     'category_1' => array(
+            //         'name' => 'Categorie 1',
+            //         'is_displayed' => true
+            //     ),
+            //     'category_2' => array(
+            //         'name' => 'Categorie 2',
+            //         'is_displayed' => true
+            //     ),
+            // ),
             'form' => array(
                 'display_images' 	=> true,
                 'display_description' => true,
@@ -129,7 +153,7 @@ class InstallModuleOrderForm extends Command
             'emails' => array(
                 'send_confirmation' => true,
                 'confirmation_subject' => 'Bevestiging van uw bestelling #',
-                'send_notication' => true,
+                'send_notification' => true,
                 'notification_subject' => 'Een nieuwe online bestelling #',
                 'from_email' => 'hello@chuck.be',
                 'from_name' => 'ChuckCMS Order',
@@ -138,42 +162,42 @@ class InstallModuleOrderForm extends Command
                 'to_cc' => false, // false or string with emails seperated by comma
                 'to_bcc' => false, // false or string with emails seperated by comma
             ),
-            'locations' => array(
-                'afhalen' 	=> array(
-                    'type' => 'takeout',
-                    'name' => 'Afhalen',
-                    'days_of_week_disabled' => '0,6', //comma seperated numbers representing day of week eg: to disable sunder and tuesday: '0,2'
-                    'delivery_cost' => 0,
-                    'delivery_limited_to' => null,
-                    'delivery_radius' => 0, 
-                    'delivery_radius_from' => 'Berlaarsestraat 10, 2500 Lier',
-                    'delivery_in_postalcodes' => array(),
-                    'time_required' => false,
-                    'time_min' => 11, //in hours: 0 - 24
-                    'time_max' => 19, //in hours: 0 - 24
-                    'time_default' => '14:00', //string in format HH:mm
-                ),
-                'leveren' 	=> array(
-                    'type' => 'delivery',
-                    'name' => 'Leveren',
-                    'days_of_week_disabled' => '0,6',
-                    'delivery_cost' => 2,
-                    'delivery_limited_to' => 'postalcode', //null, 'radius', 'postalcode' - for radius you need to fill in delivery.google_maps_api_key
-                    'delivery_radius' => 10000, //expressed in meters so: 1000 = 1km
-                    'delivery_radius_from' => 'Berlaarsestraat 10, 2500 Lier',
-                    'delivery_in_postalcodes' => array(
-                        '2000',
-                        '2500',
-                        '2800',
-                        '2100',
-                        '2200'
-                    ),
-                    'time_required' => true,
-                    'time_min' => 11, //in hours: 0 - 24
-                    'time_max' => 19, //in hours: 0 - 24
-                    'time_default' => '14:00', //string in format HH:mm
-                )
-            ),
+            // 'locations' => array(
+            //     'afhalen' 	=> array(
+            //         'type' => 'takeout',
+            //         'name' => 'Afhalen',
+            //         'days_of_week_disabled' => '0,6', //comma seperated numbers representing day of week eg: to disable sunder and tuesday: '0,2'
+            //         'delivery_cost' => 0,
+            //         'delivery_limited_to' => null,
+            //         'delivery_radius' => 0, 
+            //         'delivery_radius_from' => 'Berlaarsestraat 10, 2500 Lier',
+            //         'delivery_in_postalcodes' => array(),
+            //         'time_required' => false,
+            //         'time_min' => 11, //in hours: 0 - 24
+            //         'time_max' => 19, //in hours: 0 - 24
+            //         'time_default' => '14:00', //string in format HH:mm
+            //     ),
+            //     'leveren' 	=> array(
+            //         'type' => 'delivery',
+            //         'name' => 'Leveren',
+            //         'days_of_week_disabled' => '0,6',
+            //         'delivery_cost' => 2,
+            //         'delivery_limited_to' => 'postalcode', //null, 'radius', 'postalcode' - for radius you need to fill in delivery.google_maps_api_key
+            //         'delivery_radius' => 10000, //expressed in meters so: 1000 = 1km
+            //         'delivery_radius_from' => 'Berlaarsestraat 10, 2500 Lier',
+            //         'delivery_in_postalcodes' => array(
+            //             '2000',
+            //             '2500',
+            //             '2800',
+            //             '2100',
+            //             '2200'
+            //         ),
+            //         'time_required' => true,
+            //         'time_min' => 11, //in hours: 0 - 24
+            //         'time_max' => 19, //in hours: 0 - 24
+            //         'time_default' => '14:00', //string in format HH:mm
+            //     )
+            // ),
             'delivery' => array(
                 'same_day' => true,
                 'same_day_until_hour' => 1,

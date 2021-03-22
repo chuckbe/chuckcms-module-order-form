@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Chuckbe\Chuckcms\Models\FormEntry;
+use ChuckSite;
 use Mollie;
 use URL;
 use Mail;
@@ -128,7 +129,7 @@ class OrderController extends Controller
         $all_json['order_shipping'] = round($request['shipping'], 2);
         $all_json['order_price_with_shipping'] = round(($request['total'] + $request['shipping']), 2);
 
-        if($request['total'] < config('chuckcms-module-order-form.order.minimum_order_price')) {
+        if($request['total'] < ChuckSite::module('chuckcms-module-order-form')->getSetting('order.minimum_order_price')) {
             return response()->json([
                 'status' => 'error'
             ]);
@@ -188,7 +189,7 @@ class OrderController extends Controller
 
         if($order->save()){
 
-            if(config('chuckcms-module-order-form.order.payment_upfront')) {
+            if(ChuckSite::module('chuckcms-module-order-form')->getSetting('order.payment_upfront')) {
                 $amount = number_format( ( (float)$order->entry['order_price_with_shipping'] ), 2, '.', '');
 
                 $payment = Mollie::api()->payments()->create([
@@ -196,7 +197,7 @@ class OrderController extends Controller
                     'currency' => 'EUR',
                     'value' => $amount, // You must send the correct number of decimals, thus we enforce the use of strings
                 ],
-                'description' => config('chuckcms-module-order-form.order.payment_description') . $order->entry['order_number'],
+                'description' => ChuckSite::module('chuckcms-module-order-form')->getSetting('order.payment_description') . $order->entry['order_number'],
                 'webhookUrl' => route('cof.mollie_webhook'),
                 'redirectUrl' => route('cof.followup', ['order_number' => $order->entry['order_number']]),
                 "metadata" => array(
@@ -245,7 +246,7 @@ class OrderController extends Controller
         if($order == null) {
             return abort(404);
         } else {
-            return redirect(URL::to(config('chuckcms-module-order-form.order.redirect_url')), 303)->with('order_number', $order_number);
+            return redirect(URL::to(ChuckSite::module('chuckcms-module-order-form')->getSetting('order.redirect_url')), 303)->with('order_number', $order_number);
         }
 
     }
@@ -280,7 +281,7 @@ class OrderController extends Controller
                 'currency' => 'EUR',
                 'value' => $amount, // You must send the correct number of decimals, thus we enforce the use of strings
             ],
-            'description' => config('chuckcms-module-order-form.order.payment_description') . $order->entry['order_number'],
+            'description' => ChuckSite::module('chuckcms-module-order-form')->getSetting('order.payment_description') . $order->entry['order_number'],
             'webhookUrl' => route('cof.mollie_webhook'),
             'redirectUrl' => route('cof.followup', ['order_number' => $order->entry['order_number']]),
             "metadata" => array(
@@ -339,27 +340,27 @@ class OrderController extends Controller
 
     public function sendConfirmation(FormEntry $order)
     {
-        if( (config('chuckcms-module-order-form.order.payment_upfront') && $order->entry['status'] == 'paid') || (config('chuckcms-module-order-form.order.payment_upfront') == false) ){
+        if( (ChuckSite::module('chuckcms-module-order-form')->getSetting('order.payment_upfront') && $order->entry['status'] == 'paid') || (ChuckSite::module('chuckcms-module-order-form')->getSetting('order.payment_upfront') == false) ){
             Mail::send('chuckcms-module-order-form::frontend.emails.confirmation', ['order' => $order], function ($m) use ($order) {
-                $m->from(config('chuckcms-module-order-form.emails.from_email'), config('chuckcms-module-order-form.emails.from_name'));
-                $m->to($order->entry['email'], $order->entry['first_name'].' '.$order->entry['last_name'])->subject(config('chuckcms-module-order-form.emails.confirmation_subject').$order->entry['order_number']);
+                $m->from(ChuckSite::module('chuckcms-module-order-form')->getSetting('emails.from_email'), ChuckSite::module('chuckcms-module-order-form')->getSetting('emails.from_name'));
+                $m->to($order->entry['email'], $order->entry['first_name'].' '.$order->entry['last_name'])->subject(ChuckSite::module('chuckcms-module-order-form')->getSetting('emails.confirmation_subject').$order->entry['order_number']);
             });
         }
     }
 
     public function sendNotification(FormEntry $order)
     {
-        if( (config('chuckcms-module-order-form.order.payment_upfront') && $order->entry['status'] == 'paid') || (config('chuckcms-module-order-form.order.payment_upfront') == false) ){
+        if( (ChuckSite::module('chuckcms-module-order-form')->getSetting('order.payment_upfront') && $order->entry['status'] == 'paid') || (ChuckSite::module('chuckcms-module-order-form')->getSetting('order.payment_upfront') == false) ){
             Mail::send('chuckcms-module-order-form::frontend.emails.notification', ['order' => $order], function ($m) use ($order) {
-                $m->from(config('chuckcms-module-order-form.emails.from_email'), config('chuckcms-module-order-form.emails.from_name'));
-                $m->to(config('chuckcms-module-order-form.emails.to_email'), config('chuckcms-module-order-form.emails.to_name'))->subject(config('chuckcms-module-order-form.emails.notification_subject').$order->entry['order_number']);
+                $m->from(ChuckSite::module('chuckcms-module-order-form')->getSetting('emails.from_email'), ChuckSite::module('chuckcms-module-order-form')->getSetting('emails.from_name'));
+                $m->to(ChuckSite::module('chuckcms-module-order-form')->getSetting('emails.to_email'), ChuckSite::module('chuckcms-module-order-form')->getSetting('emails.to_name'))->subject(ChuckSite::module('chuckcms-module-order-form')->getSetting('emails.notification_subject').$order->entry['order_number']);
                 
-                if( config('chuckcms-module-order-form.emails.to_cc') !== false){
-                    $m->cc(config('chuckcms-module-order-form.emails.to_cc'));
+                if( ChuckSite::module('chuckcms-module-order-form')->getSetting('emails.to_cc') !== false){
+                    $m->cc(ChuckSite::module('chuckcms-module-order-form')->getSetting('emails.to_cc'));
                 }
 
-                if( config('chuckcms-module-order-form.emails.to_bcc') !== false){
-                    $m->bcc(config('chuckcms-module-order-form.emails.to_bcc'));
+                if( ChuckSite::module('chuckcms-module-order-form')->getSetting('emails.to_bcc') !== false){
+                    $m->bcc(ChuckSite::module('chuckcms-module-order-form')->getSetting('emails.to_bcc'));
                 }
             });
         }

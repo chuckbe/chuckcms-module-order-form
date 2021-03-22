@@ -1,10 +1,10 @@
 <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 mb-4 chuck_ofm_product_tile" data-product-id="{{ $product->id }}" data-product-name="{{ $product->json['name'][app()->getLocale()] }}">
 	<div class="thumbnail d-flex align-items-start flex-column" style="border: 1px solid #ddd;border-radius: 4px;padding:10px;height:100%;">
-		@if(config('chuckcms-module-order-form.form.display_images'))
+		@if($settings['form']['display_images'])
 		<img src="{{ $product->json['featured_image'] ?? 'https://via.placeholder.com/500x333.jpg?text=No+Image+Found' }}" class="cof_productImage img-fluid" data-product-id="{{ $product->id }}" alt="">
 		@endif
 		<h3 class="mb-1 mt-1">{{ $product->json['name'][app()->getLocale()] }}</h3>
-		@if(config('chuckcms-module-order-form.form.display_description'))
+		@if($settings['form']['display_description'])
 		<p class="mb-3">{{ $product->json['description'][app()->getLocale()] }}</p>
 		@endif
 
@@ -26,7 +26,7 @@
 					</div>
 					<input type="number" min="0" max="99" step="1" value="1" class="form-control cof_productQuantityInput" data-product-id="{{ $product->id }}" readonly style="text-align:center;padding: 0.375rem 0.5rem;">
 					<div class="input-group-append">
-						<button class="btn btn-outline-secondary cof_additionProductBtn" data-product-id="{{ $product->id }}">+</button>
+						<button class="btn btn-outline-secondary cof_additionProductBtn" data-product-id="{{ $product->id }}" data-q="{{ http_build_query($product->getJson('quantity'),'',',') }}">+</button>
 					</div>
 				</div>
 			</div>

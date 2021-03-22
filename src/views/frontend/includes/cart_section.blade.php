@@ -35,17 +35,17 @@
 		</li>
 	</ul>
 
-	<div class="card p-2 mb-3" id="cof_orderLegalCard" data-has-promo="{{ config('chuckcms-module-order-form.order.promo_check') }}">
+	<div class="card p-2 mb-3" id="cof_orderLegalCard" data-has-promo="{{ $settings['order']['promo_check'] }}">
 		<div class="form-group mb-2">
 			<label for="cof_orderLegalApproval" class="legal_label mb-0">
 				<input type="hidden" name="legal_approval" value="0">
-				<input type="checkbox" id="cof_orderLegalApproval" value="1" name="legal_approval" required> {{ config('chuckcms-module-order-form.order.legal_text') }} *
+				<input type="checkbox" id="cof_orderLegalApproval" value="1" name="legal_approval" required> {{ $settings['order']['legal_text'] }} *
 			</label>
 		</div>
-		@if(config('chuckcms-module-order-form.order.promo_check'))
+		@if($settings['order']['promo_check'])
 		<div class="form-group mb-0">
 			<label for="cof_orderPromoApproval" class="legal_label mb-0">
-				<input type="checkbox" id="cof_orderPromoApproval" value="1" name="promo_approval"> {{ config('chuckcms-module-order-form.order.promo_text') }}
+				<input type="checkbox" id="cof_orderPromoApproval" value="1" name="promo_approval"> {{ $settings['order']['promo_text'] }}
 			</label>
 		</div>
 		@else
@@ -53,9 +53,9 @@
 		@endif
 	</div>
 
-	<div class="card p-2 text-center" id="cof_orderBtnCard" data-has-mop="{{ config('chuckcms-module-order-form.order.has_minimum_order_price') }}" data-mop="{{ config('chuckcms-module-order-form.order.minimum_order_price') }}">
-		@if(config('chuckcms-module-order-form.order.has_minimum_order_price'))
-		<p class="mb-3" id="cof_minOrderP_not">Helaas, je kunt nog niet bestellen. We hanteren een minimum bestelbedrag van: € {{ number_format((float)config('chuckcms-module-order-form.order.minimum_order_price'), 2, ',', '.') }}</p>
+	<div class="card p-2 text-center" id="cof_orderBtnCard" data-has-mop="{{ $settings['order']['has_minimum_order_price'] }}" data-mop="{{ $settings['order']['minimum_order_price'] }}">
+		@if($settings['order']['has_minimum_order_price'])
+		<p class="mb-3" id="cof_minOrderP_not">Helaas, je kunt nog niet bestellen. We hanteren een minimum bestelbedrag van: € {{ number_format((float)$settings['order']['minimum_order_price'], 2, ',', '.') }}</p>
 		@endif
 
 		<div class="error_bag hidden mb-3">

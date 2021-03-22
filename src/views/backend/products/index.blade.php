@@ -49,9 +49,9 @@
 						@foreach($products as $product)
 							<tr class="product_line" data-id="{{ $product->id }}">
 								<td>{{ $product->id }}</td>
-						    	<td class="semi-bold">{{ $product->json['name'][ChuckSite::getFeaturedLocale()] }}</td>
+						    	<td class="semi-bold">{{ $product->name[ChuckSite::getFeaturedLocale()] }}</td>
 						    	<td>{{$product->slug}}</td>
-								<td>{{ucfirst(str_replace('_', ' ', $product->json['category']))}}</td>
+								<td>{{ChuckRepeater::find($product->category)->name}}</td>
 						    	{{-- <td>{{config('chuckcms-module-order-form.categories')[$product->json['category']]['name']}}</td> --}}
 						    	<td class="semi-bold">
 						    		<a href="{{ route('dashboard.module.order_form.products.edit', ['product' => $product->id]) }}" class="btn btn-primary btn-sm btn-rounded m-r-20">
@@ -72,68 +72,55 @@
 @endsection
 
 @section('css')
-    <link href="https://cdn.chuck.be/assets/plugins/jquery-datatable/extensions/FixedColumns/css/dataTables.fixedColumns.min.css" rel="stylesheet" type="text/css" />
-    <link href="https://cdn.chuck.be/assets/plugins/datatables-responsive/css/datatables.responsive.css" rel="stylesheet" type="text/css" media="screen" />
 @endsection
 
 @section('scripts')
-	<script src="https://cdn.chuck.be/assets/plugins/jquery-datatable/media/js/jquery.dataTables.min.js" type="text/javascript"></script>
-    <script src="https://cdn.chuck.be/assets/plugins/jquery-datatable/extensions/TableTools/js/dataTables.tableTools.min.js" type="text/javascript"></script>
-    <script src="https://cdn.chuck.be/assets/plugins/jquery-datatable/media/js/dataTables.bootstrap.js" type="text/javascript"></script>
-    <script src="https://cdn.chuck.be/assets/plugins/jquery-datatable/extensions/Bootstrap/jquery-datatable-bootstrap.js" type="text/javascript"></script>
-    <script type="text/javascript" src="https://cdn.chuck.be/assets/plugins/datatables-responsive/js/datatables.responsive.js"></script>
-    <script type="text/javascript" src="https://cdn.chuck.be/assets/plugins/datatables-responsive/js/lodash.min.js"></script>
-    <script src="https://cdn.chuck.be/assets/js/tables.js" type="text/javascript"></script>
-    <script src="https://cdn.chuck.be/assets/plugins/sweetalert2.all.js"></script>
-    <script>
-    $( document ).ready(function (){
-    	$('.product_delete').each(function(){
-			var product_id = $(this).attr("data-id");
-			var token = '{{ Session::token() }}';
-		  	$(this).click(function (event) {
-		  		event.preventDefault();
-		  		swal({
-					title: 'Are you sure?',
-					text: "You won't be able to revert this!",
-					type: 'warning',
-					showCancelButton: true,
-					confirmButtonColor: '#3085d6',
-					cancelButtonColor: '#d33',
-					confirmButtonText: 'Yes, delete it!'
-				}).then((result) => {
-				  	if (result.value) { 
-				  		$.ajax({
-	                        method: 'POST',
-	                        url: "{{ route('dashboard.module.order_form.products.delete') }}",
-	                        data: { 
-	                        	product_id: product_id, 
-	                        	_token: token
-	                        }
-	                    })
-	                    .done(function (data) {
-	                    	if(data == 'success'){
-	                    		$(".product_line[data-id='"+product_id+"']").first().remove();
-	                    		swal(
-						      		'Deleted!',
-						      		'The product has been deleted.',
-						      		'success'
-						    	)
-	                    	} else {
-	                    		swal(
-						      		'Oops!',
-						      		'Something went wrong...',
-						      		'danger'
-						    	)
-	                    	}
-
-	                        
-	                    });
-				    	
-				  	}
-				})
-		    });
-		});
-    });
-
-    </script>
+<script src="https://cdn.chuck.be/assets/plugins/sweetalert2.all.js"></script>
+<script>
+$( document ).ready(function (){
+	$('.product_delete').each(function(){
+		var product_id = $(this).attr("data-id");
+		var token = '{{ Session::token() }}';
+	  	$(this).click(function (event) {
+	  		event.preventDefault();
+	  		swal({
+				title: 'Are you sure?',
+				text: "You won't be able to revert this!",
+				type: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: 'Yes, delete it!'
+			}).then((result) => {
+			  	if (result.value) { 
+			  		$.ajax({
+                        method: 'POST',
+                        url: "{{ route('dashboard.module.order_form.products.delete') }}",
+                        data: { 
+                        	product_id: product_id, 
+                        	_token: token
+                        }
+                    })
+                    .done(function (data) {
+                    	if(data == 'success'){
+                    		$(".product_line[data-id='"+product_id+"']").first().remove();
+                    		swal(
+					      		'Deleted!',
+					      		'The product has been deleted.',
+					      		'success'
+					    	)
+                    	} else {
+                    		swal(
+					      		'Oops!',
+					      		'Something went wrong...',
+					      		'danger'
+					    	)
+                    	}
+                    });
+			  	}
+			})
+	    });
+	});
+});
+</script>
 @endsection

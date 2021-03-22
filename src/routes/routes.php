@@ -12,6 +12,12 @@ Route::group(['middleware' => ['web']], function() {
 		Route::post('/dashboard/order-form/orders/update_address', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\OrderController@updateAddress')->name('dashboard.module.order_form.products.update_address');
 		//END OF: ORDERS ROUTES
 		
+		//START OF: CATEGORIES ROUTES
+		Route::get('/dashboard/order-form/categories', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\CategoryController@index')->name('dashboard.module.order_form.categories.index');
+		Route::post('/dashboard/order-form/categories/save', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\CategoryController@save')->name('dashboard.module.order_form.categories.save');
+		Route::post('/dashboard/order-form/categories/delete', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\CategoryController@delete')->name('dashboard.module.order_form.categories.delete');
+		//END OF: CATEGORIES ROUTES
+		
 		//START OF: PRODUCTS ROUTES
 		Route::get('/dashboard/order-form/products', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\ProductController@index')->name('dashboard.module.order_form.products.index');
 		Route::get('/dashboard/order-form/products/create', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\ProductController@create')->name('dashboard.module.order_form.products.create');
@@ -21,9 +27,19 @@ Route::group(['middleware' => ['web']], function() {
 		Route::post('/dashboard/order-form/products/update', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\ProductController@update')->name('dashboard.module.order_form.products.update');
 		//END OF: PRODUCTS ROUTES
 		
+		//START OF: LOCATIONS ROUTES
+		Route::get('/dashboard/order-form/locations', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\LocationController@index')->name('dashboard.module.order_form.locations.index');
+		Route::post('/dashboard/order-form/locations/save', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\LocationController@save')->name('dashboard.module.order_form.locations.save');
+		Route::post('/dashboard/order-form/locations/delete', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\LocationController@delete')->name('dashboard.module.order_form.locations.delete');
+		//END OF: LOCATIONS ROUTES
+		
 		//START OF: SETTINGS ROUTES
 		Route::get('/dashboard/order-form/settings', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\SettingsController@index')->name('dashboard.module.order_form.settings.index');
 		Route::post('/dashboard/order-form/settings', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\SettingsController@update')->name('dashboard.module.order_form.settings.update');
+
+		//START OF: SETTINGS ROUTES
+		Route::get('/dashboard/order-form/pos', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\POSController@index')->name('dashboard.module.order_form.pos.index');
+		Route::get('/dashboard/order-form/pos/data', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\POSController@list')->name('dashboard.module.order_form.pos.list');
 	});
 
 	Route::post('/cof/place-order', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\OrderController@postOrder')->name('cof.place_order');

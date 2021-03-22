@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Chuckbe\Chuckcms\Models\FormEntry;
+use ChuckRepeater;
+use ChuckSite;
 use Mollie;
 use URL;
 use Mail;
@@ -26,7 +28,7 @@ class ShippingController extends Controller
     {
         $locationKey = $request['locationKey'];
 
-        $limited_to = config('chuckcms-module-order-form.locations.'.$locationKey.'.delivery_limited_to');
+        $limited_to = ChuckRepeater::find($locationKey)->delivery_limited_to;
 
         if($limited_to == null) {
             return true;
@@ -43,9 +45,9 @@ class ShippingController extends Controller
     {
         $locationKey = $request['locationKey'];
 
-        $from = urlencode(config('chuckcms-module-order-form.locations.'.$locationKey.'.delivery_radius_from'));
+        $from = urlencode(ChuckRepeater::find($locationKey)->delivery_radius_from);
         $to = urlencode($request['to']);
-        $data = file_get_contents("https://maps.googleapis.com/maps/api/distancematrix/json?origins=".$from."&destinations=".$to."&language=en-EN&sensor=false&key=".config('chuckcms-module-order-form.delivery.google_maps_api_key'));
+        $data = file_get_contents("https://maps.googleapis.com/maps/api/distancematrix/json?origins=".$from."&destinations=".$to."&language=en-EN&sensor=false&key=".ChuckSite::module('chuckcms-module-order-form')->getSetting('delivery.google_maps_api_key'));
         $data = json_decode($data);
 
         $time = 0;
@@ -60,7 +62,7 @@ class ShippingController extends Controller
                 }            
             }
 
-            if ($distance <= config('chuckcms-module-order-form.locations.'.$locationKey.'.delivery_radius') ) {
+            if ($distance <= ChuckRepeater::find($locationKey)->delivery_radius ) {
                 return response()->json(['status' => 'success']);
             }  
         } else {
@@ -72,7 +74,7 @@ class ShippingController extends Controller
     public function checkPostalcode(Request $request)
     {
         $locationKey = $request['locationKey'];
-        if ( in_array($request['postalcode'], config('chuckcms-module-order-form.locations.'.$locationKey.'.delivery_in_postalcodes')) ) {
+        if ( in_array($request['postalcode'], ChuckRepeater::find($locationKey)->delivery_in_postalcodes) ) {
             return response()->json(['status' => 'success']);
         }
         return response()->json(['status' => 'error']);

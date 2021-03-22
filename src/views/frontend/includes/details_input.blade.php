@@ -1,10 +1,21 @@
 <div class="col-md-8 order-md-1 order-sm-1 order-1">
 	<label for="bestelling">Gegevens</label><br>
 	<div class="row">
-		@foreach(config('chuckcms-module-order-form.locations') as $key => $location)
+		@foreach(ChuckRepeater::for(config('chuckcms-module-order-form.locations.slug'))->sortBy('json.order') as $location)
 		<div class="col">
 			<div class="form-group">
-                <label><input type="radio" class="cof_location_radio" data-location-key="{{ $key }}" data-first-available-date="{{ ChuckModuleOrderForm::firstAvailableDate($key) }}" data-days-of-week-disabled="{{ config('chuckcms-module-order-form.locations.'.$key.'.days_of_week_disabled') }}" data-location-type="{{ config('chuckcms-module-order-form.locations.'.$key.'.type') }}" data-delivery-cost="{{ config('chuckcms-module-order-form.locations.'.$key.'.delivery_cost') }}" data-time-required="{{ config('chuckcms-module-order-form.locations.'.$key.'.time_required') }}" data-time-min="{{ config('chuckcms-module-order-form.locations.'.$key.'.time_min') }}" data-time-max="{{ config('chuckcms-module-order-form.locations.'.$key.'.time_max') }}" data-time-default="{{ config('chuckcms-module-order-form.locations.'.$key.'.time_default') }}" name="location" value="{{ $key }}" {{ $loop->first ? 'checked' : '' }}> {{ $location['name'] }}</label><br>
+                <label><input type="radio" class="cof_location_radio" 
+                    data-location-key="{{ $location->id }}" 
+                    data-first-available-date="{{ ChuckModuleOrderForm::firstAvailableDate($location->id) }}" 
+                    data-days-of-week-disabled="{{ is_null($location->days_of_week_disabled) ? '' : $location->days_of_week_disabled }}" 
+                    data-dates-disabled="{{ is_null($location->dates_disabled) ? '' : $location->dates_disabled }}" 
+                    data-location-type="{{ $location->type }}" 
+                    data-delivery-cost="{{ is_null($location->delivery_cost) ? 0 : $location->delivery_cost }}" 
+                    data-time-required="{{ is_null($location->time_required) ? 0 : $location->time_required }}" 
+                    data-time-min="{{ $location->time_min }}" 
+                    data-time-max="{{ $location->time_max }}" 
+                    data-time-default="{{ $location->time_default }}" 
+                    name="location" value="{{ $location->id }}" {{ $loop->first ? 'checked' : '' }}> {{ $location->name }}</label><br>
 	        </div>
 		</div>
 		@endforeach

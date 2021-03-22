@@ -48,7 +48,8 @@ class ProductController extends Controller
             'category' => 'required',
             'is_displayed' => 'required',
             'is_buyable' => 'required',
-            'price.final' => 'required'
+            'price.final' => 'required',
+            'quantity.*' => 'required'
         ]);
 
         $product = $this->productRepository->save($request);
@@ -75,7 +76,8 @@ class ProductController extends Controller
             'category' => 'required',
             'is_displayed' => 'required',
             'is_buyable' => 'required',
-            'price.final' => 'required'
+            'price.final' => 'required',
+            'quantity.*' => 'required'
         ]);
 
         $product = $this->productRepository->update($request);

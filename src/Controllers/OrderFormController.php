@@ -21,7 +21,7 @@ class OrderFormController extends Controller
 
     public function index()
     {
-        if (config('chuckcms-module-order-form.order.payment_upfront')) {
+        if (ChuckSite::module('chuckcms-module-order-form')->getSetting('order.payment_upfront')) {
             $orders = FormEntry::where('slug', config('chuckcms-module-order-form.products.slug'))
                                     ->where('entry->status', 'paid')
                                     ->get();

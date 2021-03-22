@@ -1,4 +1,8 @@
-@if(config('chuckcms-module-order-form.cart.use_ui') == true)
+@php
+$settings = ChuckSite::module('chuckcms-module-order-form')->settings;
+@endphp
+
+@if($settings['cart']['use_ui'] == true)
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 @endif
 
@@ -20,9 +24,9 @@
 	var cof_dp_startdate = {};
 </script>
 
-@foreach(config('chuckcms-module-order-form.locations') as $locationKey => $location)
+@foreach(ChuckRepeater::for(config('chuckcms-module-order-form.locations.slug'))->sortBy('json.order') as $location)
 <script type="text/javascript">
-	cof_dp_startdate['{{ $locationKey }}'] = '+{{ ChuckModuleOrderForm::firstAvailableDateInDaysFromNow($locationKey) }}d';
+	cof_dp_startdate['{{ $location->id }}'] = '+{{ ChuckModuleOrderForm::firstAvailableDateInDaysFromNow($location->id) }}d';
 </script>
 @endforeach
 <script type="text/javascript">
@@ -40,6 +44,7 @@ if (!$.fn.bootstrapDP && $.fn.datepicker && $.fn.datepicker.noConflict) {
 $(document).ready(function() {
 	var OGlocationKey = $('.cof_location_radio:checked').attr('data-location-key');
 	var OGlocationDate = $('.cof_location_radio:checked').attr('data-first-available-date');
+	var OGlocationDatesDisabled = $('.cof_location_radio:checked').attr('data-dates-disabled') !== undefined ? $('.cof_location_radio:checked').attr('data-dates-disabled').split(',') : [];
 
 	$('.cof_datepicker').val(OGlocationDate);
 
@@ -48,13 +53,15 @@ $(document).ready(function() {
 	    startDate: cof_dp_startdate[OGlocationKey],
 	    weekStart: 1,
 	    language: "{{ config('chuckcms-module-order-form.datepicker.js.locale') }}",
-	    daysOfWeekDisabled: $('.cof_location_radio:checked').attr('data-days-of-week-disabled')
+	    daysOfWeekDisabled: $('.cof_location_radio:checked').attr('data-days-of-week-disabled'),
+	    datesDisabled: OGlocationDatesDisabled
 	});
 
 	if($('.cof_location_radio:checked').attr('data-location-type') == 'delivery') {
 		location_shipping_price = $('.cof_location_radio:checked').attr('data-delivery-cost');
 		$('.cof_cartShippingPrice').text('€ '+parseFloat(location_shipping_price).toFixed(2).replace('.', ','));
 	}
+	calculateProductQty();
 
 	if($('.cof_location_radio:checked').attr('data-time-required') == true) {
 		datetime_default = $('.cof_location_radio:checked').attr('data-time-default');
@@ -80,6 +87,7 @@ $(document).ready(function() {
 		var locationType = $('.cof_location_radio:checked').attr('data-location-type');
 		var locationDate = $('.cof_location_radio:checked').attr('data-first-available-date');
 		var locationDaysOfWeekDisabled = $('.cof_location_radio:checked').attr('data-days-of-week-disabled');
+		var locationDatesDisabled = ($('.cof_location_radio:checked').attr('data-dates-disabled') !== undefined ? $('.cof_location_radio:checked').attr('data-dates-disabled').split(',') : []);
 		var deliveryTimeRequired = $('.cof_location_radio:checked').attr('data-time-required');
 
 		$('.cof_datepicker').bootstrapDP('destroy');
@@ -89,7 +97,8 @@ $(document).ready(function() {
 		    startDate: cof_dp_startdate[locationKey],
 		    weekStart: 1,
 		    language: "{{ config('chuckcms-module-order-form.datepicker.js.locale') }}",
-		    daysOfWeekDisabled: locationDaysOfWeekDisabled
+		    daysOfWeekDisabled: locationDaysOfWeekDisabled,
+		    datesDisabled: locationDatesDisabled
 		});
 
 		$('.cof_datepicker_group').removeClass('col-sm-8').addClass('col-sm-12');
@@ -118,13 +127,17 @@ $(document).ready(function() {
 		}
 
 		calculateTotalPrice();
+		calculateProductQty();
 	});
 
 	$('body').on('click', '.cof_additionProductBtn', function (event) {
 		event.preventDefault();
 		product_id = $(this).attr('data-product-id');
+		max_q = $(this).attr('data-max-q');
 		newValue = parseInt($('.cof_productQuantityInput[data-product-id='+product_id+']').val()) + 1;
-		$('.cof_productQuantityInput[data-product-id='+product_id+']').val(newValue);
+		if( (parseInt(max_q) == -1) || (newValue <= parseInt(max_q)) ) {
+			$('.cof_productQuantityInput[data-product-id='+product_id+']').val(newValue);
+		}
 	});
 
 	$('body').on('click', '.cof_subtractionProductBtn', function (event) {
@@ -1115,6 +1128,32 @@ $(document).ready(function() {
 		$('.cof_cartShippingPrice').text('€ '+parseFloat(location_shipping_price).toFixed(2).replace('.', ','));
 
 		return parseFloat(location_shipping_price);
+	}
+
+	function calculateProductQty() {
+		locationKey = $('.cof_location_radio:checked').attr('data-location-key');
+		$('.cof_additionProductBtn').each(function() {
+			productId = $(this).attr('data-product-id');
+			q = $(this).attr('data-q').split(',')
+			for (var i = 0; i < q.length; i++) {
+				if(q[i].search(''+locationKey+'=') !== -1) {
+					max_q = q[i].split('=').pop();
+					$(this).attr('data-max-q', max_q);
+					if(parseInt(max_q) == 0) {
+						$('.cof_btnAddProductToCart[data-product-id='+productId+']').prop('disabled', true);
+						$('.cof_btnAddProductOptionsToCart[data-product-id='+productId+']').prop('disabled', true);
+						$('.cof_btnAddProductAttributeToCart[data-product-id='+productId+']').prop('disabled', true);
+						$('.cof_btnAddProductAttributeOptionsToCart[data-product-id='+productId+']').prop('disabled', true);
+					} else {
+						$('.cof_btnAddProductToCart[data-product-id='+productId+']').prop('disabled', false);
+						$('.cof_btnAddProductOptionsToCart[data-product-id='+productId+']').prop('disabled', false);
+						$('.cof_btnAddProductAttributeToCart[data-product-id='+productId+']').prop('disabled', false);
+						$('.cof_btnAddProductAttributeOptionsToCart[data-product-id='+productId+']').prop('disabled', false);
+					}
+				}
+			};
+		});
+		//@TODO: add a check for products already in cart
 	}
 
 	function isAddressEligible() {

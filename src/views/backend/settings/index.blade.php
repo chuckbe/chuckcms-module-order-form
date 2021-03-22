@@ -41,11 +41,11 @@
       <div class="col">
         <div class="my-3">
           <ul class="nav nav-tabs justify-content-start" id="instellingenTab" role="tablist">
-            <li class="nav-item" role="presentation">
+            {{-- <li class="nav-item" role="presentation">
                 <a class="nav-link active" id="categories_setup-tab" data-target="#tab_resource_categories_setup" data-toggle="tab" href="#" role="tab" aria-controls="#categories_setup" aria-selected="true">Categories</a>
-            </li>
+            </li> --}}
             <li class="nav-item" role="presentation">
-                <a class="nav-link" id="form_setup-tab" data-target="#tab_resource_form_setup" data-toggle="tab" href="#" role="tab" aria-controls="#form_setup" aria-selected="false">Form</a>
+                <a class="nav-link active" id="form_setup-tab" data-target="#tab_resource_form_setup" data-toggle="tab" href="#" role="tab" aria-controls="#form_setup" aria-selected="false">Form</a>
             </li>
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="cart_setup-tab" data-target="#tab_resource_cart_setup" data-toggle="tab" href="#" role="tab" aria-controls="#cart_setup" aria-selected="false">Cart</a>
@@ -56,9 +56,9 @@
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="emails_setup-tab" data-target="#tab_resource_emails_setup" data-toggle="tab" href="#" role="tab" aria-controls="#emails_setup" aria-selected="false">Emails</a>
             </li>
-            <li class="nav-item" role="presentation">
+            {{-- <li class="nav-item" role="presentation">
                 <a class="nav-link" id="locations_setup-tab" data-target="#tab_resource_locations_setup" data-toggle="tab" href="#" role="tab" aria-controls="#locations_setup" aria-selected="false">Locations</a>
-            </li>
+            </li> --}}
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="delivery_setup-tab" data-target="#tab_resource_delivery_setup" data-toggle="tab" href="#" role="tab" aria-controls="#delivery_setup" aria-selected="false">Delivery</a>
             </li>
@@ -67,8 +67,9 @@
       </div>
     </div>
     <div class="row tab-content bg-light shadow-sm rounded p-3 mb-3 mx-1" id="instellingenTabContent">
+      
       {{-- categories-tab-starts --}}
-      <div class="col-sm-12 tab-pane fade show active" id="tab_resource_categories_setup" role="tabpanel" aria-labelledby="categories_setup-tab">
+      {{-- <div class="col-sm-12 tab-pane fade show active" id="tab_resource_categories_setup" role="tabpanel" aria-labelledby="categories_setup-tab">
         <h4>Categories</h4>
         <div class="field_container_wrapper">
         @foreach ($settings["categories"] as $categoryName => $categoryValue)
@@ -101,11 +102,12 @@
             <button class="btn btn-warning btn-lg" type="button" id="remove_last_field_btn" @if(count($settings["categories"]) == 1) style="display:none;" @endif><i class="fa fa-minus"></i> Laatste veld verwijderen</button>
           </div>
         </div>
-      </div>{{-- categories-tab-ends --}}
+      </div> --}}
+      {{-- categories-tab-ends --}}
+
+
       {{-- form-tab-starts --}}
-      <div class="col-sm-12 tab-pane fade" id="tab_resource_form_setup" role="tabpanel" aria-labelledby="form_setup-tab">
-        <h4>Form</h4>
-        <br>
+      <div class="col-sm-12 tab-pane fade show active" id="tab_resource_form_setup" role="tabpanel" aria-labelledby="form_setup-tab">
         @foreach ($settings["form"] as $formOption => $formOptionValue)
           <div class="row column-seperation">
             <div class="col">
@@ -113,39 +115,43 @@
                 <div class="form-group form-group-default required ">
                   <label>{{$formOption}}</label>
                   <select class="full-width select2 form-control" data-init-plugin="select2" name="form[{{$formOption}}]">
-                    <option value="true" @if($formOptionValue == true) selected @endif>Ja</option>
-                    <option value="false" @if($formOptionValue !== true) selected @endif>Nee</option>
+                    <option value="1" @if($formOptionValue == true) selected @endif>Ja</option>
+                    <option value="0" @if($formOptionValue !== true) selected @endif>Nee</option>
                   </select>
                 </div>
               @else
                 <div class="form-group form-group-default required ">
                   <label>{{$formOption}}</label>
-                  <input type="text" class="form-control" placeholder="{{$formOption}} name" name="form[{{$formOption}}]" value="{{$formOptionValue}}" required>
+                  <input type="text" class="form-control" placeholder="{{$formOption}}" name="form[{{$formOption}}]" value="{{$formOptionValue}}" required>
                 </div>
               @endif
             </div>
           </div>
+          @if(!$loop->last)
           <hr>
+          @endif
         @endforeach
-      </div>{{-- form-tab-ends --}}
+      </div>
+      {{-- form-tab-ends --}}
+      
       {{-- cart-tab-starts --}}
       <div class="col-sm-12 tab-pane fade" id="tab_resource_cart_setup" role="tabpanel" aria-labelledby="cart_setup-tab">
-        <h4>Cart</h4>
         <div class="row column-seperation">  
           <div class="col"> 
             <div class="form-group form-group-default required ">
               <label>Use ui</label>
               <select class="full-width select2 form-control" data-init-plugin="select2" name="cart[use_ui]">
-                <option value="true" @if($settings["cart"]["use_ui"] == true) selected @endif>Ja</option>
-                <option value="false" @if($settings["cart"]["use_ui"] !== true) selected @endif>Nee</option>
+                <option value="1" @if($settings["cart"]["use_ui"] == true) selected @endif>Ja</option>
+                <option value="0" @if($settings["cart"]["use_ui"] !== true) selected @endif>Nee</option>
               </select>
             </div>
           </div>
         </div>
-      </div>{{-- cart-tab-ends --}}
+      </div>
+      {{-- cart-tab-ends --}}
+      
       {{-- order-tab-starts --}}
       <div class="col-sm-12 tab-pane fade" id="tab_resource_order_setup" role="tabpanel" aria-labelledby="order_setup-tab">
-        <h4>Order</h4>
         @foreach ($settings["order"] as $order => $orderValue)
           @if (is_bool($orderValue))
             <div class="row column-seperation">  
@@ -153,8 +159,8 @@
                 <div class="form-group form-group-default required ">
                   <label>{{$order}}</label>
                   <select class="full-width select2 form-control" data-init-plugin="select2" name="order[{{$order}}]">
-                    <option value="true" @if($orderValue == true) selected @endif>Ja</option>
-                    <option value="false" @if($orderValue !== true) selected @endif>Nee</option>
+                    <option value="1" @if($orderValue == true) selected @endif>Ja</option>
+                    <option value="0" @if($orderValue !== true) selected @endif>Nee</option>
                   </select>
                 </div>
               </div>
@@ -162,23 +168,24 @@
           @else
             <div class="form-group form-group-default required ">
               <label>{{$order}}</label>
-              <input type="text" class="form-control" placeholder="{{$orderValue}} name" name="order[{{$order}}]" value="{{$orderValue}}" required>
+              <input type="text" class="form-control" placeholder="{{$orderValue}}" name="order[{{$order}}]" value="{{$orderValue}}" required>
             </div>
           @endif
         @endforeach
-      </div>{{-- order-tab-ends --}}
+      </div>
+      {{-- order-tab-ends --}}
+      
       {{-- emails-tab-starts --}}
       <div class="col-sm-12 tab-pane fade" id="tab_resource_emails_setup" role="tabpanel" aria-labelledby="emails_setup-tab">
-        <h4>Emails</h4>
         @foreach ($settings["emails"] as $emailOption => $emailOptionValue)
-          @if (is_bool($emailOptionValue))
+          @if (is_bool($emailOptionValue) && $emailOption !== 'to_cc'  && $emailOption !== 'to_bcc')
             <div class="row column-seperation">  
               <div class="col"> 
                 <div class="form-group form-group-default required ">
                   <label>{{$emailOption}}</label>
                   <select class="full-width select2 form-control" data-init-plugin="select2" name="emails[{{$emailOption}}]">
-                    <option value="true" @if($emailOptionValue == true) selected @endif>Ja</option>
-                    <option value="false" @if($emailOptionValue !== true) selected @endif>Nee</option>
+                    <option value="1" @if($emailOptionValue == true) selected @endif>Ja</option>
+                    <option value="0" @if($emailOptionValue !== true) selected @endif>Nee</option>
                   </select>
                 </div>
               </div>
@@ -186,13 +193,15 @@
           @else
             <div class="form-group form-group-default required ">
               <label>{{$emailOption}}</label>
-              <input type="text" class="form-control" placeholder="{{$emailOptionValue}} name" name="emails[{{$emailOption}}]" value="{{$emailOptionValue}}" required>
+              <input type="text" class="form-control" placeholder="{{$emailOptionValue}}" name="emails[{{$emailOption}}]" value="{{$emailOptionValue}}" @if($emailOption !== 'to_cc'  && $emailOption !== 'to_bcc') required @endif>
             </div>
           @endif
         @endforeach
-      </div>{{-- emails-tab-ends --}}
+      </div>
+      {{-- emails-tab-ends --}}
+      
       {{-- locations-tab-starts --}}
-      <div class="col-sm-12 tab-pane fade" id="tab_resource_locations_setup" role="tabpanel" aria-labelledby="locations_setup-tab">
+      {{-- <div class="col-sm-12 tab-pane fade" id="tab_resource_locations_setup" role="tabpanel" aria-labelledby="locations_setup-tab">
         <h4>Locations</h4>
         @foreach ($settings["locations"] as $locationOption => $locationOptionValue)
           <h5>{{ucfirst($locationOption)}}</h5>
@@ -203,8 +212,8 @@
                   <div class="form-group form-group-default required ">
                     <label>{{$locationOptionType}}</label>
                     <select class="full-width select2 form-control" data-init-plugin="select2" name="locations[{{$locationOption}}][{{$locationOptionType}}]">
-                      <option value="true" @if($locationOptionTypeValue == true) selected @endif>Ja</option>
-                      <option value="false" @if($locationOptionTypeValue !== true) selected @endif>Nee</option>
+                      <option value="1" @if($locationOptionTypeValue == true) selected @endif>Ja</option>
+                      <option value="0" @if($locationOptionTypeValue !== true) selected @endif>Nee</option>
                     </select>
                   </div>
                 @elseif (is_null($locationOptionTypeValue))
@@ -217,7 +226,7 @@
                     <label>{{$locationOptionType}}</label>
                     <input type="text" class="form-control" placeholder="voer elke postcode in met een komma" name="locations[{{$locationOption}}][{{$locationOptionType}}]" 
                     value="{{implode(",", $locationOptionTypeValue)}}"
-                    >{{-- if null submit an empty array --}}
+                    >
                   </div>
                 @else
                   <div class="form-group form-group-default required ">
@@ -230,10 +239,11 @@
           </div>
           <hr>
         @endforeach
-      </div>{{-- locations-tab-ends --}}
+      </div> --}}
+      {{-- locations-tab-ends --}}
+      
       {{-- delivery-tab-starts --}}
       <div class="col-sm-12 tab-pane fade" id="tab_resource_delivery_setup" role="tabpanel" aria-labelledby="delivery_setup-tab">
-        <h4>Delivery</h4>
         @foreach ($settings["delivery"] as $deliveryOption => $deliveryOptionValue)
           <div class="row column-seperation"> 
             <div class="col">
@@ -241,14 +251,14 @@
                 <div class="form-group form-group-default required ">
                   <label>{{$deliveryOption}}</label>
                   <select class="full-width select2 form-control" data-init-plugin="select2" name="delivery[{{$deliveryOption}}]">
-                    <option value="true" @if($deliveryOptionValue == true) selected @endif>Ja</option>
-                    <option value="false" @if($deliveryOptionValue !== true) selected @endif>Nee</option>
+                    <option value="1" @if($deliveryOptionValue == true) selected @endif>Ja</option>
+                    <option value="0" @if($deliveryOptionValue !== true) selected @endif>Nee</option>
                   </select>
                 </div>
               @else
                 <div class="form-group form-group-default required ">
                   <label>{{$deliveryOption}}</label>
-                  <input type="text" class="form-control" placeholder="{{$deliveryOption}} details" name="delivery[{{$deliveryOption}}]" value="{{$deliveryOptionValue}}" >
+                  <input type="text" class="form-control" placeholder="{{$deliveryOption}}" name="delivery[{{$deliveryOption}}]" value="{{$deliveryOptionValue}}" >
                 </div>
               @endif
             </div>

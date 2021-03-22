@@ -169,8 +169,8 @@
                                         <tr>
                                             <td style="padding: 20px 0 0 0; font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding">
                                                 
-                                                <b>Locatie:</b> {{ config('chuckcms-module-order-form.locations')[$order->entry['location']]['name'] }} op {{ $order->entry['order_date'] }}
-                                                    @if(config('chuckcms-module-order-form.locations')[$order->entry['location']]['time_required'] == true)
+                                                <b>Locatie:</b> {{ ChuckRepeater::find($order->entry['location'])->name }} op {{ $order->entry['order_date'] }}
+                                                    @if(ChuckRepeater::find($order->entry['location'])->time_required == true)
                                                     om {{ $order->entry['order_time'] }}
                                                     @endif <br><br>
                                                 
@@ -204,7 +204,7 @@
                                                 @endforeach
 
                                                 <br>
-                                                @if(config('chuckcms-module-order-form.locations')[$order->entry['location']]['type'] == 'delivery')
+                                                @if(ChuckRepeater::find($order->entry['location'])->type == 'delivery')
                                                 <b>Subtotaal</b>: € {{ number_format((float)$order->entry['order_price'], 2, ',', '.') }} <br>
                                                 <b>Verzending</b>: € {{ number_format((float)$order->entry['order_shipping'], 2, ',', '.') }} <br><br>
                                                 <b>Totaal</b>: € {{ number_format((float)$order->entry['order_price_with_shipping'], 2, ',', '.') }}
@@ -230,10 +230,10 @@
                                             <td style="padding: 20px 0 0 0; font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding">
                                                 Heeft u vragen over uw bestelling? U kan ons steeds contacteren.
                                                 <br><br>
-                                                <a href="mailto:{{ config('chuckcms-module-order-form.company.email') }}">{{ config('chuckcms-module-order-form.company.email') }}</a>
+                                                <a href="mailto:{{ ChuckSite::getSetting('company.email') }}">{{ ChuckSite::getSetting('company.email') }}</a>
                                                 <br>
                                                 <br>
-                                                {{ config('chuckcms-module-order-form.company.name') }}
+                                                {{ ChuckSite::getSetting('company.name') }}
                                             </td>
                                         </tr>
                                     </table>
@@ -261,8 +261,8 @@
             <table width="100%" border="0" cellspacing="0" cellpadding="0" align="center" style="max-width: 500px;" class="responsive-table">
                 <tr>
                     <td align="center" style="font-size: 12px; line-height: 18px; font-family: Helvetica, Arial, sans-serif; color:#666666;">
-                        {{ config('chuckcms-module-order-form.company.name') }} - {{ config('chuckcms-module-order-form.company.vat') }}<br>
-                        {{ config('chuckcms-module-order-form.company.address1') }}, {{ config('chuckcms-module-order-form.company.address2') }}
+                        {{ ChuckSite::getSetting('company.name') }} - {{ ChuckSite::getSetting('company.vat') }}<br>
+                        {{ ChuckSite::getSetting('company.street').' '.ChuckSite::getSetting('company.housenumber') }}, {{ ChuckSite::getSetting('company.postalcode').' '.ChuckSite::getSetting('company.city') }}
                     </td>
                 </tr>
             </table>
