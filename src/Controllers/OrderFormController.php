@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Chuckbe\Chuckcms\Models\FormEntry;
+use ChuckSite;
 
 class OrderFormController extends Controller
 {

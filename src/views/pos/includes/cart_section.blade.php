@@ -137,6 +137,6 @@
 </div>
 <div class="betaalArea row">
     <div class="container">
-        <button class="btn text-center d-block">Betalen</button>
+        <button class="btn text-center d-block " id="cof_placeOrderBtnNow">Betalen</button>
     </div>
 </div>

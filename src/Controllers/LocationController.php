@@ -58,6 +58,7 @@ class LocationController extends Controller
         } 
 
         if(!$location->save()){
+            
             return 'error';//add ThrowNewException
         }
 

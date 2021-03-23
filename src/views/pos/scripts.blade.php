@@ -37,7 +37,7 @@ $('body').on('click', '.cof_pos_product_card', function (event) {
         addToCart(product);
     }
     
-})
+});
 
 $('body').on('click', '#addProductFromModalToCartButton', function (event) {
     event.preventDefault();
@@ -91,12 +91,18 @@ $('body').on('click', '.cof_cartTabRemove', function (event) {
     }
 });
 
-
+    
 
 
 
 $('body').on('click', '#options-form .options_modal_item_radio label.form-check-label', function (event) {
     $(this).siblings('input').first().prop('checked', true);
+});
+
+//to-do: betalen button
+$('body').on('click', '.betaalArea #cof_placeOrderBtnNow', function (event) {
+    event.preventDefault();
+    openPaymentModel(getActiveCart());
 });
 
 
@@ -517,6 +523,7 @@ function storeNewCart(cartId) {
     carts.push(cart);
     localStorage.setItem('cof_carts', JSON.stringify(carts));
 }
+
 /* END OF CART FUNCTIONS */
 
 
@@ -824,28 +831,45 @@ function formatPrice(raw) {
 /* END OF PRICE FUNCTIONS */
 
 
+
+function openPaymentModel(cartId) {
+    carts = getAllCartsFromStorage();
+    for (var i = 0; i < carts.length; i++) {
+        if( carts[i].id == cartId) {
+            /*let products = carts[i].products;
+            let price = getTotalPrice(cartId)
+            let shipping = 0;*/
+            console.log(carts[i]);
+        }
+    };
+    
+}
+
+
 function placeOrder(products, price, shipping) {
+    var order_url = "{{ route('cof.place_order') }}";
+    let a_token = "{{ Session::token() }}"
     $.ajax({
         method: 'POST',
         url: order_url,
         data: { 
-            location: $('input[name=location]:checked').val(), 
-            order_date: $('input[name=order_date]').val(), 
-            order_time: $('input[name=order_time]').val(), 
-            surname: $('input[name=order_surname]').val(), 
-            name: $('input[name=order_name]').val(),
-            email: $('input[name=order_email]').val(),
-            tel: $('input[name=order_tel]').val(),
-            street: $('input[name=order_street]').val(),
-            housenumber: $('input[name=order_housenumber]').val(),
-            postalcode: $('input[name=order_postalcode]').val(),
-            city: $('input[name=order_city]').val(),
-            remarks: $('textarea[name=order_remarks]').val(),
+            location: $('#cof_pos_location').attr('data-active-location'), 
+            order_date: '', 
+            order_time: '', 
+            surname: '', 
+            name: '',
+            email: '',
+            tel: '',
+            street: '',
+            housenumber: '',
+            postalcode: '',
+            city: $('#cof_pos_location').attr('data-active-location'),
+            remarks: '',
             order: products,
             total: price,
             shipping: shipping,
-            legal_approval: $('input[name=legal_approval]').val(),
-            promo_approval: $('input[name=promo_approval]').val(),
+            legal_approval: '',
+            promo_approval: '',
             _token: a_token
         }
     })
