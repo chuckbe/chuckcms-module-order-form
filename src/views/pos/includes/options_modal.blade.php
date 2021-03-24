@@ -74,3 +74,47 @@
     </div>
   </div>
 </div>
+
+<div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="paymentModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">kies betalingsoptie</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+            <div class="col-4 text-center">
+                <div class="m-auto rounded-circle p-3" style="
+                        width: 100px;
+                        height: 100px;
+                        background: #f7f7f7;">
+                        <img src="{{asset('chuckbe/chuckcms-module-order-form/qr-scan.svg')}}" class="img-fluid w-100 p-2">
+                </div>
+                <button class="btn btn-primary my-3">QR code</button>
+            </div>
+            <div class="col-4 text-center">
+                <div class="m-auto rounded-circle p-3" style="
+                    width: 100px;
+                    height: 100px;
+                    background: #f7f7f7;">
+                    <img src="{{asset('chuckbe/chuckcms-module-order-form/wallet.svg')}}" class="img-fluid w-100 p-2">
+                </div>
+                <button class="btn btn-primary my-3">Cash</button>
+            </div>
+            <div class="col-4 text-center">
+                <div class="m-auto rounded-circle p-3" style="
+                    width: 100px;
+                    height: 100px;
+                    background: #f7f7f7;">
+                    <img src="{{asset('chuckbe/chuckcms-module-order-form/credit-card.svg')}}" class="img-fluid w-100 p-2">
+                </div>
+                <button class="btn btn-primary my-3">kaart</button>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

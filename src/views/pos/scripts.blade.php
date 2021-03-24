@@ -840,6 +840,8 @@ function openPaymentModel(cartId) {
             let price = getTotalPrice(cartId)
             let shipping = 0;*/
             console.log(carts[i]);
+            
+            $('#paymentModal').modal('show')
         }
     };
     

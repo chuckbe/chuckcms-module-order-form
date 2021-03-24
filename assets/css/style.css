@@ -388,3 +388,64 @@ html, body, row {
     width: calc(95% - 15px);
     margin: auto;
 }
+@media only screen and (max-width: 767px) {
+  .wrapper{
+      display: block !important;
+      max-height: unset;
+      overflow-x: hidden;
+  }
+  .main, .bestelling{
+    padding: 0;
+    flex: 0 0 100%;
+    max-width: 100%;
+    height: unset;
+  }
+  .menuItemArea > div.container .tab-content{
+      max-height: 100vh;
+    overflow-y: scroll;
+  }
+  .menuItemArea > div.container .tab-content> .tab-pane>.row{
+      margin: 0 !important;
+  }
+  .menuItemArea > div.container .tab-content> .tab-pane>.row .cof_pos_product_card{
+      flex: 0 0 100%;
+    max-width: 100%;
+  }
+  .handlerArea{
+      height: unset;
+  }
+  .handlerArea>.container>.row>div{
+      flex: 0 0 100%;
+    max-width: 100%;
+  }
+  .bestelling {
+      padding: 1rem 0;
+      max-width:720px;
+      margin: 0 auto;
+  }
+  .bestelTabHandler nav{
+    flex-wrap: wrap;
+    flex-direction: row !important;
+    overflow-x: scroll;
+  }
+
+}
+@media (min-width: 576px) {
+    .bestelling {
+        max-width:540px;
+        margin: 0 auto;
+    }
+}
+@media (min-width: 992px) {
+    .bestelling{
+        max-width:960px;
+        margin: 0 auto;
+    }
+}
+
+@media (min-width: 1200px) {
+    .bestelling {
+        max-width:1140px;
+        margin: 0 auto;
+    }
+}
