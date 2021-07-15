@@ -1,7 +1,11 @@
+@php
+$settings = ChuckSite::module('chuckcms-module-order-form')->settings;
+@endphp
+
 <script type="text/javascript">
 var followup_url = "{{ route('cof.status') }}";
 var a_token = "{{ Session::token() }}";
-var payment_upfront = "{{ config('chuckcms-module-order-form.order.payment_upfront') }}";
+var payment_upfront = "{{ ChuckSite::module('chuckcms-module-order-form')->getSetting('order.payment_upfront') }}";
 
 $(document).ready(function() {
 	statusOrder();

@@ -1,96 +1,107 @@
-@extends('chuckcms::backend.layouts.admin')
+@extends('chuckcms::backend.layouts.base')
 
 @section('title')
 Bestelling #{{ $order->entry['order_number'] }}
 @endsection
 
-@section('breadcrumbs')
-<ol class="breadcrumb">
-	<li class="breadcrumb-item active"><a href="{{ route('dashboard.module.order_form.orders.index') }}">Bestellingen</a></li>
-  <li class="breadcrumb-item"><a href="#">Bestelling #{{ $order->entry['order_number'] }}</a></li>
-</ol>
+@section('add_record')
+  
+@endsection
+
+@section('css')
+  
+@endsection
+
+@section('scripts')
+  
 @endsection
 
 @section('content')
-<!-- START CONTAINER FLUID -->
-<div class="container-fluid   container-fixed-lg">
-  <!-- START card -->
-  <div class="card-block">
+<div class="container">
     <div class="row">
-      <div class="col-lg-12">
-        <div class="card card-default">
-          <div class="card-block">
-            <div class="row">
-              <div class="col-sm-12">
-                <h4>Gegevens</h4>
-              </div>
-              <div class="col-sm-12">
-                  <table class="table table-inline">
-                    <tbody>
-                      @foreach($order->entry as $entryKey => $entryValue)
-                      @if(!is_array($entryValue))
-                      <tr>
-                        <td>{{ $entryKey }}</td>
-                        <td>{{ $entryValue }} 
-                          @if($entryKey == 'order_date') <button class="btn btn-xs float-right btn-primary editDateModal"><i data-feather="edit"></i></button> @endif
-                          @if($entryKey == 'street') <button class="btn btn-xs float-right btn-primary editAddressModal"><i data-feather="edit"></i></button> @endif </td>
-                      </tr>
-                      @endif
-                      @endforeach
-                    </tbody>
-                  </table>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-sm-12">
-                <h4 class="mt-5">Overzicht</h4>
-              </div>
-              <div class="col-sm-12">
-                  <table class="table table-inline">
-                    <tbody>
-                      @foreach($order->entry['items'] as $item)
-                          <tr>
-                            <td>{{ $item['attributes'] == false ? $item['name'] : $item['name'] . ' - ' . $item['attributes'] }} <br>
-                              @if($item['options'] !== false)
-                              <small>
-                              @foreach($item['options'] as $option)
-                              {{ $option['name'] }}: {{ $option['value'] }}<br>
-                              @endforeach
-                              </small>
-                                @if($item['extras'] !== false)
-                                <br>
-                                @endif
-                              @endif
-
-                              @if($item['extras'] !== false)
-                              <small>
-                              @foreach($item['extras'] as $option)
-                              {{ $option['name'] }} (€ {{ $option['value'] }})<br>
-                              @endforeach
-                              </small>
-                              @endif
-                            </td>
-                            <td>{{ $item['qty'] }}x</td>
-                            <td>{{ $item['totprice'] }}</td>
-                          </tr>
-                      @endforeach
-                      <tr>
-                          <td><b>Totaal</b></td>
-                          <td> </td>
-                          <td>{{ $order->entry['order_price'] }}</td>
-                        </tr>
-                    </tbody>
-                  </table>
-              </div>
-            </div>
+        <div class="col-sm-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mt-3">
+                    <li class="breadcrumb-item"><a href="{{ route('dashboard.module.order_form.orders.index') }}">Bestellingen</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Bestelling #{{ $order->entry['order_number'] }}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <div class="row bg-light shadow-sm rounded py-3 mb-3 mx-1">
+        <div class="col-sm-12 my-3">
+          <h5>Gegevens</h5>
+          <div class="table-responsive">
+            <table class="table" style="width:100%">
+              <tbody>
+                @foreach($order->entry as $entryKey => $entryValue)
+                @if(!is_array($entryValue))
+                <tr>
+                  <td>{{ $entryKey }}</td>
+                  <td>{{ $entryValue }} 
+                    @if($entryKey == 'order_date') <button class="btn btn-xs float-right btn-primary editDateModal"><i class="fas fa fa-edit"></i></button> @endif
+                    @if($entryKey == 'street') <button class="btn btn-xs float-right btn-primary editAddressModal"><i class="fas fa fa-edit"></i></button> @endif </td>
+                </tr>
+                @endif
+                @endforeach
+              </tbody>
+            </table>
           </div>
         </div>
-      </div>
     </div>
-  </div>
+    <div class="row bg-light shadow-sm rounded py-3 mb-3 mx-1">
+        <div class="col-sm-12 my-3">
+          <h5>Overzicht</h5>
+          <div class="table-responsive">
+            <table class="table" style="width:100%">
+              <thead>
+                <tr>
+                  <th scope="col">Product</th>
+                  <th scope="col">Hvl</th>
+                  <th scope="col" class="pr-5">Prijs</th>
+                </tr>
+              </thead>
 
+              <tbody>
+                @foreach($order->entry['items'] as $item)
+                <tr class="order_line" data-id="{{ $item['id'] }}">
+                  <td>
+                    {{ $item['attributes'] == false ? $item['name'] : $item['name'] . ' - ' . $item['attributes'] }} <br>
+                    @if($item['options'] !== false)
+                    <small>
+                    @foreach($item['options'] as $option)
+                    {{ $option['name'] }}: {{ $option['value'] }}<br>
+                    @endforeach
+                    </small>
+                      @if($item['extras'] !== false)
+                      <br>
+                      @endif
+                    @endif
+
+                    @if($item['extras'] !== false)
+                    <small>
+                    @foreach($item['extras'] as $option)
+                    {{ $option['name'] }} (€ {{ $option['value'] }})<br>
+                    @endforeach
+                    </small>
+                    @endif
+                  </td>
+                  <td>{{ $item['qty'] }}x</td>
+                  <td>{{ $item['totprice'] }}</td>
+                </tr>
+                @endforeach
+                <tr>
+                  <td><b>Totaal</b></td>
+                  <td> </td>
+                  <td>{{ $order->entry['order_price'] }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+    </div>
 </div>
-<!-- END CONTAINER FLUID -->
+
 @include('chuckcms-module-order-form::backend.orders._edit_date_modal')
 @include('chuckcms-module-order-form::backend.orders._edit_address_modal')
 

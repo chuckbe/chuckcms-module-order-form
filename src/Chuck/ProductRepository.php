@@ -4,6 +4,7 @@ namespace Chuckbe\ChuckcmsModuleOrderForm\Chuck;
 
 use Chuckbe\Chuckcms\Models\Repeater;
 use ChuckSite;
+use ChuckRepeater;
 use Illuminate\Http\Request;
 
 class ProductRepository
@@ -43,9 +44,19 @@ class ProductRepository
         $json['category'] = $values->get('category');
         $json['is_displayed'] = ($values->get('is_displayed') == '1' ? true : false);
         $json['is_buyable'] = ($values->get('is_buyable') == '1' ? true : false);
+        $json['is_pos_available'] = ($values->get('is_pos_available') == '1' ? true : false);
 
         $json['price']['final'] = $values->get('price')['final'];//verkoopprijs incl btw
         $json['price']['discount'] = $values->get('price')['discount'];//kortingsprijs incl btw
+        $json['price']['vat_delivery'] = $values->get('price')['vat_delivery'];
+        $json['price']['vat_takeout'] = $values->get('price')['vat_takeout'];
+        $json['price']['vat_on_the_spot'] = $values->get('price')['vat_on_the_spot'];
+
+        $quantity = [];
+        foreach(ChuckRepeater::for(config('chuckcms-module-order-form.locations.slug')) as $location) {
+            $quantity[$location->id] = $values->get('quantity')[''.$location->id.''];
+        }
+        $json['quantity'] = $quantity;
 
         $json['featured_image'] = $values->get('featured_image');
 
@@ -101,9 +112,19 @@ class ProductRepository
         $json['category'] = $values->get('category');
         $json['is_displayed'] = ($values->get('is_displayed') == '1' ? true : false);
         $json['is_buyable'] = ($values->get('is_buyable') == '1' ? true : false);
+        $json['is_pos_available'] = ($values->get('is_pos_available') == '1' ? true : false);
 
         $json['price']['final'] = $values->get('price')['final'];//verkoopprijs incl btw
         $json['price']['discount'] = $values->get('price')['discount'];//kortingsprijs incl btw
+        $json['price']['vat_delivery'] = $values->get('price')['vat_delivery'];
+        $json['price']['vat_takeout'] = $values->get('price')['vat_takeout'];
+        $json['price']['vat_on_the_spot'] = $values->get('price')['vat_on_the_spot'];
+
+        $quantity = [];
+        foreach(ChuckRepeater::for(config('chuckcms-module-order-form.locations.slug')) as $location) {
+            $quantity[$location->id] = $values->get('quantity')[''.$location->id.''];
+        }
+        $json['quantity'] = $quantity;
 
         $json['featured_image'] = $values->get('featured_image');
 
