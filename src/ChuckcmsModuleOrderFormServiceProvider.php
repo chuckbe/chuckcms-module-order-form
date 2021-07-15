@@ -16,6 +16,8 @@ class ChuckcmsModuleOrderFormServiceProvider extends ServiceProvider
     {
         $this->loadRoutesFrom(__DIR__.'/routes/routes.php');
         
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        
         //php artisan vendor:publish --tag=chuckcms-module-order-form-public --force
         $this->publishes([
             __DIR__.'/../assets' => public_path('chuckbe/chuckcms-module-order-form'),

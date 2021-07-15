@@ -48,6 +48,7 @@ class ProductController extends Controller
             'category' => 'required',
             'is_displayed' => 'required',
             'is_buyable' => 'required',
+            'is_pos_available' => 'required',
             'price.final' => 'required',
             'quantity.*' => 'required'
         ]);
@@ -76,6 +77,7 @@ class ProductController extends Controller
             'category' => 'required',
             'is_displayed' => 'required',
             'is_buyable' => 'required',
+            'is_pos_available' => 'required',
             'price.final' => 'required',
             'quantity.*' => 'required'
         ]);

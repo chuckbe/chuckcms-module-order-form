@@ -54,6 +54,7 @@ class LocationRepository
         $json['name'] = $values->get('name');
         $json['type'] = $values->get('type');
         $json['days_of_week_disabled'] = is_null($values->get('days_of_week_disabled')) ? '' : $values->get('days_of_week_disabled');
+        $json['on_the_spot'] = ($values->get('on_the_spot') == '1' ? true : false);
         $json['dates_disabled'] = is_null($values->get('dates_disabled')) ? '' : $values->get('dates_disabled');
         
         $json['delivery_cost'] = (float)$values->get('delivery_cost');
@@ -86,6 +87,7 @@ class LocationRepository
         $json['name'] = $values->get('name');
         $json['type'] = $values->get('type');
         $json['days_of_week_disabled'] = is_null($values->get('days_of_week_disabled')) ? '' : $values->get('days_of_week_disabled');
+        $json['on_the_spot'] = ($values->get('on_the_spot') == '1' ? true : false);
         $json['dates_disabled'] = is_null($values->get('dates_disabled')) ? '' : $values->get('dates_disabled');
         
         $json['delivery_cost'] = (float)$values->get('delivery_cost');

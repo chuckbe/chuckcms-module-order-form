@@ -6,6 +6,10 @@ use Chuckbe\ChuckcmsModuleOrderForm\Chuck\SettingsRepository;
 use Chuckbe\ChuckcmsModuleOrderForm\Chuck\ProductRepository;
 use Chuckbe\ChuckcmsModuleOrderForm\Chuck\CategoryRepository;
 use Chuckbe\ChuckcmsModuleOrderForm\Chuck\LocationRepository;
+use Chuckbe\ChuckcmsModuleOrderForm\Chuck\CustomerRepository;
+
+use Chuckbe\Chuckcms\Models\FormEntry;
+use ChuckSite;
 
 use Illuminate\Http\Request;
 use App\Http\Requests;
@@ -18,17 +22,19 @@ class POSController extends Controller
     private $productRepository;
     private $categoryRepository;
     private $locationRepository;
+    private $customerRepository;
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(SettingsRepository $settingsRepository, ProductRepository $productRepository, CategoryRepository $categoryRepository, LocationRepository $locationRepository)
+    public function __construct(SettingsRepository $settingsRepository, ProductRepository $productRepository, CategoryRepository $categoryRepository, LocationRepository $locationRepository, CustomerRepository $customerRepository)
     {
         $this->settingsRepository = $settingsRepository;
         $this->productRepository = $productRepository;
         $this->categoryRepository = $categoryRepository;
         $this->locationRepository = $locationRepository;
+        $this->customerRepository = $customerRepository;
     }
 
     public function index()
@@ -39,8 +45,10 @@ class POSController extends Controller
         $products = $this->productRepository->get();
         $categories = $this->categoryRepository->get();
         $locations = $this->locationRepository->getForUser(\Auth::user()->id);
+        $customers = $this->customerRepository->get();
+        $guest = $customers->where('email', 'guest@guest.com')->first();
 
-        return view('chuckcms-module-order-form::pos.index')->with(compact('settings','products','categories','locations'));
+        return view('chuckcms-module-order-form::pos.index')->with(compact('settings','products','categories','locations','customers','guest'));
     }
 
     public function list()
@@ -48,7 +56,8 @@ class POSController extends Controller
         $products = $this->productRepository->get();
         $collections = $this->categoryRepository->get();
         $locations = $this->locationRepository->getForUser(\Auth::user()->id);
-        return response()->json(['products' => $products,'collections' => $collections,'locations' => $locations] );
+        $customers = $this->customerRepository->get();
+        return response()->json(['products' => $products,'collections' => $collections,'locations' => $locations,'customers' => $customers] );
     }
 
     public function update(Request $request)
@@ -87,5 +96,146 @@ class POSController extends Controller
 
         return redirect()->route('dashboard.module.order_form.settings.index');
         
+    }
+
+    /**
+     * Store the order in the database.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function postOrder(Request $request)
+    {
+        $this->validate(request(), [
+            'location' => 'required',
+            'location_type' => 'required',
+            'customer_id' => 'nullable',
+            'products' => 'required',
+            'discounts' => 'nullable',
+            'subtotal' => 'required',
+            'discount' => 'required',
+            'total' => 'required',
+            'vat' => 'required'
+        ]);
+
+        $order = new FormEntry();
+        $order->slug = config('chuckcms-module-order-form.products.slug');
+        
+        $all_json = [];
+
+        
+        $all_json['order_number'] = str_random(8);
+        $all_json['status'] = 'paid';
+        $all_json['type'] = 'pos';
+
+
+        $all_json['first_name'] = $request['surname'];
+        $all_json['last_name'] = $request['name'];
+        $all_json['email'] = $request['email'];
+        $all_json['tel'] = $request['tel'];
+        $all_json['street'] = $request['street'];
+        $all_json['housenumber'] = $request['housenumber'];
+        $all_json['postalcode'] = $request['postalcode'];
+        $all_json['city'] = $request['city'];
+        $all_json['remarks'] = $request['remarks'];
+
+        $all_json['client'] = $request['client_id'];
+
+        $all_json['location'] = $request['location'];
+        $all_json['location_type'] = $request['location_type'];
+        $all_json['order_date'] = $request['order_date'];
+        $all_json['order_time'] = $request['order_time'];
+        $all_json['order_subtotal'] = round($request['subtotal'], 2);
+        $all_json['order_discount'] = round($request['discount'], 2);
+        $all_json['order_price'] = round($request['total'], 2);
+        $all_json['order_vat'] = round($request['vat'], 2);
+        $all_json['order_price_no_vat'] = round($request['total'], 2) - round($request['vat'], 2);
+        $all_json['order_shipping'] = round($request['shipping'], 2);
+        $all_json['order_price_with_shipping'] = round(($request['total'] + $request['shipping']), 2);
+
+        // if($request['total'] < ChuckSite::module('chuckcms-module-order-form')->getSetting('order.minimum_order_price')) {
+        //     return response()->json([
+        //         'status' => 'error'
+        //     ]);
+        // }
+        
+        $items = [];
+
+        foreach($request['products'] as $product){
+            $item = [];
+            $prodKey = $product['id'];
+            
+            $item['id'] = $prodKey;
+            $item['name'] = $product['name'];
+            $item['price'] = $product['current_price'];
+            $item['qty'] = $product['quantity'];
+            $item['totprice'] = round($product['total_price'], 2);
+
+            if($product['attribute'] == ''){
+                $item['attributes'] = false;
+            } else {
+                $item['attributes'] = $product['attribute'];
+            }
+
+            if(array_key_exists('options', $product) && $product['options'] !== []){
+                $item['options'] = $product['options'];
+            } else {
+                $item['options'] = false;
+            }
+
+            if(array_key_exists('extras', $product) && $product['extras'] !== []){
+                $item_extras = $product['extras'];
+                $extras = [];
+                if($item_extras !== false) {
+                    foreach($item_extras as $item_extra) {
+                        if(count((array)$item_extra) > 0) {
+                            $extras[] = $item_extra;
+                        }
+                    }
+                }
+
+                if(count($extras) > 0) {
+                    $item['extras'] = $extras;
+                } else {
+                    $item['extras'] = false;
+                }
+            } else {
+                $item['extras'] = false;
+            }
+
+            $items[] = $item;
+            
+        }
+
+        $all_json['items'] = $items;
+
+        $discounts = [];
+        if (is_array($request['discounts']) && count($request['discounts']) > 0) {
+            foreach($request['discounts'] as $singleDiscount){
+                $discount = [];
+                $discount['id'] = $singleDiscount['id'];
+
+                $discounts[] = $discount;
+            }
+        }
+
+        $all_json['discounts'] = $discounts;
+
+        $order->entry = $all_json;
+
+        if($order->save()){
+            //No Payment upfront so send confirmation
+            //$this->sendConfirmation($order);
+            //@todo : sendNotification - printer
+            //$this->sendNotification($order);
+            return response()->json([
+                'status' => 'success',
+                'order_number' => $all_json['order_number'],
+                'url' => route('cof.followup', ['order_number' => $order->entry['order_number']])
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'error'
+            ]);
+        }
     }
 }

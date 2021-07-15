@@ -3,8 +3,8 @@
         <h4 class="bestelHeaderTitle">Bestelling</h4>
     </div>
     <div class="col-6 text-right bestelHeaderInstellingen h-100">
-        <button type="button" class="btn shadow-sm deletealles">Verwijder alles</button>
-        <button type="button" class="btn shadow-sm"><i class="fas fa-cog"></i></button>
+        <button type="button" class="btn shadow-sm deletealles"><i class="fas fa-trash"></i></button>
+        {{-- <button type="button" class="btn shadow-sm"><i class="fas fa-cog"></i></button> --}}
     </div>
 </div>
 <div class="bestelTabHandler row">
@@ -93,17 +93,17 @@
         <div class="card shadow-sm">
             <div class="card-body">
               <div class="row">
-                  <div class="col-7 klantDetails">
+                  <div class="col-9 klantDetails">
                       <div class="col-2 klantIcon">
                         <i class="fas fa-user-circle"></i>
                       </div>
                       <div class="col-10 klantGegevens">
                           <p>Klant:</p>
-                          <p>guest@guest.com</p>
+                          <p id="cof_selectedCustomerEmail">guest@guest.com</p>
                       </div>
                   </div>
-                  <div class="col-5 klantKoppeler">
-                    <button class="btn w-100">Ontkoppelen</button>
+                  <div class="col-3 klantKoppeler">
+                    <button class="btn btn-sm w-100" id="cof_selectCustomerAccount" data-guest="{{ $guest->id }}"><small><i class="fas fa-cog"></i></small></button>
                   </div>
               </div>
             </div>
@@ -116,20 +116,30 @@
             <div class="card-body">
                 <div class="subtotaal row">
                   <div class="col-6 text-left">Subtotaal</div>
-                  <div class="col-6 text-right st-value">€ 0,00</div>
+                  <div class="col-6 text-right cof_cartSubtotalPrice">€ 0,00</div>
                 </div>
                 <div class="korting row">
                     <div class="col-6 text-left">Korting</div>
-                    <div class="col-6 text-right ko-value">€ 0,00</div>
+                    <div class="col-6 text-right cof_cartDiscountPrice">€ 0,00</div>
                 </div>
-                <div class="btw row">
-                    <div class="col-6 text-left">BTW</div>
-                    <div class="col-6 text-right btw-value">€ 0,00</div>
+                <div class="row">
+                    <div class="col-12" id="cof_cartCouponWrapper">
+                      <span class="badge badge-primary badge-sm mt-1 mr-1 cof_cartCouponItem d-none" data-coupon="" style="font-size:0.7rem!important">
+                        <button type="button" class="close ml-1 cof_cartCouponItemRemoveBtn" style="font-size:1.2rem!important;line-height: 0.65!important" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                        <span class="cof_couponText">PROMO10</span>
+                      </span>
+                    </div>
                 </div>
                 <hr class="priceCalculatorDivider"/>
                 <div class="totaal row">
                     <div class="col-6 text-left">Totaal</div>
                     <div class="col-6 text-right tot-value cof_cartTotalPrice">€ 0,00</div>
+                </div>
+                <div class="btw row">
+                    <div class="col-6 text-left">BTW</div>
+                    <div class="col-6 text-right cof_cartTotalVatPrice">€ 0,00</div>
                 </div>
             </div>
         </div>

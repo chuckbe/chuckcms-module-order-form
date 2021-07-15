@@ -71,10 +71,10 @@
                 </div>
               </div>
               <div class="row column-separation">
-                <div class="col-sm-6">
+                <div class="col-sm-4">
                   <div class="form-group form-group-default input-group">
                     <div class="form-input-group">
-                      <label class="inline">Wordt weergegeven?</label>
+                      <label class="inline">Wordt online weergegeven?</label>
                     </div>
                     <div class="input-group-addon bg-transparent h-c-50 pl-3">
                       <input type="hidden" name="is_displayed" value="0">
@@ -82,14 +82,25 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-4">
                   <div class="form-group form-group-default input-group">
                     <div class="form-input-group">
-                      <label class="inline">Mag verkocht worden?</label>
+                      <label class="inline">Mag online verkocht worden?</label>
                     </div>
                     <div class="input-group-addon bg-transparent h-c-50 pl-3">
                       <input type="hidden" name="is_buyable" value="0">
                       <input type="checkbox" data-init-plugin="switchery" data-size="small" data-color="primary" value="1" name="is_buyable" {{ old('is_buyable') == '1' ? 'checked' : '' }} />
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group form-group-default input-group">
+                    <div class="form-input-group">
+                      <label class="inline">Beschikbaar in POS?</label>
+                    </div>
+                    <div class="input-group-addon bg-transparent h-c-50 pl-3">
+                      <input type="hidden" name="is_pos_available" value="0">
+                      <input type="checkbox" data-init-plugin="switchery" data-size="small" data-color="primary" value="1" name="is_pos_available" {{ old('is_pos_available') == '1' ? 'checked' : '' }} />
                     </div>
                   </div>
                 </div>

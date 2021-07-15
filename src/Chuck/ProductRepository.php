@@ -44,6 +44,7 @@ class ProductRepository
         $json['category'] = $values->get('category');
         $json['is_displayed'] = ($values->get('is_displayed') == '1' ? true : false);
         $json['is_buyable'] = ($values->get('is_buyable') == '1' ? true : false);
+        $json['is_pos_available'] = ($values->get('is_pos_available') == '1' ? true : false);
 
         $json['price']['final'] = $values->get('price')['final'];//verkoopprijs incl btw
         $json['price']['discount'] = $values->get('price')['discount'];//kortingsprijs incl btw
@@ -111,6 +112,7 @@ class ProductRepository
         $json['category'] = $values->get('category');
         $json['is_displayed'] = ($values->get('is_displayed') == '1' ? true : false);
         $json['is_buyable'] = ($values->get('is_buyable') == '1' ? true : false);
+        $json['is_pos_available'] = ($values->get('is_pos_available') == '1' ? true : false);
 
         $json['price']['final'] = $values->get('price')['final'];//verkoopprijs incl btw
         $json['price']['discount'] = $values->get('price')['discount'];//kortingsprijs incl btw

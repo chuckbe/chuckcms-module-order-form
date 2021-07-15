@@ -62,6 +62,10 @@
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="delivery_setup-tab" data-target="#tab_resource_delivery_setup" data-toggle="tab" href="#" role="tab" aria-controls="#delivery_setup" aria-selected="false">Delivery</a>
             </li>
+
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="pos_setup-tab" data-target="#tab_resource_pos_setup" data-toggle="tab" href="#" role="tab" aria-controls="#pos_setup" aria-selected="false">POS</a>
+            </li>
           </ul>
         </div>
       </div>
@@ -265,6 +269,31 @@
           </div>
         @endforeach
       </div>{{-- delivery-tab-ends --}}
+
+      {{-- pos-tab-starts --}}
+      <div class="col-sm-12 tab-pane fade" id="tab_resource_pos_setup" role="tabpanel" aria-labelledby="pos_setup-tab">
+        @foreach ($settings["pos"] as $posOption => $posOptionValue)
+          @if (is_bool($posOptionValue) && $posOption !== 'to_cc'  && $posOption !== 'to_bcc')
+            <div class="row column-seperation">  
+              <div class="col"> 
+                <div class="form-group form-group-default required ">
+                  <label>{{$posOption}}</label>
+                  <select class="full-width select2 form-control" data-init-plugin="select2" name="pos[{{$posOption}}]">
+                    <option value="1" @if($posOptionValue == true) selected @endif>Ja</option>
+                    <option value="0" @if($posOptionValue !== true) selected @endif>Nee</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          @else
+            <div class="form-group form-group-default required ">
+              <label>{{$posOption}}</label>
+              <input type="text" class="form-control" placeholder="{{$posOptionValue}}" name="pos[{{$posOption}}]" value="{{$posOptionValue}}" required>
+            </div>
+          @endif
+        @endforeach
+      </div>
+      {{-- pos-tab-ends --}}
     </div>
     <div class="row">
       <div class="col">

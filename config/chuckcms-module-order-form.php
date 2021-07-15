@@ -13,6 +13,12 @@ return [
 		'page' => 'chuckcms-module-order-form::frontend.products.detail'
 	],
 
+	'discounts' => [
+		'slug' 	=> 'order_form_discounts',
+		'url' => 'of-discounts/',
+		'page' => 'chuckcms-module-order-form::frontend.discounts.detail'
+	],
+
 	'categories' => [
 		'slug' 	=> 'order_form_categories',
 		'url' => 'of-categories/',
@@ -23,6 +29,36 @@ return [
 		'slug' 	=> 'order_form_locations',
 		'url' => 'of-locations/',
 		'page' => 'chuckcms-module-order-form::frontend.locations.detail'
+	],
+
+	'rewards' => [
+		'slug' 	=> 'order_form_rewards',
+		'url' => 'of-rewards/',
+		'page' => 'chuckcms-module-order-form::frontend.rewards.detail'
+	],
+
+	'customers' => [
+		'table' 	=> 'cof_customers'
+	],
+
+	'coupons' => [
+		'table' 	=> 'cof_coupons'
+	],
+
+	'auth' => [
+		'template' => [
+			'hintpath' => 'chuckcms-template-starter',
+            'login_blade' => 'account.auth',
+            'registration_blade' => 'account.register',
+		],
+	],
+
+	'account' => [
+		'template' => [
+			'account' => 'order-form.account',
+			'coupons' => 'order-form.coupons',
+			'swap_points' => 'order-form.swap_points',
+		],
 	],
 
 	// 'categories' => [
@@ -161,5 +197,47 @@ return [
 	// 	'next_day_until_hour' => 24,
 	// 	'google_maps_api_key' => env('GOOGLE_MAPS_API_KEY', ''),
 	// ],
+	
+	'countries_data' => [
+        "BE" => [
+            "name" => "Belgium",
+            "native" => "België",
+            "postalcode" => [
+                "max" => 4,
+                "regex" => '^[1-9]{1}[0-9]{3}$'
+            ],
+            'vat' => [
+                'max' => 12,
+                'regex' => '^(BE)?0[0-9]{9}$',
+                'format' => 'BE0123456789'
+            ]
+        ],
+        "LU" => [
+            'name' => 'Luxembourg',
+            'native' => 'Luxembourg',
+            'postalcode' => [
+                'max' => 4,
+                'regex' => '^[1-9]{1}[0-9]{3}$'
+            ],
+            'vat' => [
+                'max' => 10,
+                'regex' => '^(LU)?[0-9]{8}$',
+                'format' => 'LU01234567'
+            ]
+        ],
+        "NL" => [
+            'name' => 'The Netherlands',
+            'native' => 'Nederland',
+            'postalcode' => [
+                'max' => 8,
+                'regex' => '^[1-9][0-9]{3}[ ]?([A-RT-Za-rt-z][A-Za-z]|[sS][BCbcE-Re-rT-Zt-z])$'
+            ],
+            'vat' => [
+                'max' => 14,
+                'regex' => '^(NL)?[0-9]{9}B[0-9]{2}$',
+                'format' => 'NL001234567B01'
+            ]
+        ]
+    ],
 
 ];

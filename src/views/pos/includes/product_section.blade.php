@@ -9,11 +9,11 @@
                     
 
                     @foreach($products as $product)
-                    @if($product->json['category'] == $category->id && $product->json['is_displayed'])
-                    <div class="col-3 p-1 cof_pos_product_card {{-- unavailable --}}" data-product-id="{{ $product->id }}"  data-product-name="{{ $product->getJson('name.nl') }}" data-q="{{ http_build_query($product->getJson('quantity'),'',',') }}" data-current-price="{{ $product->json['price']['discount'] !== '0.000000' ? $product->json['price']['discount'] : $product->json['price']['final'] }}" data-product-attributes="{{ json_encode($product->json['attributes']) }}" data-product-options="{{ json_encode($product->json['options']) }}" @if(array_key_exists('extras', $product->json)) data-product-extras="{{ json_encode($product->json['extras']) }}" @endif>
+                    @if($product->json['category'] == $category->id && $product->is_pos_available == true)
+                    <div class="col-3 p-1 cof_pos_product_card {{-- unavailable --}}" data-product-id="{{ $product->id }}" data-product-category-id="{{ $product->getJson('category') }}" data-product-name="{{ $product->getJson('name.nl') }}" data-q="{{ http_build_query($product->getJson('quantity'),'',',') }}" data-vat-delivery="{{ $product->json['price']['vat_delivery'] }}" data-vat-takeout="{{ $product->json['price']['vat_takeout'] }}" data-vat-on-the-spot="{{ $product->json['price']['vat_on_the_spot'] }}" data-current-price="{{ $product->json['price']['discount'] !== '0.000000' ? $product->json['price']['discount'] : $product->json['price']['final'] }}" data-product-attributes="{{ json_encode($product->json['attributes']) }}" data-product-options="{{ json_encode($product->json['options']) }}" @if(array_key_exists('extras', $product->json)) data-product-extras="{{ json_encode($product->json['extras']) }}" @endif>
                         <div class="card shadow-sm">
                             <div class="card-body">
-                                <h5 class="card-title">{{ $product->getJson('name.nl') }}</h5>
+                                <h6 class="card-title"><b>{{ $product->getJson('name.nl') }}</b></h6>
                                 <div class="row">
                                     <div class="col">
                                         <h6 class="card-subtitle mb-2 text-muted cof_productItemPriceDisplay" data-product-id="{{ $product->id }}" data-current-price="{{ $product->json['price']['discount'] !== '0.000000' ? $product->json['price']['discount'] : $product->json['price']['final'] }}" style="font-size:16px">

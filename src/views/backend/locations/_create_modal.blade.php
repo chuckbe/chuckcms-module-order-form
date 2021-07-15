@@ -44,6 +44,18 @@
                   <input type="text" id="create_location_days_of_week_disabled" name="days_of_week_disabled" class="form-control">
                 </div>
               </div>
+
+              <div class="col-sm-12">
+                <div class="form-group form-group-default required ">
+                  <label>Is on-the-spot mogelijk?</label>
+                  <div class="form-check">
+                    <input type="hidden" value="0" name="on_the_spot">
+                    <input type="checkbox" class="form-check-input" value="1" id="create_location_on_the_spot" name="on_the_spot">
+                    <label class="form-check-label" for="on_the_spot">Ter plaatse eten is mogelijk</label>
+                  </div>
+                </div>
+              </div>
+            
               <div class="col-sm-12">
                 <div class="form-group form-group-default">
                   <label>Uitgesloten Datums (dd/mm/yyyy,dd/mm/yyyy,...)</label>

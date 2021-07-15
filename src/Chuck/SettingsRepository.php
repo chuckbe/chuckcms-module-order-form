@@ -59,6 +59,8 @@ class SettingsRepository
         $settings['delivery']['next_day_until_hour'] = (int)$values->input('delivery.next_day_until_hour');
         $settings['delivery']['google_maps_api_key'] = $values->input('delivery.google_maps_api_key');
 
+        $settings['pos']['ticket_logo'] = $values->input('pos.ticket_logo');
+
         $json['admin']['settings'] = $settings;
         $module->json = $json;
         $module->update();

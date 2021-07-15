@@ -112,6 +112,7 @@ class OrderController extends Controller
         
         $all_json['order_number'] = str_random(8);
         $all_json['status'] = 'awaiting';
+        $all_json['type'] = 'web';
         $all_json['first_name'] = $request['surname'];
         $all_json['last_name'] = $request['name'];
         $all_json['email'] = $request['email'];

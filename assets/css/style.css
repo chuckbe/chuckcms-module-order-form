@@ -48,11 +48,11 @@ html, body, row {
     background-color: #f8f9fa;
 }
 .menuArea {
-    height: 20vh;
+    height: 16vh;
     margin: 0;
 }
 .menuArea nav {
-    padding: 12vh 2vw 0;
+    padding: 8vh 2vw 0;
 }
 .menuArea ul.nav .nav-item {
     background-color: rgba(231, 40, 112, 0.65)!important;
@@ -67,7 +67,7 @@ html, body, row {
     color: #fff;
 }
 .menuItemArea {
-    height: 50vh;
+    height: 54vh;
     margin-bottom: 2vh;
     max-width: 100%;
     margin: 0;
@@ -430,7 +430,7 @@ html, body, row {
   }
 
 }
-@media (min-width: 576px) {
+/*@media (min-width: 576px) {
     .bestelling {
         max-width:540px;
         margin: 0 auto;
@@ -448,4 +448,4 @@ html, body, row {
         max-width:1140px;
         margin: 0 auto;
     }
-}
+}*/
