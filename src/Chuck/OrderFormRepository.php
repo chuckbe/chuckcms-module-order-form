@@ -144,7 +144,7 @@ class OrderFormRepository
         if(ChuckSite::module('chuckcms-module-order-form')->getSetting('order.payment_upfront')) {
             $total = $this->formEntry->where('slug', config('chuckcms-module-order-form.products.slug'))->where('entry->status', 'paid')->whereDate('entry->order_date', '>', Carbon::today()->subDays(7)->toDateString())->sum('entry->order_price');
         } else {
-            $total = $this->formEntry->where('slug', config('chuckcms-module-order-form.products.slug'))->where('entry->status', 'awaiting')->whereDate('entry->order_date', '>', Carbon::today()->subDays(7)->toDateString())->sum('entry->order_price');
+            $total = $this->formEntry->where('slug', config('chuckcms-module-order-form.products.slug'))->where('entry->status', 'awaiting')->whereDate('entry->order_date', '>', Carbon::today()->subDays(7))->sum('entry->order_price');
         }
         return number_format((float)$total, 2, ',', '.');
     }
@@ -154,7 +154,7 @@ class OrderFormRepository
         if(ChuckSite::module('chuckcms-module-order-form')->getSetting('order.payment_upfront')) {
             return $this->formEntry->where('slug', config('chuckcms-module-order-form.products.slug'))->where('entry->status', 'paid')->where('entry->order_date', '>', Carbon::today()->subDays(7)->toDateString())->count();
         } else {
-            return $this->formEntry->where('slug', config('chuckcms-module-order-form.products.slug'))->where('entry->status', 'awaiting')->where('entry->order_date', '>', Carbon::today()->subDays(7)->toDateString())->count();
+            return $this->formEntry->where('slug', config('chuckcms-module-order-form.products.slug'))->where('entry->status', 'awaiting')->where('entry->order_date', '>', Carbon::today()->subDays(7))->count();
         }
     }
 

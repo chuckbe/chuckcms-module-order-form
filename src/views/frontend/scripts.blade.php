@@ -347,6 +347,7 @@ $(document).ready(function() {
 
 		$('#cof_cartTotalQuanity').attr('data-cof-quantity', cart_count + parseInt(quantity));
 		$('#cof_cartTotalQuanity').text(cart_count + parseInt(quantity));
+		$('.cof_cartTotalQuanity').text(cart_count + parseInt(quantity));
 
 		//reset original product tile qty input to 1
 		$('.cof_productQuantityInput[data-product-id='+product_id+']').val(1);
