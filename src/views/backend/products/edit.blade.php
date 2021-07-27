@@ -171,7 +171,7 @@
               <hr>
               <div class="row column-separation">
                 <div class="col-sm-12">
-                  <div class="card-title">Attributen</div>
+                  <div class="card-title"><h6><b>Attributen</b></h6></div>
                 </div>
                 <div class="col-sm-12 attributes-row">
                   <div class="attributeInputContainer">
@@ -248,7 +248,7 @@
               <hr>
               <div class="row column-separation">
                 <div class="col-sm-12">
-                  <div class="card-title">Opties</div>
+                  <div class="card-title"><h6><b>Opties</b></h6></div>
                 </div>
                 <div class="col-sm-12 options-row">
                   <div class="optionInputContainer">
@@ -317,7 +317,7 @@
               <hr>
               <div class="row column-separation">
                 <div class="col-sm-12">
-                  <div class="card-title">Extras</div>
+                  <div class="card-title"><h6><b>Extras</b></h6></div>
                 </div>
                 <div class="col-sm-12 extras-row">
                   <div class="extraInputContainer">
@@ -358,6 +358,29 @@
                                 <label>Prijs</label>
                                 <input type="text" data-a-dec="." data-a-sep="" data-m-dec="6" data-a-pad=true class="autonumeric form-control" name="extra_price[]" value="{{ $extra['price'] }}">
                               </div>
+                            </div>
+
+                            <div class="col-sm-3 offset-sm-2">
+                              <div class="form-group form-group-default required">
+                                <label>BTW% voor levering *</label>
+                                <input type="text" data-a-dec="." data-a-sep="" data-m-dec="0" data-a-pad=true class="autonumeric form-control" name="extra_vat_delivery[]" value="{{ array_key_exists('vat_delivery', $extra) ? $extra['vat_delivery'] : 6 }}" data-v-min="0" data-v-max="21" required>
+                              </div>
+                            </div>
+                            <div class="col-sm-3">
+                              <div class="form-group form-group-default required">
+                                <label>BTW% voor afhaal *</label>
+                                <input type="text" data-a-dec="." data-a-sep="" data-m-dec="0" data-a-pad=true class="autonumeric form-control" name="extra_vat_takeout[]" value="{{ array_key_exists('vat_takeout', $extra) ? $extra['vat_takeout'] : 6 }}" data-v-min="0" data-v-max="21" required>
+                              </div>
+                            </div>
+                            <div class="col-sm-4">
+                              <div class="form-group form-group-default required">
+                                <label>BTW% voor on-the-spot *</label>
+                                <input type="text" data-a-dec="." data-a-sep="" data-m-dec="0" data-a-pad=true class="autonumeric form-control" name="extra_vat_on_the_spot[]" value="{{ array_key_exists('vat_on_the_spot', $extra) ? $extra['vat_on_the_spot'] : 12 }}" data-v-min="0" data-v-max="21" required>
+                              </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                              <hr>
                             </div>
                           </div>
                         @endforeach

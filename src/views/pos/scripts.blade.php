@@ -1,113 +1,4 @@
 <script>
-    var clientPrinters = null;
-    var _this = this;
-
-    //WebSocket settings
-    JSPM.JSPrintManager.auto_reconnect = true;
-    JSPM.JSPrintManager.start();
-    JSPM.JSPrintManager.WS.onStatusChanged = function () {
-        if (jspmWSStatus()) {
-            //get client installed printers
-            JSPM.JSPrintManager.getPrinters().then(function (printersList) {
-                clientPrinters = printersList;
-                var options = '';
-                for (var i = 0; i < clientPrinters.length; i++) {
-                    options += '<option>' + clientPrinters[i] + '</option>';
-                }
-                $('#printerName').html(options);
-            });
-        }
-    };
-
-    //Check JSPM WebSocket status
-    function jspmWSStatus() {
-        if (JSPM.JSPrintManager.websocket_status == JSPM.WSStatus.Open)
-            return true;
-        else if (JSPM.JSPrintManager.websocket_status == JSPM.WSStatus.Closed) {
-            console.warn('JSPrintManager (JSPM) is not installed or not running! Download JSPM Client App from https://neodynamic.com/downloads/jspm');
-            return false;
-        }
-        else if (JSPM.JSPrintManager.websocket_status == JSPM.WSStatus.Blocked) {
-            alert('JSPM has blocked this website!');
-            return false;
-        }
-    }
-
-    //Do printing...
-    function doPrinting() {
-        if (jspmWSStatus()) {
-
-            // Gen sample label featuring logo/image, barcode, QRCode, text, etc by using JSESCPOSBuilder.js
-
-            var escpos = Neodynamic.JSESCPOSBuilder;
-            var doc = new escpos.Document();
-            escpos.ESCPOSImage.load('data:image/png;base64,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')
-            .then(logo => {
-
-                // logo image loaded, create ESC/POS commands
-
-                var escposCommands = doc
-                    .setCharacterCodeTable(19)
-                    .align(escpos.TextAlignment.Center)
-                    .image(logo, escpos.BitmapDensity.D24)
-                    .feed(2)
-                    .font(escpos.FontFamily.A)
-                    .align(escpos.TextAlignment.Center)
-                    .style([escpos.FontStyle.Bold])
-                    .size(0, 0)
-                    .text("DONUTTELLO")
-                    .font(escpos.FontFamily.B)
-                    .size(0, 0)
-                    .text("Bergstraat 27,")
-                    .text("2220 Heist-op-den-Berg")
-                    .feed(2)
-                    .font(escpos.FontFamily.A)
-                    .size(0, 0)
-                    .text("KASTICKET")
-                    .feed(2)
-                    
-                    .drawLine()
-                    .drawTable(["2 Classic Donut", "     3.00 C"])
-                    .drawTable(["1 Boxdeal: Doosje van 6", "    15.00 C"])
-                    .drawTable(["1 2 euro deal:", "     2.00  "])
-                    .drawTable(["  1 Classic Donut", "     1.00 C"])
-                    .drawTable(["  1 Basic Koffie", "     1.00 C"])
-                    .text("3 Filled Donut                            9.60 C")
-                    .drawLine()
-                    
-                    .font(escpos.FontFamily.B)
-                    .style([escpos.FontStyle.Bold])
-                    .size(1, 1)
-                    .drawTable(["Totaal", "€ 230.00"])
-
-                    .feed(2)
-                    .font(escpos.FontFamily.A)
-                    .linearBarcode('1234567', escpos.Barcode1DType.EAN8, new escpos.Barcode1DOptions(2, 100, true, escpos.BarcodeTextPosition.Below, escpos.BarcodeFont.A))
-                    .qrCode('https://donuttello.com', new escpos.BarcodeQROptions(escpos.QRLevel.L, 6))
-                    .pdf417('PDF417 data to be encoded here', new escpos.BarcodePDF417Options(3, 3, 0, 0.1, false))
-                    .feed(5)
-                    .cut()
-                    .generateUInt8Array();
-
-
-                // create ClientPrintJob
-                var cpj = new JSPM.ClientPrintJob();
-
-                // Set Printer info
-                var myPrinter = new JSPM.InstalledPrinter($('#printerName').val());
-                cpj.clientPrinter = myPrinter;
-
-                // Set the ESC/POS commands
-                cpj.binaryPrinterCommands = escposCommands;
-
-                // Send print job to printer!
-                cpj.sendToClient();
-
-            });
-        }
-    }
-</script>
-<script>
 $(document).ready(function() {
     $.fn.numpad.defaults.gridTpl = '<table class="table bg-white"></table>';
     $.fn.numpad.defaults.backgroundTpl = '<div class=""></div>';
@@ -246,15 +137,13 @@ $('body').on('click', '.cof_cartCouponItemRemoveBtn', function (event) {
 
     
 
-
-
 $('body').on('click', '#options-form .options_modal_item_radio label.form-check-label', function (event) {
     $(this).siblings('input').first().prop('checked', true);
 });
 
-//to-do: betalen button
 $('body').on('click', '.betaalArea #cof_placeOrderBtnNow', function (event) {
     event.preventDefault();
+
     openPaymentModal(getActiveCart());
 });
 
@@ -370,13 +259,6 @@ $('body').on('click', '#cof_finalizeOrderBtn', function (event) {
 });
 
 
-$('body').on('click', '#openPrintSettingsModal', function (event) {
-    event.preventDefault();
-
-    $('#printerSettingsModal').modal('show');
-});
-
-
 
 /* INIT */
 /* INIT */
@@ -420,9 +302,29 @@ function changeActiveLocation(elem) {
     let locationType = elem.attr('data-location-type');
     let locationOnTheSpot = elem.attr('data-on-the-spot');
     let locationName = elem.text();
+
+    let locationPosName = elem.attr('data-pos-name');
+    let locationPosAddress1 = elem.attr('data-pos-address');
+    let locationPosAddress2 = elem.attr('data-pos-address-t');
+    let locationPosVat = elem.attr('data-pos-vat');
+    let locationPosReceiptTitle = elem.attr('data-pos-receipt-title');
+    let locationPosReceiptFooterLine1 = elem.attr('data-pos-receipt-footer-line');
+    let locationPosReceiptFooterLine2 = elem.attr('data-pos-receipt-footer-line-t');
+    let locationPosReceiptFooterLine3 = elem.attr('data-pos-receipt-footer-line-tt');
+
     $('#cof_pos_location').attr('data-active-location', locationId);
     $('#cof_pos_location').attr('data-location-type', locationType);
     $('#cof_pos_location').attr('data-on-the-spot', locationOnTheSpot);
+
+    $('#cof_pos_location').attr('data-pos-name', locationPosName);
+    $('#cof_pos_location').attr('data-pos-address', locationPosAddress1);
+    $('#cof_pos_location').attr('data-pos-address-t', locationPosAddress2);
+    $('#cof_pos_location').attr('data-pos-vat', locationPosVat);
+    $('#cof_pos_location').attr('data-pos-receipt-title', locationPosReceiptTitle);
+    $('#cof_pos_location').attr('data-pos-receipt-footer-line', locationPosReceiptFooterLine1);
+    $('#cof_pos_location').attr('data-pos-receipt-footer-line-t', locationPosReceiptFooterLine2);
+    $('#cof_pos_location').attr('data-pos-receipt-footer-line-tt', locationPosReceiptFooterLine3);
+
     $('#cof_pos_location').text(locationName);
     cof_pos_active_location = locationId;
 
@@ -692,9 +594,6 @@ function addProductToCartInStorage(product, cartId) {
             });
 
             carts[i].products = products;
-            // carts[i].total = carts[i].total + product.total_price;
-            // carts[i].vat = getCartTotalVatFromProducts(products); 
-            // carts[i].subtotal = (carts[i].total - carts[i].vat);
             localStorage.setItem('cof_carts', JSON.stringify(carts));
             calculateTotalPrice(cartId)
             return;
@@ -956,6 +855,14 @@ function getSelectedCustomer() {
     return $('.cof_customerSelectInputOption:selected').first().val();
 }
 
+function getCustomerByEan(ean_digit) {
+    let ean = ean_digit.slice(0, -1);
+    if ($('.cof_customerSelectInputOption[data-ean="'+ean+'"]').length > 0) {
+        return $('.cof_customerSelectInputOption[data-ean="'+ean+'"]').first().val();
+    }
+    return getGuestCustomer();
+}
+
 function getGuestCustomer() {
     return parseInt($('#cof_selectCustomerAccount').attr('data-guest'));
 }
@@ -969,6 +876,30 @@ function getCustomerEmail(customer_id) {
     });
 
     return customer_email;
+}
+
+function addCustomerPoints(cart_id) {
+    let cart = getCartFromStorage(cart_id);
+    let points = Math.floor(cart.total);
+    let customer_id = cart.customer_id;
+
+    $('.cof_customerSelectInputOption').each(function () {
+        if ($(this).val() == customer_id) {
+            let old_points = parseInt($(this).attr('data-points'));
+            $(this).attr('data-points', (old_points+points));
+        }
+    });
+}
+
+function getCustomerPoints(customer_id) {
+    customer_points = '';
+    $('.cof_customerSelectInputOption').each(function () {
+        if ($(this).val() == customer_id) {
+            customer_points = parseInt($(this).attr('data-points'));
+        }
+    });
+
+    return customer_points;
 }
 
 function updateCustomerForCart(customer_id, cartId) {
@@ -1049,10 +980,20 @@ function placeOrderFromCart(cartId) {
         }
     };
 
+    var ogDate = new Date,
+        order_date = [ogDate.getDate().padLeft(),
+                   (ogDate.getMonth()+1).padLeft(),
+                   ogDate.getFullYear()].join('/'),
+        order_time = [ogDate.getHours().padLeft(),
+                   ogDate.getMinutes().padLeft(),
+                   ogDate.getSeconds().padLeft()].join(':');
+
     $.ajax({
         method: 'POST',
         url: order_pos_url,
         data: { 
+            order_date: order_date,
+            order_time: order_time,
             location: cof_pos_active_location,
             location_type: cof_pos_active_location_type, 
             customer_id: cart.customer_id,
@@ -1067,7 +1008,7 @@ function placeOrderFromCart(cartId) {
     })
     .done(function(data) {
         if (data.status == "success"){
-            orderSuccesfullyPlacedFromCart(cartId, data.order_number);
+            orderSuccesfullyPlacedFromCart(cartId, data.order_number, order_date, order_time);
         }
         else{
             $('#cof_placeOrderBtnNow').html('Bestellen');
@@ -1079,10 +1020,11 @@ function placeOrderFromCart(cartId) {
     });
 }
 
-function orderSuccesfullyPlacedFromCart(cartId, order_number) {
+function orderSuccesfullyPlacedFromCart(cartId, order_number, order_date, order_time) {
     cof_pos_processing_order = false;
+    addCustomerPoints(cartId);
+    printTicketFromCart(cartId, order_number, order_date, order_time);
     resetPaymentModal();
-    printTicketFromCart(cartId, order_number);
     //addCartToOrder(cartId, order_number);
     //removeCart(cartId);
 }
@@ -1718,11 +1660,27 @@ function getSelectedProductExtras()
     product_options = [];
     if(!$('#extrasModalBody').hasClass('d-none')) {
         $('.extras_modal_row').each(function() {
-            
-            option_name = $(this).find('input:checked').first().val();
-            option_value = $(this).find('input:checked').first().attr('data-product-extra-item-price');
+            o_el = $(this).find('input:checked').first();
+            o_name = o_el.val();
+            o_value = o_el.attr('data-product-extra-item-price');
 
-            option_object = {name: option_name, value: option_value};
+            if (o_value !== undefined) {
+                o_vat_delivery = Number(o_el.attr('data-product-extra-item-vat-delivery'));
+                o_vat_takeout = Number(o_el.attr('data-product-extra-item-vat-takeout'));
+                o_vat_on_the_spot = Number(o_el.attr('data-product-extra-item-vat-on-the-spot'));
+            } else {
+                o_vat_delivery = o_value;
+                o_vat_takeout = o_value;
+                o_vat_on_the_spot = o_value;
+            }
+
+            option_object = {
+                name: o_name, 
+                value: o_value, 
+                vat_delivery: o_vat_delivery, 
+                vat_takeout: o_vat_takeout, 
+                vat_on_the_spot: o_vat_on_the_spot
+            };
             product_options.push(option_object)
         });
     }
@@ -1742,6 +1700,20 @@ function getSelectedProductExtrasPrice(product_id)
     return extras_price;
 }
 
+function getSingleExtrasPriceFromProduct(product) 
+{
+    let productExtras = product.extras;
+    let productExtrasValue = 0;
+
+    for (var i = 0; i < productExtras.length; i++) {
+        if ( !$.isEmptyObject(productExtras[i]) ) {
+            productExtrasValue = productExtrasValue + Number(parseFloat(parseFloat(productExtras[i]['value'])).toFixed(2))
+        }
+    };
+
+    return productExtrasValue;
+}
+
 function getSelectedProductQuantity(product_id)
 {
     return parseInt($('#addProductFromModalToCartButton[data-product-id='+product_id+']').attr('data-quantity'));
@@ -1759,6 +1731,8 @@ function getSelectedProductUnitPrice(product_id)
 
     return Number(attribute_price) + Number(extras_price);
 }
+
+
 /* END OF PRODUCT FUNCTIONS */
 /* END OF PRODUCT FUNCTIONS */
 /* END OF PRODUCT FUNCTIONS */
@@ -1869,12 +1843,17 @@ function getCartTotalVatFromProducts(products) {
 
     for (var i = 0; i < products.length; i++) {
 
-        vat_rate = getVatPercentageForProduct(products[i].id);
-        if(vat_rate in totalPricesPerVatRate) {
-            totalPricesPerVatRate[vat_rate] = (totalPricesPerVatRate[vat_rate] + products[i].total_price); 
-        } else {
-            totalPricesPerVatRate[vat_rate] = products[i].total_price;
-        }
+        let vat_rates = getAllVatPercentagesForProduct(products[i]);
+        for (var vrate = 0; vrate < vat_rates.length; vrate++) {
+            vat_rate = vat_rates[vrate];
+
+            if(vat_rate in totalPricesPerVatRate) {
+                totalPricesPerVatRate[vat_rate] = (totalPricesPerVatRate[vat_rate] + getVatForRateForProduct(vat_rate, products[i])); 
+            } else {
+                totalPricesPerVatRate[vat_rate] = getVatForRateForProduct(vat_rate, products[i]);
+            }
+        };
+        
            
     };
 
@@ -1885,34 +1864,44 @@ function getCartTotalVatFromProducts(products) {
     return Number((totalVat).toFixed(2));
 }
 
-// function getVatPriceFromProductId(product_id) {
-//     vat_percentage = getVatPercentageForProduct(product_id);
+function getVatForRateForProduct(vat_rate, product) {
+    let vat_base_rate = getVatPercentageForProduct(product.id);
+    let extras_price = (product.quantity * getSingleExtrasPriceFromProduct(product));
+    let base_price = (product.total_price - extras_price);
 
-//     product_price = Number($(selector).attr('data-current-price'));
-//     divider = parseInt(100 + vat_percentage);
-//     vat_price = ((product_price / divider) * vat_percentage);
-//     return Number(vat_price);
-// }
+    let discounts = product.discounts;
 
-// function getVatPriceFromSelectedProduct(product_id) {
-//     vat_percentage = getVatPercentageForProduct(product_id);
+    if (vat_rate == vat_base_rate) {
+        for (var dlk = 0; dlk < discounts.length; dlk++) {
+            base_price = calculateDiscount(discounts[dlk], base_price, true);
+        };
+    } else {
+        base_price = 0;
+    }
 
-//     product_price = Number(getSelectedProductUnitPrice(product_id));
-//     divider = parseInt(100 + vat_percentage);
+    let productExtras = product.extras;
+    let extras_n_price = 0;
+    for (var pexl = 0; pexl < productExtras.length; pexl++) {
+        let extras_nn_price = 0;
+        if (!$.isEmptyObject(productExtras[pexl])) {
+            if (vat_rate == getVatPercentageForExtra(productExtras[pexl])) {
+                extras_nn_price = (product.quantity * Number(parseFloat(productExtras[pexl].value).toFixed(2)));
+                for (var dlk = 0; dlk < discounts.length; dlk++) {
+                    if (discounts[dlk].apply_on !== "product") {
+                        extras_nn_price = calculateDiscount(discounts[dlk], extras_nn_price, true);
+                    }
+                };
+            }
+        }
+        extras_n_price = extras_n_price + extras_nn_price;
+    };
 
-//     vat_price = ((product_price / divider) * vat_percentage);
-//     return Number(vat_price);
-// }
+    return Number(base_price + extras_n_price);
 
-// function getVatPriceFromProductAndUnitPrice(product_id, unit_price) {
-//     vat_percentage = getVatPercentageForProduct(product_id);
-
-//     product_price = Number(unit_price);
-//     divider = parseInt(100 + vat_percentage);
-
-//     vat_price = ((product_price / divider) * vat_percentage);
-//     return Number(vat_price);
-// }
+    //(products[i].quantity * (products[i].current_price - getSingleExtrasPriceFromProduct(products[i])))
+    
+    //return product.total_price;
+}
 
 function getVatFromPriceAndRate(price, rate) {
     vat_percentage = parseInt(rate);
@@ -1922,6 +1911,38 @@ function getVatFromPriceAndRate(price, rate) {
 
     vat_price = ((product_price / divider) * vat_percentage);
     return Number(vat_price);
+}
+
+function getAllVatPercentagesForProducts(products) {
+    let vat_percentages = [];
+
+    for (var i = 0; i < products.length; i++) {
+        vat_percentages.concat(getAllVatPercentagesForProduct(products[i]));
+    };
+
+    vat_percentages = vat_percentages.filter((item, index) => vat_percentages.indexOf(item) === index);
+
+    return vat_percentages;
+}
+
+function getAllVatPercentagesForProduct(product) {
+    let vat_percentages = [];
+
+    vat_percentage = getVatPercentageForProduct(product.id);
+    vat_percentages.push(vat_percentage);
+
+    if (product.extras.length > 0) {
+        let productExtras = product.extras;
+        for (var pexob = 0; pexob < productExtras.length; pexob++) {
+            if (!$.isEmptyObject(productExtras[pexob])) {
+                vat_percentages.push(getVatPercentageForExtra(productExtras[pexob]))
+            }
+        };
+    }
+
+    vat_percentages = vat_percentages.filter((item, index) => vat_percentages.indexOf(item) === index);
+
+    return vat_percentages;
 }
 
 function getVatPercentageForProduct(product_id) {
@@ -1943,39 +1964,73 @@ function getVatPercentageForProduct(product_id) {
     return vat_percentage;
 }
 
+function getVatPercentageForExtra(extra) {
+    location_type = getActiveLocationType();
+
+    if(location_type == 'delivery') {
+        vat_percentage = Number(extra.vat_delivery);
+    }
+
+    if(location_type == 'takeout') {
+        vat_percentage = Number(extra.vat_takeout);
+    }
+
+    if(location_type == 'on-the-spot') {
+        vat_percentage = Number(extra.vat_on_the_spot);
+    }
+
+    return vat_percentage;
+}
+
 function getTotalDiscount(cart_id) {
-    let cart = getCartFromStorage(cart_id);
+    let carts = getAllCartsFromStorage();
     let discounts = getAllDiscountsForCart(cart_id);
-    let products = getProductsForCartFromStorage(cart_id);
 
-    totalDiscount = 0;
+    for (var g = 0; g < carts.length; g++) {
+        if(carts[g].id == cart_id) {
+            let products = carts[g].products;
+            totalDiscount = 0;
 
-    for (var i = 0; i < products.length; i++) {
+            for (var i = 0; i < products.length; i++) {
+                let productDiscount = 0;
+                let productPrice = (products[i].quantity * (products[i].current_price - getSingleExtrasPriceFromProduct(products[i])));
 
-        let productDiscount = 0;
-        let productPrice = products[i].total_price;
-        
-        for (var k = 0; k < discounts.length; k++) {
-            if (isDiscountApplicableForProduct(discounts[k], products[i], cart_id)) {
-                productDiscount = productDiscount + calculateDiscount(discounts[k], productPrice);
-                productPrice = calculateDiscount(discounts[k], productPrice, true);
-            }
-        };
+                products[i].discounts = [];
+                products[i].discount = 0;
+                
+                for (var k = 0; k < discounts.length; k++) {
+                    if (isDiscountApplicableForProduct(discounts[k], products[i], cart_id)) {
+                        productDiscount = productDiscount + calculateDiscount(discounts[k], productPrice);
+                        productPrice = calculateDiscount(discounts[k], productPrice, true);
 
-        totalDiscount = totalDiscount + productDiscount;
-    };
+                        products[i].discounts.push(discounts[k]);
+                    }
+                };
 
-    for (var kd = 0; kd < discounts.length; kd++) {
-        if (discounts[kd].apply_on == "cart" && discounts[kd].type == "currency") {
-            totalDiscount = totalDiscount + Number(parseFloat(discounts[kd].value).toFixed(2));
+                totalDiscount = totalDiscount + productDiscount;
+                products[i].discount = productDiscount;
+            };
+            carts[g].products = products;
+            localStorage.setItem('cof_carts', JSON.stringify(carts));
+            break;
         }
     };
+
+
+
+
+
+    // for (var kd = 0; kd < discounts.length; kd++) {
+    //     if (discounts[kd].apply_on == "cart" && discounts[kd].type == "currency") {
+    //         totalDiscount = totalDiscount + Number(parseFloat(discounts[kd].value).toFixed(2));
+    //     }
+    // };
 
     return Number((totalDiscount).toFixed(2));
 }
 
 function isDiscountApplicableForProduct(coupon, product, cart_id) {
-    if (coupon.apply_on == "cart" && coupon.type == "percentage") {
+    if (coupon.apply_on == "cart") {
         return true;
     }
 
@@ -2082,46 +2137,6 @@ function resetPaymentModal(cartId) {
 }
 
 
-function placeOrder(products, price, shipping) {
-    var order_url = "{{ route('cof.place_order') }}";
-    let a_token = "{{ Session::token() }}"
-    $.ajax({
-        method: 'POST',
-        url: order_url,
-        data: { 
-            location: $('#cof_pos_location').attr('data-active-location'), 
-            order_date: '', 
-            order_time: '', 
-            surname: '', 
-            name: '',
-            email: '',
-            tel: '',
-            street: '',
-            housenumber: '',
-            postalcode: '',
-            city: $('#cof_pos_location').attr('data-active-location'),
-            remarks: '',
-            order: products,
-            total: price,
-            shipping: shipping,
-            legal_approval: '',
-            promo_approval: '',
-            _token: a_token
-        }
-    })
-    .done(function(data) {
-        if (data.status == "success"){
-            window.location.href = data.url;
-        }
-        else{
-            $('#cof_placeOrderBtnNow').html('Bestellen');
-            $('#cof_placeOrderBtnNow').prop('disabled', false);
-
-            $('.error_span:first').html(' Er is iets misgelopen, probeer het later nog eens!');
-            $('.error_bag:first').removeClass('hidden');
-        }
-    });
-}
 
 function validateForm() {
     var valid = true;
@@ -2244,9 +2259,11 @@ function updateProductListItemAttributes(cart_id, selector, product_id, product_
             }
 
             productListItem.find('.cof_cartProductListItemOptions:last')
-                .find('.cof_cartProductListItemOptionName').text(product_options[i]['name']);
+                           .find('.cof_cartProductListItemOptionName')
+                           .text(product_options[i]['name']);
             productListItem.find('.cof_cartProductListItemOptions:last')
-                .find('.cof_cartProductListItemOptionValue').text(product_options[i]['value']);
+                           .find('.cof_cartProductListItemOptionValue')
+                           .text(product_options[i]['value']);
 
         };
     } 
@@ -2354,12 +2371,13 @@ function resetOptionsModal()
     $('.extras_modal_row:first').find('.extras_item_checkbox').attr('id', 'cof_extra_name');
     $('.extras_modal_row:first').find('.extras_item_checkbox').val('');
     $('.extras_modal_row:first').find('.extras_item_checkbox').attr('data-product-extra-item-price', '');
+    $('.extras_modal_row:first').find('.extras_item_checkbox').attr('data-product-extra-item-vat-delivery', '');
+    $('.extras_modal_row:first').find('.extras_item_checkbox').attr('data-product-extra-item-vat-takeout', '');
+    $('.extras_modal_row:first').find('.extras_item_checkbox').attr('data-product-extra-item-vat-on-the-spot', '');
 }
 
 function setOptionsModal(product_id, product_name, current_price, quantity, total_price, product_attributes, product_options, product_extras)
 {
-    //console.log('test es ::',product_name);
-    
     $('.options_product_name').text(product_name);
     $('#addProductFromModalToCartButton').attr('data-product-id', product_id);
     $('#addProductFromModalToCartButton').attr('data-current-price', current_price);
@@ -2490,6 +2508,9 @@ function setOptionsModal(product_id, product_name, current_price, quantity, tota
             extra_name = product_extras[i]['name'];
             extra_slug = extra_name.toLowerCase().replace(/ /g,'-').replace(/[-]+/g, '-').replace(/[^\w-]+/g,'');
             extra_price = product_extras[i]['price'];
+            extra_vat_delivery = product_extras[i]['vat_delivery'];
+            extra_vat_takeout = product_extras[i]['vat_takeout'];
+            extra_vat_on_the_spot = product_extras[i]['vat_on_the_spot'];
             
             //$('.extras_modal_row:last').attr('data-product-option-type', option_type);
             //$('.extras_modal_row:last').attr('data-product-option-name', option_name);
@@ -2499,6 +2520,9 @@ function setOptionsModal(product_id, product_name, current_price, quantity, tota
             $('.extras_modal_row:last').find('.extras_item_checkbox').attr('id', extra_slug);
             $('.extras_modal_row:last').find('.extras_item_checkbox').val(extra_name);
             $('.extras_modal_row:last').find('.extras_item_checkbox').attr('data-product-extra-item-price', parseFloat(extra_price));
+            $('.extras_modal_row:last').find('.extras_item_checkbox').attr('data-product-extra-item-vat-delivery', parseInt(extra_vat_delivery));
+            $('.extras_modal_row:last').find('.extras_item_checkbox').attr('data-product-extra-item-vat-takeout', parseInt(extra_vat_takeout));
+            $('.extras_modal_row:last').find('.extras_item_checkbox').attr('data-product-extra-item-vat-on-the-spot', parseInt(extra_vat_on_the_spot));
             $('.extras_modal_row:last').find('.extras_item_checkbox').prop('checked', false);
             
             
@@ -2511,48 +2535,188 @@ function setOptionsModal(product_id, product_name, current_price, quantity, tota
     
 }
 
-function printTicketFromCart(cart_id, order_number) {
+function printTicketFromCart(cart_id, order_number, order_date, order_time) {
     let cart = getCartFromStorage(cart_id);
     let items = getFormattedItemsForTicket(cart.products, cart.discounts);
+    let vat = getFormattedVatItemsForTicket(cart.products);
+    let location = getActiveLocationDetails(cof_pos_active_location);
+    let payments = getPaymentsForCart(cart_id, cart.total);
 
     let job = {
+        location: location,
         cart: cart,
         items: items,
         subtotal: cart.subtotal,
         discount: cart.discount,
-        total: cart.total
+        total: cart.total,
+        vat: vat,
+        payments: payments,
+        date: order_date,
+        time: order_time,
+        customer: cart.customer_id
     };
 
     printJob(job);
+}
+
+function getActiveLocationDetails(location_id) {
+    let elem = $('#cof_pos_location');
+    let location = {
+        id: location_id,
+        name: elem.attr('data-pos-name'),
+        address1: elem.attr('data-pos-address'),
+        address2: (elem.attr('data-pos-address-t') !== undefined ? elem.attr('data-pos-address-t') : null),
+        vat: elem.attr('data-pos-vat'),
+        receipt_title: elem.attr('data-pos-receipt-title'),
+        receipt_footer1: (elem.attr('data-pos-receipt-footer-line') !== undefined ? elem.attr('data-pos-receipt-footer-line') : null),
+        receipt_footer2: (elem.attr('data-pos-receipt-footer-line-t') !== undefined ? elem.attr('data-pos-receipt-footer-line-t') : null),
+        receipt_footer3: (elem.attr('data-pos-receipt-footer-line-tt') !== undefined ? elem.attr('data-pos-receipt-footer-line-tt') : null)
+    };
+
+    return location;
+}
+
+function getPaymentsForCart(cart_id, total) {
+    let payments = [];
+
+    let paidByCard = $('.cof_checkoutCardInput').val();
+    let paidByCash = $('.cof_checkoutCashInput').val();
+
+    let total_tethered = Number(paidByCard) + Number(paidByCash);
+    let pendingAmount = total - total_tethered;
+
+    if (Number(paidByCash) > 0) {
+        payments.push({type:"cash",value:Number(parseFloat(paidByCash).toFixed(2))});
+    }
+    
+    if (Number(paidByCard) > 0) {
+        payments.push({type:"card",value:Number(parseFloat(paidByCard).toFixed(2))});
+    }
+
+    payments.push({type:"change",value:Number(parseFloat(pendingAmount).toFixed(2))});    
+
+    return payments;
 }
 
 function getFormattedItemsForTicket(products, discounts) {
     let items = [];
 
     for (var p = 0; p < products.length; p++) {
-        console.log('check out the lines per product :: ', formatLinesForProduct(products[p]));
-        items = items.concat(formatLinesForProduct(products[p]));
+        if ( (p + 1) == products.length) {
+            items = items.concat(formatLinesForProduct(products[p], true, false));
+        } else {
+            items = items.concat(formatLinesForProduct(products[p], false, checkIfProductHasOptionsOrExtrasOrDiscounts(products[p+1])));
+        }
     };
-
-    console.log('check out aaaaall of the lines :: ', items);
 
     return items;
 }
 
-function formatLinesForProduct(product) {
+function getFormattedVatItemsForTicket(products) {
+    let vatLines = [];
+    let vatLine = "";
+
+    totalPricesPerVatRate = {};
+    totalVat = 0;
+
+    for (var i = 0; i < products.length; i++) {
+        let vat_rates = getAllVatPercentagesForProduct(products[i]);
+        for (var vrate = 0; vrate < vat_rates.length; vrate++) {
+            vat_rate = vat_rates[vrate];
+
+            if(vat_rate in totalPricesPerVatRate) {
+                totalPricesPerVatRate[vat_rate] = (totalPricesPerVatRate[vat_rate] + getVatForRateForProduct(vat_rate, products[i])); 
+            } else {
+                totalPricesPerVatRate[vat_rate] = getVatForRateForProduct(vat_rate, products[i]);
+            }
+        };
+    };
+
+    Object.keys(totalPricesPerVatRate).forEach(function(rate) {
+        vatLine = "";
+
+        if (rate == 21) {
+            vatLine += "  A     ";
+        }
+        if (rate == 12) {
+            vatLine += "  B     ";
+        }
+        if (rate == 6) {
+            vatLine += "  C     ";
+        }
+        if (rate == 0) {
+            vatLine += "  D     ";
+        }
+
+        totalPriceWithoutVatRaw = Number(totalPricesPerVatRate[rate].toFixed(2)) - Number(getVatFromPriceAndRate(totalPricesPerVatRate[rate], rate).toFixed(2));
+
+        if (totalPriceWithoutVatRaw <= 9.99) {
+            vatLine += " ";
+        }
+
+        totalPriceWithoutVat = Number(totalPriceWithoutVatRaw.toFixed(2)).toFixed(2);
+
+        vatLine += totalPriceWithoutVat;
+        vatLine += "  @  ";
+        if (rate < 10) {
+            vatLine += " ";
+        }
+        vatLine += rate+"%";
+
+        vatLine += "  ";
+        if (Number(getVatFromPriceAndRate(totalPricesPerVatRate[rate], rate).toFixed(2)) <= 9.99) {
+            vatLine += " ";
+        }
+        vatLine += Number(getVatFromPriceAndRate(totalPricesPerVatRate[rate], rate).toFixed(2)).toFixed(2);
+
+        vatLines.push(vatLine);
+
+        totalVat = totalVat + Number(getVatFromPriceAndRate(totalPricesPerVatRate[rate], rate).toFixed(2));
+
+        // vatLine = "";
+        // vatLine += "VAT                    ";
+
+        // if (Number(getVatFromPriceAndRate(totalPricesPerVatRate[rate], rate).toFixed(2)) <= 9.99) {
+        //     vatLine += " ";
+        // }
+
+        // vatLine += Number(getVatFromPriceAndRate(totalPricesPerVatRate[rate], rate).toFixed(2));
+
+        // vatLines.push(vatLine);
+    });
+
+    vatLine = "";
+    vatLine += "VAT                            ";
+    vatLine += Number((totalVat).toFixed(2)).toFixed(2);
+
+    vatLines.push(vatLine);
+
+    return vatLines;
+}
+
+function formatLinesForProduct(product, isLastProduct, nextProductHasOptionsOrExtrasOrDiscounts) {
     let lines = [];
     let line = "";
 
     line += product.quantity;
     line += " ";
     line += product.name;
-    if (product.attribute !== "" && product.attribute.length > 0) {
+
+    let productHasExtras = false;
+    for (var phex = 0; phex < product.extras.length; phex++) {
+        if (!$.isEmptyObject(product.extras[phex])) {
+            productHasExtras = true;
+        }
+    };
+
+    if (product.attribute !== "" && product.attribute.length > 0 && !productHasExtras ) {
         line += ": ";
         line += product.attribute;
     }
 
     if (line.length < 41) {
-        for (var ll = 0; ll < (40 - line.length); ll++) {
+        productLineLength = (40 - line.length);
+        for (var ll = 0; ll < productLineLength; ll++) {
             line += " ";
         };
     }
@@ -2571,23 +2735,79 @@ function formatLinesForProduct(product) {
 
     line += (product.total_price).toFixed(2);
 
-    if (getVatPercentageForProduct(product.id) == 21) {
-        line += " A";
-    }
+    if ( (product.attribute !== "" && product.attribute.length > 0) && productHasExtras ) {
+        line += "  ";
+    } else {
 
-    if (getVatPercentageForProduct(product.id) == 12) {
-        line += " B";
-    }
+        if (getVatPercentageForProduct(product.id) == 21) {
+            line += " A";
+        }
 
-    if (getVatPercentageForProduct(product.id) == 6) {
-        line += " C";
-    }
+        if (getVatPercentageForProduct(product.id) == 12) {
+            line += " B";
+        }
 
-    if (getVatPercentageForProduct(product.id) == 0) {
-        line += " D";
+        if (getVatPercentageForProduct(product.id) == 6) {
+            line += " C";
+        }
+
+        if (getVatPercentageForProduct(product.id) == 0) {
+            line += " D";
+        }
     }
 
     lines.push(line);
+
+
+
+    if ( (product.attribute !== "" && product.attribute.length > 0) && productHasExtras ) {
+        let unitExtrasPrice = 0;
+        for (var pextra = 0; pextra < product.extras.length; pextra++) {
+            if (!$.isEmptyObject(product.extras[pextra])) {
+                unitExtrasPrice = unitExtrasPrice + Number(parseFloat(product.extras[pextra].value).toFixed(2));
+            }
+        }
+        let attributePrice = Number((product.quantity * (product.current_price - unitExtrasPrice)).toFixed(2));
+        
+        let attributePriceLine = attributePrice.toFixed(2)+"";
+        if (getVatPercentageForProduct(product.id) == 21) {
+            attributePriceLine += " A";
+        }
+
+        if (getVatPercentageForProduct(product.id) == 12) {
+            attributePriceLine += " B";
+        }
+
+        if (getVatPercentageForProduct(product.id) == 6) {
+            attributePriceLine += " C";
+        }
+
+        if (getVatPercentageForProduct(product.id) == 0) {
+            attributePriceLine += " D";
+        }
+
+        let attributeLine = "  1 "+product.attribute;
+
+        let neededAttributeLineLength = (48 - attributeLine.length - attributePriceLine.length);
+        for (var ell = 0; ell < neededAttributeLineLength; ell++) {
+            attributeLine += " ";
+        };
+        attributeLine += attributePriceLine;
+
+        lines.push(attributeLine);
+    }
+
+
+
+    if (product.options.length > 0) {
+        for (var pop = 0; pop < product.options.length; pop++) {
+            let optionLine = "";
+            optionLine += "    ";
+            optionLine += product.options[pop].name+": "+product.options[pop].value;
+
+            lines.push(optionLine);
+        }
+    }
 
     if (product.extras.length > 0) {
         for (var pex = 0; pex < product.extras.length; pex++) {
@@ -2596,17 +2816,19 @@ function formatLinesForProduct(product) {
                 extraLine += "  1 ";
                 extraLine += product.extras[pex].name;
 
-                if (extraLine.length > 40) {
-                    extraLine = truncateString(extraLine, 37);
-                }
-
                 if (extraLine.length < 41) {
-                    for (var ell = 0; ell < (40 - extraLine.length); ell++) {
+                    let neededLineLength = (40 - extraLine.length);
+                    for (var ell = 0; ell < neededLineLength; ell++) {
                         extraLine += " ";
                     };
                 }
 
-                let extrasPrice = Number(product.extras[pex].value);
+                if (extraLine.length > 40) {
+                    extraLine = truncateString(extraLine, 37);
+                }
+
+                let extrasUnitPrice = Number(parseFloat(product.extras[pex].value).toFixed(2));
+                let extrasPrice = Number((product.quantity * extrasUnitPrice).toFixed(2));
 
                 if (extrasPrice > 9.99 && extrasPrice < 100 ) {
                     extraLine += " ";
@@ -2616,31 +2838,162 @@ function formatLinesForProduct(product) {
                     extraLine += "  ";
                 }
 
+                if (extrasPrice == 0) {
+                    extraLine += "  ";
+                }
+
                 extraLine += (extrasPrice).toFixed(2);
 
-                // if (getVatPercentageForProduct(product.id) == 21) {
-                //     extraLine += " A";
-                // }
+                if (getVatPercentageForExtra(product.extras[pex]) == 21) {
+                    extraLine += " A";
+                }
 
-                // if (getVatPercentageForProduct(product.id) == 12) {
-                //     extraLine += " B";
-                // }
+                if (getVatPercentageForExtra(product.extras[pex]) == 12) {
+                    extraLine += " B";
+                }
 
-                // if (getVatPercentageForProduct(product.id) == 6) {
-                //     extraLine += " C";
-                // }
+                if (getVatPercentageForExtra(product.extras[pex]) == 6) {
+                    extraLine += " C";
+                }
 
-                // if (getVatPercentageForProduct(product.id) == 0) {
-                //     extraLine += " D";
-                // }
-                extraLine += "  ";
+                if (getVatPercentageForExtra(product.extras[pex]) == 0) {
+                    extraLine += " D";
+                }
 
                 lines.push(extraLine);
             }
         };
     }
-console.log('all the lines :: ', lines);
+
+    if (product.discounts.length > 0 && product.discount > 0) {
+        let discountLine = "";
+        discountLine += "    KORTING: ";
+
+        for (var pds = 0; pds < product.discounts.length; pds++) {
+            if (pds > 0) {
+                discountLine += ", ";
+            }
+            discountLine += product.discounts[pds].name;
+        };
+
+        if (discountLine.length < 41) {
+            let neededDiscountLineLength = (40 - discountLine.length);
+            for (var dll = 0; dll < neededDiscountLineLength; dll++) {
+                discountLine += " ";
+            };
+        }
+
+        if (discountLine.length > 40) {
+            discountLine = truncateString(discountLine, 37);
+        }
+
+        let discountPrice = Number(parseFloat(product.discount).toFixed(2));
+
+        if (discountPrice > 9.99 && discountPrice < 100 ) {
+            discountLine += "-";
+        }
+
+        if (discountPrice > 0.99 && discountPrice < 10) {
+            discountLine += " -";
+        }
+
+        if (discountPrice == 0) {
+            discountLine += " -";
+        }
+
+        discountLine += (discountPrice).toFixed(2);
+
+        if (getVatPercentageForProduct(product.id) == 21) {
+            discountLine += " A";
+        }
+
+        if (getVatPercentageForProduct(product.id) == 12) {
+            discountLine += " B";
+        }
+
+        if (getVatPercentageForProduct(product.id) == 6) {
+            discountLine += " C";
+        }
+
+        if (getVatPercentageForProduct(product.id) == 0) {
+            discountLine += " D";
+        }
+
+        lines.push(discountLine);
+    }
+
+    if ( ((product.options.length > 0 || productHasExtras) && !isLastProduct) || nextProductHasOptionsOrExtrasOrDiscounts) {
+        lines.push(" ");
+    }
+
     return lines;
+}
+
+function getFormattedPaymentLines(payments) {
+    let paymentLines = [];
+
+    for (var fpayl = 0; fpayl < payments.length; fpayl++) {
+        let paymentLine = "";
+
+        if (payments[fpayl].type == "change" || payments[fpayl].value == 0) {
+            continue;
+        }
+
+        if (payments[fpayl].type == "cash") {
+            paymentLine += "CONTANT";
+        } else if (payments[fpayl].type == "card") {
+            paymentLine += "KAARTBETALING";
+        }
+        
+        let paymentLineValue = "€ "+payments[fpayl].value.toFixed(2)+"  ";
+
+        let neededPaymentLineLength = (48 - paymentLine.length - paymentLineValue.length);
+        for (var npll = 0; npll < neededPaymentLineLength; npll++) {
+            paymentLine += " ";
+        };
+        paymentLine += paymentLineValue;
+        
+        paymentLines.push(paymentLine);
+    };
+
+    for (var fpayll = 0; fpayll < payments.length; fpayll++) {
+        if (payments[fpayll].type == "change") {
+            let changeLine = "WISSELGELD (EUR)";
+            let changeLineValue = "- € "+Math.abs(payments[fpayll].value).toFixed(2)+"  ";
+            
+            let neededChangeLineLength = (48 - changeLine.length - changeLineValue.length);
+            for (var ncll = 0; ncll < neededChangeLineLength; ncll++) {
+                changeLine += " ";
+            };
+
+            changeLine += changeLineValue;
+            
+            paymentLines.push(changeLine);
+            break;
+        }
+    }
+
+    return paymentLines;
+}
+
+function checkIfProductHasOptionsOrExtrasOrDiscounts(product) {
+    if (product.options.length > 0) {
+        return true;
+    }
+
+    if (product.extras.length > 0) {
+        for (var pext = 0; pext < product.extras.length; pext++) {
+            if (!$.isEmptyObject(product.extras[pext])) { 
+                return true;
+            }
+        };
+    }
+
+    if (product.discounts.length > 0) {
+        return true;
+    }
+
+    return false;
 }
 
 function truncateString(str, num) {
@@ -2655,78 +3008,215 @@ function getLineSize() {
 }
 
 function printJob(job) {
-    if (jspmWSStatus()) {
+    var escpos = Neodynamic.JSESCPOSBuilder;
+    var doc = new escpos.Document();
+    escpos.ESCPOSImage.load("{{ChuckSite::module('chuckcms-module-order-form')->getSetting('pos.ticket_logo')}}")
+        .then(logo => {
 
-        // Gen sample label featuring logo/image, barcode, QRCode, text, etc by using JSESCPOSBuilder.js
+            // logo image loaded, create ESC/POS commands
+            doc.setCharacterCodeTable(19)
+                .align(escpos.TextAlignment.Center)
+                .image(logo, escpos.BitmapDensity.D24)
+                .feed(2)
+                .font(escpos.FontFamily.A)
+                .align(escpos.TextAlignment.Center)
+                .style([escpos.FontStyle.Bold])
+                .size(0, 0)
+                .text(job.location.name)
+                .font(escpos.FontFamily.B)
+                .size(0, 0)
+                .text(job.location.address1);
+            
+            if (job.location.address2 !== null) {
+                doc.text(job.location.address2);
+            }
 
-        var escpos = Neodynamic.JSESCPOSBuilder;
-        var doc = new escpos.Document();
-        escpos.ESCPOSImage.load("{{ChuckSite::module('chuckcms-module-order-form')->getSetting('pos.ticket_logo')}}")
-            .then(logo => {
+            let dformat = job.date.replace('/','.').replace('/','.')+'                              ' + job.time;
 
-                // logo image loaded, create ESC/POS commands
-                doc.setCharacterCodeTable(19)
+            doc.text(job.location.vat)
+                .feed(2)
+                .font(escpos.FontFamily.A)
+                .size(0, 0)
+                .text(job.location.receipt_title)
+                .align(escpos.TextAlignment.LeftJustification)
+                .feed(2)
+                .text(dformat)
+                .drawLine();
+
+            for (var jit = 0, len = job.items.length; jit < len; jit++) {
+                doc.align(escpos.TextAlignment.LeftJustification).text(job.items[jit]);
+            }
+
+            if (job.discount > 0) {
+                let subtotalPriceLine = "€ "+(job.subtotal.toFixed(2))+"  ";
+                let subTotalLine = "SUBTOTAAL";
+                let neededSubtotalLineLength = (48 - subTotalLine.length - subtotalPriceLine.length);
+                for (var ell = 0; ell < neededSubtotalLineLength; ell++) {
+                    subTotalLine += " ";
+                };
+                subTotalLine += subtotalPriceLine;
+
+                doc.drawLine();
+                doc.align(escpos.TextAlignment.LeftJustification).text(subTotalLine);
+                
+                let discountPriceLine = "- € "+(job.discount.toFixed(2))+"  ";
+                let discountLine = "KORTING";
+                let neededDiscountLineLength = (48 - discountLine.length - discountPriceLine.length);
+                for (var ell = 0; ell < neededDiscountLineLength; ell++) {
+                    discountLine += " ";
+                };
+                discountLine += discountPriceLine;
+
+                doc.align(escpos.TextAlignment.LeftJustification).text(discountLine);
+            }
+
+            doc.drawLine()
+                .font(escpos.FontFamily.B)
+                .style([escpos.FontStyle.Bold])
+                .size(1, 1)
+                .drawTable(["Totaal", "€ "+(job.total.toFixed(2))]);
+
+            if (job.payments.length > 0) {
+                doc.feed(1);
+                let paymentsLines = getFormattedPaymentLines(job.payments);
+                for (var payl = 0; payl < paymentsLines.length; payl++) {
+                    doc.font(escpos.FontFamily.A)
+                        .size(0, 0)
+                        .align(escpos.TextAlignment.LeftJustification)
+                        .text(paymentsLines[payl]);
+                };
+            }
+
+            doc.feed(2);
+            for (var jvq = 0; jvq < job.vat.length; jvq++) {
+                doc.font(escpos.FontFamily.A)
+                        .size(0, 0)
+                        .align(escpos.TextAlignment.LeftJustification)
+                        .text(job.vat[jvq]);
+            };
+
+            if (job.customer !== 1) {
+                doc.feed(2);
+                doc.font(escpos.FontFamily.A)
+                    .size(0, 0)
                     .align(escpos.TextAlignment.Center)
-                    .image(logo, escpos.BitmapDensity.D24)
-                    .feed(2)
-                    .font(escpos.FontFamily.A)
-                    .align(escpos.TextAlignment.Center)
-                    .style([escpos.FontStyle.Bold])
-                    .size(0, 0)
-                    .text("DONUTTELLO")
-                    .font(escpos.FontFamily.B)
-                    .size(0, 0)
-                    .text("Bergstraat 27,")
-                    .text("2220 Heist-op-den-Berg")
-                    .text("BE0721.497.975")
-                    .feed(2)
-                    .font(escpos.FontFamily.A)
-                    .size(0, 0)
-                    .text("KASTICKET")
-                    .align(escpos.TextAlignment.LeftJustification)
-                    .feed(2)
-                    .drawLine();
+                    .text("Voor deze bestelling krijgt u")
+                    .text(""+Math.floor(job.total)+" punten")
+                    .text(" ")
+                    .text("U heeft nu "+getCustomerPoints(job.customer)+" punten in totaal.");
+            }
 
-                for (var jit = 0, len = job.items.length; jit < len; jit++) {
-                    doc.align(escpos.TextAlignment.LeftJustification).text(job.items[jit]);
+            if (job.location.receipt_footer1 !== null || job.location.receipt_footer2 !== null || job.location.receipt_footer3 !== null) {
+                doc.feed(2)
+                    .font(escpos.FontFamily.A)
+                    .size(0, 0);
+            }
+
+
+            if (job.location.receipt_footer1 !== null) {
+                if (job.location.receipt_footer1.indexOf("qrcode:") !== -1) {
+                    qrcodevalue = job.location.receipt_footer1.slice(7, -1);
+                    doc.qrCode(qrcodevalue, new escpos.BarcodeQROptions(escpos.QRLevel.L, 6));
+                } else {
+                    doc.align(escpos.TextAlignment.Center).text(job.location.receipt_footer1);
                 }
+            }
 
-                doc.drawLine()
-                    .font(escpos.FontFamily.B)
-                    .style([escpos.FontStyle.Bold])
-                    .size(1, 1)
-                    .drawTable(["Totaal", "€ "+(job.total.toFixed(2))])
-                    .feed(2)
-                    .font(escpos.FontFamily.A)
-                    .size(0, 0)
-                    .align(escpos.TextAlignment.Center)
-                    .text("Bedankt voor uw bezoek aan Donuttello!")
-                    .text("Geef uw mening over uw bezoek:")
-                    .qrCode('https://donuttello.com', new escpos.BarcodeQROptions(escpos.QRLevel.L, 6))
-                    
+            if (job.location.receipt_footer2 !== null) {
+                if (job.location.receipt_footer2.indexOf("qrcode:") !== -1) {
+                    qrcodevalue = job.location.receipt_footer2.slice(7, -1);
+                    doc.qrCode(qrcodevalue, new escpos.BarcodeQROptions(escpos.QRLevel.L, 6));
+                } else {
+                    doc.align(escpos.TextAlignment.Center).text(job.location.receipt_footer2);
+                }
+            }
 
-                var escposCommands = doc.feed(5).cut().generateUInt8Array();
+            if (job.location.receipt_footer3 !== null) {
+                if (job.location.receipt_footer3.indexOf("qrcode:") !== -1) {
+                    qrcodevalue = job.location.receipt_footer3.slice(7, -1);
+                    doc.qrCode(qrcodevalue, new escpos.BarcodeQROptions(escpos.QRLevel.L, 6));
+                } else {
+                    doc.align(escpos.TextAlignment.Center).text(job.location.receipt_footer3);
+                }
+            }
 
-                // create ClientPrintJob
-                var cpj = new JSPM.ClientPrintJob();
+            // doc.feed(2)
+            //     .font(escpos.FontFamily.A)
+            //     .size(0, 0)
+            //     .align(escpos.TextAlignment.Center)
+            //     .text("Bedankt voor uw bezoek aan Donuttello!")
+            //     .text("Geef uw mening over uw bezoek:")
+            //     .qrCode('https://donuttello.com', new escpos.BarcodeQROptions(escpos.QRLevel.L, 6))
+                
 
-                // Set Printer info
-                var myPrinter = new JSPM.InstalledPrinter($('#printerName').val());
-                cpj.clientPrinter = myPrinter;
+            var escposCommands = doc.feed(5).cut().generateUInt8Array();
 
-                // Set the ESC/POS commands
-                cpj.binaryPrinterCommands = escposCommands;
+            var printSocket = new WebSocket("ws://localhost:5555", ["binary"]);
+            printSocket.binaryType = 'arraybuffer';
 
-                // Send print job to printer!
-                cpj.sendToClient();
-        });
-    }
+            printData = escposCommands.buffer;
+
+            if (!(printData instanceof ArrayBuffer)) {
+              console.log("directPrint(): Argument type must be ArrayBuffer.")
+              return false;
+            }
+            
+            printSocket.onopen = function (event) {
+              console.log("Socket is connected.");
+
+              // Serialise, send.
+              console.log("Sending " + printData.byteLength + " bytes of print data.");
+              printSocket.send(printData);
+              //return true;
+              
+              setInterval(function() {
+                if (printSocket.bufferedAmount == 0)
+                  printSocket.close();
+              }, 50);
+              
+
+              //directPrintUint8ArrayBuffer(printSocket, escposCommands.buffer);
+
+              //printSocket.close();
+              
+            }
+            printSocket.onerror = function(event) {
+              console.log('Socket error', event);
+            };
+            printSocket.onclose = function(event) {
+              console.log('Socket is closed');
+            }
+    });
 }
+
+// Initialize BS toasts
+$('.toast').toast({delay:2500});
+
+// Initialize onScan
+onScan.attachTo(document, {
+    suffixKeyCodes: [9], // enter-key expected at the end of a scan
+    reactToPaste: true, 
+    onScan: function(sCode, iQty) { 
+        cart_id = getActiveCart();
+        customer_id = getCustomerByEan(sCode);
+
+        updateCustomerForCart(customer_id, cart_id);
+
+        $('#customerChangedToast').toast('show')
+    },
+    keyCodeMapper: function(oEvent) {
+        return String.fromCharCode(oEvent.keyCode);
+    }
+});
 
 });
 
 
 
+Number.prototype.padLeft = function(base,chr){
+    var  len = (String(base || 10).length - String(this).length)+1;
+    return len > 0? new Array(len).join(chr || '0')+this : this;
+}
 
 
 
@@ -2744,5 +3234,8 @@ function printJob(job) {
 //     }
 //     img.src="https://donuttello.com/img/donuttello-logo.png?rnd="+new Date().getTime();
 // }, 3000);
+
+
+
 
 </script>

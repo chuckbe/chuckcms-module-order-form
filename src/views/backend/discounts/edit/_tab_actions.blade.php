@@ -20,7 +20,7 @@
             <input type="radio" name="apply_on" id="apply_on_cart" value="cart" @if($discount->apply_on == 'cart') checked @endif> Winkelwagen
         </label>
         <label for="apply_on_product" class="d-block">
-            <input type="radio" name="apply_on" id="apply_on_product" value="product" @if($discount->apply_on == 'product') checked @endif> Specifiek product
+            <input type="radio" name="apply_on" id="apply_on_product" value="product" @if($discount->apply_on == 'product') checked @endif> Specifiek product (zonder extras)
         </label>
         <label for="apply_on_conditions" class="d-block">
             <input type="radio" name="apply_on" id="apply_on_conditions" value="conditions" @if($discount->apply_on == 'conditions') checked @endif @if($discount->type == 'currency') disabled @endif> Geselecteerde product(en)

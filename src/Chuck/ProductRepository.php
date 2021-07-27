@@ -85,6 +85,9 @@ class ProductRepository
             foreach ($values->get('extra_name') as $key => $extraName) {
                 $extras[$key]['name'] = $values->get('extra_name')[$key];
                 $extras[$key]['price'] = $values->get('extra_price')[$key];
+                $extras[$key]['vat_delivery'] = $values->get('extra_vat_delivery')[$key];
+                $extras[$key]['vat_takeout'] = $values->get('extra_vat_takeout')[$key];
+                $extras[$key]['vat_on_the_spot'] = $values->get('extra_vat_on_the_spot')[$key];
             }
         }
         $json['extras'] = $extras;
@@ -153,6 +156,9 @@ class ProductRepository
             foreach ($values->get('extra_name') as $key => $optionName) {
                 $extras[$key]['name'] = $values->get('extra_name')[$key];
                 $extras[$key]['price'] = $values->get('extra_price')[$key];
+                $extras[$key]['vat_delivery'] = $values->get('extra_vat_delivery')[$key];
+                $extras[$key]['vat_takeout'] = $values->get('extra_vat_takeout')[$key];
+                $extras[$key]['vat_on_the_spot'] = $values->get('extra_vat_on_the_spot')[$key];
             }
         }
         $json['extras'] = $extras;

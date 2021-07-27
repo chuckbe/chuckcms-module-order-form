@@ -42,6 +42,18 @@
             </div>
             <div class="row">
               <div class="col-md-12">
+                <div class="form-group form-group-default required ">
+                  <label>Beschikbaar in POS</label>
+                  <div class="form-check">
+                    <input type="hidden" value="0" name="is_pos_available">
+                    <input type="checkbox" class="form-check-input" value="1" id="is_pos_available" name="is_pos_available">
+                    <label class="form-check-label" for="is_pos_available">Beschikbaar</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
                 <div class="form-group form-group-default required">
                   <label>Volgorde</label>
                   <input type="number" min="0" steps="1" max="9999" id="create_category_order" name="order" class="form-control" value="{{ ($categories->count() + 1) }}" required>

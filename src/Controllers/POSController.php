@@ -108,7 +108,7 @@ class POSController extends Controller
         $this->validate(request(), [
             'location' => 'required',
             'location_type' => 'required',
-            'customer_id' => 'nullable',
+            'customer_id' => 'required',
             'products' => 'required',
             'discounts' => 'nullable',
             'subtotal' => 'required',
@@ -127,10 +127,11 @@ class POSController extends Controller
         $all_json['status'] = 'paid';
         $all_json['type'] = 'pos';
 
-
-        $all_json['first_name'] = $request['surname'];
-        $all_json['last_name'] = $request['name'];
-        $all_json['email'] = $request['email'];
+        $customer = $this->customerRepository->find($request['customer_id']);
+        $all_json['first_name'] = $customer->surname;
+        $all_json['last_name'] = $customer->name;
+        $all_json['email'] = $customer->email;
+        
         $all_json['tel'] = $request['tel'];
         $all_json['street'] = $request['street'];
         $all_json['housenumber'] = $request['housenumber'];
@@ -138,7 +139,7 @@ class POSController extends Controller
         $all_json['city'] = $request['city'];
         $all_json['remarks'] = $request['remarks'];
 
-        $all_json['client'] = $request['client_id'];
+        $all_json['client'] = $request['customer_id'];
 
         $all_json['location'] = $request['location'];
         $all_json['location_type'] = $request['location_type'];
@@ -157,6 +158,39 @@ class POSController extends Controller
         //         'status' => 'error'
         //     ]);
         // }
+        // 
+        
+
+        // $all_json['order_number'] = str_random(8);
+        // $all_json['status'] = 'awaiting';
+        // $all_json['type'] = 'web';
+        // $all_json['first_name'] = $request['surname'];
+        // $all_json['last_name'] = $request['name'];
+        // $all_json['email'] = $request['email'];
+        // $all_json['tel'] = $request['tel'];
+        // $all_json['street'] = $request['street'];
+        // $all_json['housenumber'] = $request['housenumber'];
+        // $all_json['postalcode'] = $request['postalcode'];
+        // $all_json['city'] = $request['city'];
+        // $all_json['remarks'] = $request['remarks'];
+
+        // $all_json['location'] = $request['location'];
+        // $all_json['order_date'] = $request['order_date'];
+        // $all_json['order_time'] = $request['order_time'];
+        // $all_json['order_price'] = round($request['total'], 2);
+        // $all_json['order_shipping'] = round($request['shipping'], 2);
+        // $all_json['order_price_with_shipping'] = round(($request['total'] + $request['shipping']), 2);
+
+        // if($request['total'] < ChuckSite::module('chuckcms-module-order-form')->getSetting('order.minimum_order_price')) {
+        //     return response()->json([
+        //         'status' => 'error'
+        //     ]);
+        // }
+
+
+
+
+
         
         $items = [];
 
@@ -202,6 +236,14 @@ class POSController extends Controller
                 $item['extras'] = false;
             }
 
+            if(array_key_exists('discounts', $product)) {
+                $item['discounts'] = $product['discounts'];
+            }
+
+            if(array_key_exists('discount', $product)) {
+                $item['discount'] = $product['discount'];
+            }
+
             $items[] = $item;
             
         }
@@ -223,6 +265,9 @@ class POSController extends Controller
         $order->entry = $all_json;
 
         if($order->save()){
+            if (!$customer->guest) {
+                $customer->incrementLoyaltyPoints(floor(round($request['total'], 2)));
+            }
             //No Payment upfront so send confirmation
             //$this->sendConfirmation($order);
             //@todo : sendNotification - printer

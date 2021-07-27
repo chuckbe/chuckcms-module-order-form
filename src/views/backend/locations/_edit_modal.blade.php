@@ -152,6 +152,78 @@
             </div>
 
             <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group form-group-default">
+                  <label>POS Naam *</label>
+                  <input type="text" id="edit_location_pos_name" name="pos_name" class="form-control" required>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group form-group-default">
+                  <label>POS Adreslijn 1 *</label>
+                  <input type="text" id="edit_location_pos_address1" name="pos_address1" class="form-control" required>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group form-group-default">
+                  <label>POS Adreslijn 2</label>
+                  <input type="text" id="edit_location_pos_address2" name="pos_address2" class="form-control">
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group form-group-default">
+                  <label>POS BTW-nummer *</label>
+                  <input type="text" id="edit_location_pos_vat" name="pos_vat" class="form-control" required>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group form-group-default">
+                  <label>POS Ticket Titel *</label>
+                  <input type="text" id="edit_location_pos_receipt_title" name="pos_receipt_title" class="form-control" required>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group form-group-default">
+                  <label>POS Afsluitlijn 1</label>
+                  <input type="text" id="edit_location_pos_receipt_footer_line1" name="pos_receipt_footer_line1" class="form-control">
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group form-group-default">
+                  <label>POS Afsluitlijn 2</label>
+                  <input type="text" id="edit_location_pos_receipt_footer_line2" name="pos_receipt_footer_line2" class="form-control">
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group form-group-default">
+                  <label>POS Afsluitlijn 3</label>
+                  <input type="text" id="edit_location_pos_receipt_footer_line3" name="pos_receipt_footer_line3" class="form-control">
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
               <div class="col-md-12">
                 <div class="form-group form-group-default required">
                   <label>Volgorde</label>

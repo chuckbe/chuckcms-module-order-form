@@ -131,6 +131,7 @@ class RegisterController extends BaseController
         } else {
             $json['promo'] = false;
         }
+        $json['ean'] = $this->generateEanForCustomer();
 
         $customer->json = $json;
         $customer->save();
@@ -164,6 +165,17 @@ class RegisterController extends BaseController
         $uids = Coupon::where('number', $uid)->get();
         if (count($uids) > 0) {
             $this->generateCouponNumber();
+        } else {
+            return $uid;
+        }
+    }
+
+    public function generateEanForCustomer()
+    {
+        $uid = rand(100000000000, 999999999999);
+        $uids = Customer::where('json->ean', $uid)->get();
+        if (count($uids) > 0) {
+            $this->generateEanForCustomer();
         } else {
             return $uid;
         }

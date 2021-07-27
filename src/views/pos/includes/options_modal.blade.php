@@ -75,6 +75,10 @@
   </div>
 </div>
 
+
+
+
+
 <div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="paymentModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -166,6 +170,10 @@
   </div>
 </div>
 
+
+
+
+
 <div class="modal fade" id="customerModal" tabindex="-1" role="dialog" aria-labelledby="customerModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -185,7 +193,7 @@
                     </div>
                     <select id="cof_customerSelectInput" class="custom-select">
                         @foreach($customers as $customer)
-                        <option value="{{ $customer->id }}" class="cof_customerSelectInputOption" data-is-guest="{{ $customer->guest ? 'true' : 'false' }}" data-customer-email="{{ $customer->email }}">{{ $customer->surname.' '.$customer->name.' ('.$customer->email.')' }}</option>
+                        <option value="{{ $customer->id }}" class="cof_customerSelectInputOption" data-is-guest="{{ $customer->guest ? 'true' : 'false' }}" data-customer-email="{{ $customer->email }}" data-ean="{{ $customer->ean }}" data-points="{{ $customer->loyalty_points }}">{{ $customer->surname.' '.$customer->name.' ('.$customer->email.')' }}</option>
                         @endforeach
                     </select>
                     <div class="input-group-append">
@@ -249,39 +257,17 @@
   </div>
 </div>
 
-
-<div class="modal fade" id="printerSettingsModal" tabindex="-1" role="dialog" aria-labelledby="printerSettingsModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="printerSettingsModalLabel">Printer instellingen</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="row">
-            <div class="col-12">
-                <label class="checkbox">
-                    <input type="checkbox" id="useDefaultPrinter" /> <strong>Print to Default printer</strong>
-                </label>
-                <p>or...</p>
-                <div id="installedPrinters">
-                    <label for="printerName">Select an installed Printer:</label>
-                    <select name="printerName" id="printerName"></select>
-                </div>
-                <button class="mt-2" type="button" onclick="doPrinting();">Print Now...</button>
-            </div>
-
-            <div class="col-12">
-                <hr>
-                <div class="w-100 d-block"></div>
-                <button class="btn btn-secondary" type="button" data-dismiss="modal" aria-label="Close">Annuleren</button>
-                <button class="btn btn-success float-right" id="">Instellingen opslaan</button>
-            </div>
-        </div>
-      </div>
+<div role="alert" aria-live="assertive" aria-atomic="true"  class="toast text-success" id="customerChangedToast" style="position: absolute; bottom: 25px; right: 25px;">
+    <div class="toast-header">
+      <strong class="mr-auto"><b>SCANNER</b></strong>
+      <small>nu</small>
+      <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
     </div>
-  </div>
+    <div class="toast-body">
+      Klant werd succesvol gewijzigd!
+    </div>
 </div>
+
 

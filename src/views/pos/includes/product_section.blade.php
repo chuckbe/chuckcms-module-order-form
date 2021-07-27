@@ -1,28 +1,28 @@
 <div class="menuItemArea row">
-    <div class="container pl-5 pr-5 d-flex">
+    <div class="container pl-4 pr-4 pl-md-5 pr-md-5 d-flex">
         <div class="tab-content" id="navigationTabContent">
             @php $c = 0; @endphp
             @foreach($categories as $category)
-            @if($category->is_displayed)
+            @if($category->is_pos_available == true)
             <div class="tab-pane fade show{{ $c == 0 ? ' active' : '' }}" id="category{{$category->id}}Tab" role="tabpanel" aria-labelledby="category{{$category->id}}Tab">
                 <div class="row">
                     
 
                     @foreach($products as $product)
                     @if($product->json['category'] == $category->id && $product->is_pos_available == true)
-                    <div class="col-3 p-1 cof_pos_product_card {{-- unavailable --}}" data-product-id="{{ $product->id }}" data-product-category-id="{{ $product->getJson('category') }}" data-product-name="{{ $product->getJson('name.nl') }}" data-q="{{ http_build_query($product->getJson('quantity'),'',',') }}" data-vat-delivery="{{ $product->json['price']['vat_delivery'] }}" data-vat-takeout="{{ $product->json['price']['vat_takeout'] }}" data-vat-on-the-spot="{{ $product->json['price']['vat_on_the_spot'] }}" data-current-price="{{ $product->json['price']['discount'] !== '0.000000' ? $product->json['price']['discount'] : $product->json['price']['final'] }}" data-product-attributes="{{ json_encode($product->json['attributes']) }}" data-product-options="{{ json_encode($product->json['options']) }}" @if(array_key_exists('extras', $product->json)) data-product-extras="{{ json_encode($product->json['extras']) }}" @endif>
+                    <div class="col-6 col-sm-4 col-md-3 p-1 cof_pos_product_card {{-- unavailable --}}" data-product-id="{{ $product->id }}" data-product-category-id="{{ $product->getJson('category') }}" data-product-name="{{ $product->getJson('name.nl') }}" data-q="{{ http_build_query($product->getJson('quantity'),'',',') }}" data-vat-delivery="{{ $product->json['price']['vat_delivery'] }}" data-vat-takeout="{{ $product->json['price']['vat_takeout'] }}" data-vat-on-the-spot="{{ $product->json['price']['vat_on_the_spot'] }}" data-current-price="{{ $product->json['price']['discount'] !== '0.000000' ? $product->json['price']['discount'] : $product->json['price']['final'] }}" data-product-attributes="{{ json_encode($product->json['attributes']) }}" data-product-options="{{ json_encode($product->json['options']) }}" @if(array_key_exists('extras', $product->json)) data-product-extras="{{ json_encode($product->json['extras']) }}" @endif>
                         <div class="card shadow-sm">
-                            <div class="card-body">
-                                <h6 class="card-title"><b>{{ $product->getJson('name.nl') }}</b></h6>
+                            <div class="card-body py-2 px-3">
+                                <p class="card-title mb-2" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;"><small><b>{{ $product->getJson('name.nl') }}</b></small></p>
                                 <div class="row">
                                     <div class="col">
-                                        <h6 class="card-subtitle mb-2 text-muted cof_productItemPriceDisplay" data-product-id="{{ $product->id }}" data-current-price="{{ $product->json['price']['discount'] !== '0.000000' ? $product->json['price']['discount'] : $product->json['price']['final'] }}" style="font-size:16px">
+                                        <small class="d-block card-subtitle mb-1 text-muted cof_productItemPriceDisplay" data-product-id="{{ $product->id }}" data-current-price="{{ $product->json['price']['discount'] !== '0.000000' ? $product->json['price']['discount'] : $product->json['price']['final'] }}">
                                             <span class="cof_productItemUnitPrice" data-product-id="{{ $product->id }}" data-product-price="{{ $product->json['price']['final'] }}" data-has-discount="{{ $product->json['price']['discount'] == '0.000000' ? 'false' : 'true' }}" @if($product->json['price']['discount'] !== '0.000000') style="text-decoration:line-through" @endif>{{ '€ ' . number_format($product->json['price']['final'], 2, ',', '.') }}</span> 
                                             @if($product->json['price']['discount'] !== '0.000000')
                                             <span style="color:red;" class="cof_productItemDiscountPrice" data-product-id="{{ $product->id }}" data-discount-price="{{ $product->json['price']['discount'] }}">{{ '€ ' . number_format($product->json['price']['discount'], 2, ',', '.') }}</span>
                                             @endif
 
-                                        </h6>
+                                        </small>
                                         {{-- <h6 class="card-subtitle mb-2 text-muted">€ ${parseFloat(product.json.price.final).toFixed(2).replace(".", ",")}</h6>
                                          ${(product.json.quantity[ogLocation] == 0) ? '<p style="font-size: 10px; color: #e72870">Niet beschikbaar</p>' : ''} --}}
                                     </div>

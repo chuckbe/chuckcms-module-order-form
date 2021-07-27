@@ -25,7 +25,7 @@ class OrderController extends Controller
 
     public function index()
     {
-        $orders = FormEntry::where('slug', config('chuckcms-module-order-form.products.slug'))->get();
+        $orders = FormEntry::where('slug', config('chuckcms-module-order-form.products.slug'))->orderByDesc('created_at')->get();
         return view('chuckcms-module-order-form::backend.orders.index', compact('orders'));
     }
 
@@ -180,11 +180,31 @@ class OrderController extends Controller
                 $item['extras'] = false;
             }
 
+            if(array_key_exists('discounts', $product)) {
+                $item['discounts'] = $product['discounts'];
+            }
+
+            if(array_key_exists('discount', $product)) {
+                $item['discount'] = $product['discount'];
+            }
+
             $items[] = $item;
             
         }
 
         $all_json['items'] = $items;
+
+        $discounts = [];
+        if (is_array($request['discounts']) && count($request['discounts']) > 0) {
+            foreach($request['discounts'] as $singleDiscount){
+                $discount = [];
+                $discount['id'] = $singleDiscount['id'];
+
+                $discounts[] = $discount;
+            }
+        }
+
+        $all_json['discounts'] = $discounts;
 
         $order->entry = $all_json;
 

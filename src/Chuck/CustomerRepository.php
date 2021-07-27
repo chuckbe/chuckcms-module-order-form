@@ -28,6 +28,11 @@ class CustomerRepository
         return $this->customer->get();
     }
 
+    public function find($id)
+    {
+        return $this->customer->where('id', $id)->first();
+    }
+
     public function findByUserId($user_id)
     {
         return $this->customer->where('user_id', $user_id)->first();
@@ -137,7 +142,6 @@ class CustomerRepository
         $this->customer->destroy($id);
         return true;
     }
-
 
     public function mapAddress(Request $request, $json)
     {

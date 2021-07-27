@@ -27,12 +27,6 @@
     		<a href="{{ route('dashboard.module.order_form.products.create') }}" class="btn btn-sm btn-outline-success"> Voeg Nieuw Product Toe </a>
     	</div>
 		@endcan
-		<div class="tools">
-			<a class="collapse" href="javascript:;"></a>
-			<a class="config" data-toggle="modal" href="#grid-config"></a>
-			<a class="reload" href="javascript:;"></a>
-			<a class="remove" href="javascript:;"></a>
-		</div>
 		<div class="col-sm-12 my-3">
 			<div class="table-responsive">
 				<table class="table" data-datatable style="width:100%">
@@ -40,7 +34,8 @@
 						<tr>
 							<th scope="col">ID</th>
 							<th scope="col">Naam</th>
-							<th scope="col">Slug</th>
+							<th scope="col">Online?</th>
+							<th scope="col">POS?</th>
 							<th scope="col">Categorie</th>
 							<th scope="col">Actions</th>
 						</tr>
@@ -50,15 +45,23 @@
 							<tr class="product_line" data-id="{{ $product->id }}">
 								<td>{{ $product->id }}</td>
 						    	<td class="semi-bold">{{ $product->name[ChuckSite::getFeaturedLocale()] }}</td>
-						    	<td>{{$product->slug}}</td>
-								<td>{{ChuckRepeater::find($product->category)->name}}</td>
-						    	{{-- <td>{{config('chuckcms-module-order-form.categories')[$product->json['category']]['name']}}</td> --}}
+						    	<td class="v-align-middle">
+									<span class="badge badge-{{ $product->is_displayed ? 'success' : 'danger' }}">
+										{!!$product->is_displayed ? '✓' : '✕'!!}
+									</span>
+								</td>
+								<td class="v-align-middle">
+									<span class="badge badge-{{ $product->is_pos_available ? 'success' : 'danger' }}">
+										{!!$product->is_pos_available ? '✓' : '✕'!!}
+									</span>
+								</td>
+								<td>{{ is_null(ChuckRepeater::find($product->category)) ? 'Unlinked' : ChuckRepeater::find($product->category)->name}}</td>
 						    	<td class="semi-bold">
 						    		<a href="{{ route('dashboard.module.order_form.products.edit', ['product' => $product->id]) }}" class="btn btn-primary btn-sm btn-rounded m-r-20">
-						    			<i class="fa fa-pencil"></i> edit
+						    			<i class="fa fa-pencil"></i>
 						    		</a>
 						    		<a href="#" class="btn btn-danger btn-sm btn-rounded m-r-20 product_delete" data-id="{{ $product->id }}">
-						    			<i class="fa fa-trash"></i> delete
+						    			<i class="fa fa-trash"></i>
 						    		</a>
 						    	</td>
 							</tr>

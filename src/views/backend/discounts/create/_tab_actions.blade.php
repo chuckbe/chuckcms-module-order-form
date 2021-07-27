@@ -20,7 +20,7 @@
             <input type="radio" name="apply_on" id="apply_on_cart" value="cart"> Winkelwagen
         </label>
         <label for="apply_on_product" class="d-block">
-            <input type="radio" name="apply_on" id="apply_on_product" value="product"> Specifiek product
+            <input type="radio" name="apply_on" id="apply_on_product" value="product"> Specifiek product (zonder extras)
         </label>
         <label for="apply_on_conditions" class="d-block">
             <input type="radio" name="apply_on" id="apply_on_conditions" value="conditions"> Geselecteerde product(en)
