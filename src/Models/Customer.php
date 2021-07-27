@@ -62,6 +62,30 @@ class Customer extends Eloquent
         return array_key_exists('address', $this->json) ? $this->json['address']['shipping'] : array();
     }
 
+    public function incrementLoyaltyPoints($points)
+    {
+        $loyaltyPoints = (!is_null($this->loyalty_points) ? $this->loyalty_points : 0) + $points;
+        
+        $json = $this->json;
+        $json['loyalty_points'] = $loyaltyPoints;
+        
+        $this->json = $json;
+
+        $this->update();
+    }
+
+    public function decrementLoyaltyPoints($points)
+    {
+        $loyaltyPoints = (!is_null($this->loyalty_points) ? $this->loyalty_points : 0) - $points;
+        
+        $json = $this->json;
+        $json['loyalty_points'] = $loyaltyPoints >= 0 ? $loyaltyPoints : 0;
+        
+        $this->json = $json;
+
+        $this->update();
+    }
+
     public function getJson(string $string)
     {
         $json = $this->resolveJson($string);

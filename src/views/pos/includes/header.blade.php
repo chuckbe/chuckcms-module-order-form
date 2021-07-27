@@ -21,20 +21,15 @@
                     </div>
                 </div>
                 <div class="dropdown">
-                    <button class="btn btn-light align-self-center dropdown-toggle" type="button" id="locationDropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span id="cof_pos_location" data-active-location="{{ $locations->first()->id }}" data-type="{{ $locations->first()->type }}" data-on-the-spot="{{ $locations->first()->type == 'delivery' ? 0 : ($locations->first()->on_the_spot ? 1 : 0) }}">{{ $locations->first()->name }}</span>
+                    <button class="btn btn-sm btn-light align-self-center dropdown-toggle" type="button" id="locationDropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span id="cof_pos_location" data-active-location="{{ $locations->first()->id }}" data-type="{{ $locations->first()->type }}" data-on-the-spot="{{ $locations->first()->type == 'delivery' ? 0 : ($locations->first()->on_the_spot ? 1 : 0) }}" data-pos-name="{{ $locations->first()->pos_name }}" data-pos-address="{{ $locations->first()->pos_address1 }}" data-pos-address-t="{{ $locations->first()->pos_address2 }}" data-pos-vat="{{ $locations->first()->pos_vat }}" data-pos-receipt-title="{{ $locations->first()->pos_receipt_title }}" data-pos-receipt-footer-line="{{ $locations->first()->pos_receipt_footer_line1 }}" data-pos-receipt-footer-line-t="{{ $locations->first()->pos_receipt_footer_line2 }}"  data-pos-receipt-footer-line-tt="{{ $locations->first()->pos_receipt_footer_line3 }}">{{ $locations->first()->name }}</span>
                     </button>
                     <div class="dropdown-menu" aria-labelledby="locationDropdownButton">
                         @foreach($locations as $location)
-                        <a class="dropdown-item locationDropdownSelect" href="#" data-location-id="{{ $location->id }}" data-location-type="{{ $location->type }}" data-on-the-spot="{{ $location->type == 'delivery' ? 0 : ($location->on_the_spot ? 1 : 0) }}">{{ $location->name }}</a>
+                        <a class="dropdown-item locationDropdownSelect" href="#" data-location-id="{{ $location->id }}" data-location-type="{{ $location->type }}" data-on-the-spot="{{ $location->type == 'delivery' ? 0 : ($location->on_the_spot ? 1 : 0) }}" data-pos-name="{{ $location->pos_name }}" data-pos-address="{{ $location->pos_address1 }}" data-pos-address-t="{{ $location->pos_address2 }}" data-pos-vat="{{ $location->pos_vat }}" data-pos-receipt-title="{{ $location->pos_receipt_title }}" data-pos-receipt-footer-line="{{ $location->pos_receipt_footer_line1 }}" data-pos-receipt-footer-line-t="{{ $location->pos_receipt_footer_line2 }}"  data-pos-receipt-footer-line-tt="{{ $location->pos_receipt_footer_line3 }}">{{ $location->name }}</a>
                         @endforeach
                     </div>
                 </div>
-            </div>
-            <div class="text-right d-flex justify-content-end align-items-center h-100">
-                <button class="btn btn-light align-self-center ml-2" id="openPrintSettingsModal">
-                    <i class="fas fa-print"></i>
-                </button>
             </div>
         </div>
     </div>

@@ -11,7 +11,7 @@
 @endsection
 
 @section('content')
-<div class="container p-3">
+<div class="container min-height p-3">
   <form action="{{ route('dashboard.module.order_form.settings.update') }}" method="POST">
     <div class="row">
       <div class="col-sm-12">

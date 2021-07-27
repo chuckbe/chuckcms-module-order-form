@@ -35,6 +35,7 @@ class CategoryRepository
     	$json = [];
         $json['name'] = $values->get('name');
         $json['is_displayed'] = ($values->get('is_displayed') == '1' ? true : false);
+        $json['is_pos_available'] = ($values->get('is_pos_available') == '1' ? true : false);
         $json['order'] = (int)$values->get('order');
 
         $input['json'] = $json;
@@ -52,6 +53,7 @@ class CategoryRepository
         $json = [];
         $json['name'] = $values->get('name');
         $json['is_displayed'] = ($values->get('is_displayed') == '1' ? true : false);
+        $json['is_pos_available'] = ($values->get('is_pos_available') == '1' ? true : false);
         $json['order'] = (int)$values->get('order');
 
         $of_category->json = $json;

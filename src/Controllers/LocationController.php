@@ -45,6 +45,14 @@ class LocationController extends Controller
             'time_max' => 'required|numeric|between:1,24',
             'time_default' => 'required',
             'pos_users' => 'nullable',
+            'pos_name' => 'required',
+            'pos_address1' => 'required',
+            'pos_address2' => 'nullable',
+            'pos_vat' => 'required',
+            'pos_receipt_title' => 'required',
+            'pos_receipt_footer_line1' => 'nullable',
+            'pos_receipt_footer_line2' => 'nullable',
+            'pos_receipt_footer_line3' => 'nullable',
             'order' => 'numeric|required',
             'id' => 'required_with:update'
         ]);

@@ -93,7 +93,7 @@ $( document ).ready(function (){
 			  	if (result.value) { 
 			  		$.ajax({
                         method: 'POST',
-                        url: "{{ route('dashboard.module.ecommerce.discounts.delete') }}",
+                        url: "{{ route('dashboard.module.order_form.discounts.delete') }}",
                         data: { 
                         	discount_id: discount_id, 
                         	_token: token

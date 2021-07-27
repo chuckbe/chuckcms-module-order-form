@@ -33,6 +33,7 @@ class CategoryController extends Controller
         $this->validate($request, [ 
             'name' => 'max:185|required',
             'is_displayed' => 'required|in:0,1',
+            'is_pos_available' => 'required|in:0,1',
             'order' => 'numeric|required',
             'id' => 'required_with:update'
         ]);

@@ -69,6 +69,16 @@ class LocationRepository
         $json['time_default'] = $values->get('time_default');
 
         $json['pos_users'] = is_null($values->get('pos_users')) ? '' : $values->get('pos_users');
+        $json['pos_name'] = $values->get('pos_name');
+        $json['pos_address1'] = $values->get('pos_address1');
+        $json['pos_address2'] = is_null($values->get('pos_address2')) ? '' : $values->get('pos_address2');
+        $json['pos_vat'] = $values->get('pos_vat');
+        $json['pos_receipt_title'] = $values->get('pos_receipt_title');
+
+        $json['pos_receipt_footer_line1'] = is_null($values->get('pos_receipt_footer_line1')) ? '' : $values->get('pos_receipt_footer_line1');
+        $json['pos_receipt_footer_line2'] = is_null($values->get('pos_receipt_footer_line2')) ? '' : $values->get('pos_receipt_footer_line2');
+        $json['pos_receipt_footer_line3'] = is_null($values->get('pos_receipt_footer_line3')) ? '' : $values->get('pos_receipt_footer_line3');
+
         $json['order'] = (int)$values->get('order');
 
         $input['json'] = $json;
@@ -102,6 +112,16 @@ class LocationRepository
         $json['time_default'] = $values->get('time_default');
 
         $json['pos_users'] = is_null($values->get('pos_users')) ? '' : $values->get('pos_users');
+        $json['pos_name'] = $values->get('pos_name');
+        $json['pos_address1'] = $values->get('pos_address1');
+        $json['pos_address2'] = is_null($values->get('pos_address2')) ? '' : $values->get('pos_address2');
+        $json['pos_vat'] = $values->get('pos_vat');
+        $json['pos_receipt_title'] = $values->get('pos_receipt_title');
+
+        $json['pos_receipt_footer_line1'] = is_null($values->get('pos_receipt_footer_line1')) ? '' : $values->get('pos_receipt_footer_line1');
+        $json['pos_receipt_footer_line2'] = is_null($values->get('pos_receipt_footer_line2')) ? '' : $values->get('pos_receipt_footer_line2');
+        $json['pos_receipt_footer_line3'] = is_null($values->get('pos_receipt_footer_line3')) ? '' : $values->get('pos_receipt_footer_line3');
+
         $json['order'] = (int)$values->get('order');
 
         $of_location->json = $json;

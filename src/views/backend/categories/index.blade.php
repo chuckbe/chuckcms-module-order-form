@@ -24,7 +24,7 @@ $( document ).ready(function() {
 		$('.img_lfm_link').filemanager('image', {prefix: domain});
 	}
 });
-function editModal(id, name, is_displayed, order){
+function editModal(id, name, is_displayed, is_pos_available, order){
 	$('#edit_category_id').val(id);
 	$('#edit_category_name').val(name);
 	
@@ -32,6 +32,12 @@ function editModal(id, name, is_displayed, order){
 		$('#edit_category_is_displayed').prop('checked', true);
 	} else {
 		$('#edit_category_is_displayed').prop('checked', false);
+	}
+
+	if (is_pos_available == 1) {
+		$('#edit_category_is_pos_available').prop('checked', true);
+	} else {
+		$('#edit_category_is_pos_available').prop('checked', false);
 	}
 
 	$('#edit_category_order').val(order);
@@ -69,7 +75,8 @@ function deleteModal(id, name){
         				<tr>
         					<th scope="col">#</th>
 							<th scope="col">Naam</th>
-							<th scope="col">Wordt weergegeven?</th>
+							<th scope="col">Weergave?</th>
+							<th scope="col">POS?</th>
 							<th scope="col">Volgorde</th>
 							<th scope="col" style="min-width:190px">Actions</th>
         				</tr>
@@ -84,10 +91,15 @@ function deleteModal(id, name){
 									{!!$category->is_displayed ? '✓' : '✕'!!}
 								</span>
 							</td>
+							<td class="v-align-middle">
+								<span class="badge badge-{{ $category->is_pos_available ? 'success' : 'danger' }}">
+									{!!$category->is_pos_available ? '✓' : '✕'!!}
+								</span>
+							</td>
 							<td class="v-align-middle">{{$category->order }}</td>
 							<td class="v-align-middle semi-bold">
 								@can('edit redirects')
-								<a href="#" onclick="editModal({{ $category->id }}, '{{ $category->json['name'] }}', '{{ $category->is_displayed }}', '{{ $category->order }}')" class="btn btn-default btn-sm btn-rounded m-r-20">
+								<a href="#" onclick="editModal({{ $category->id }}, '{{ $category->json['name'] }}', '{{ $category->is_displayed }}', '{{ $category->is_pos_available }}', '{{ $category->order }}')" class="btn btn-default btn-sm btn-rounded m-r-20">
 									<i data-feather="edit-2"></i> edit
 								</a>
 								@endcan

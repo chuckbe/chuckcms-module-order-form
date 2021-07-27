@@ -47,10 +47,10 @@ html, body, row {
 .header .headerSearchArea .btn{
     background-color: #f8f9fa;
 }
-.menuArea {
+/*.menuArea {
     height: 16vh;
     margin: 0;
-}
+}*/
 .menuArea nav {
     padding: 8vh 2vw 0;
 }
@@ -407,10 +407,10 @@ html, body, row {
   .menuItemArea > div.container .tab-content> .tab-pane>.row{
       margin: 0 !important;
   }
-  .menuItemArea > div.container .tab-content> .tab-pane>.row .cof_pos_product_card{
+  /*.menuItemArea > div.container .tab-content> .tab-pane>.row .cof_pos_product_card{
       flex: 0 0 100%;
     max-width: 100%;
-  }
+  }*/
   .handlerArea{
       height: unset;
   }
