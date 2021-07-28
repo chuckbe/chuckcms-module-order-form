@@ -73,12 +73,12 @@ Bestelling #{{ $order->entry['order_number'] }}
                     {{ $option['name'] }}: {{ $option['value'] }}<br>
                     @endforeach
                     </small>
-                      @if($item['extras'] !== false)
+                      @if(array_key_exists('extras', $item) && $item['extras'] !== false)
                       <br>
                       @endif
                     @endif
 
-                    @if($item['extras'] !== false)
+                    @if(array_key_exists('extras', $item) && $item['extras'] !== false)
                     <small>
                     @foreach($item['extras'] as $option)
                     {{ $option['name'] }} (€ {{ $option['value'] }})<br>

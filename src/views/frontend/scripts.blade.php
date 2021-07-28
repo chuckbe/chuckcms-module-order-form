@@ -609,6 +609,15 @@ $(document).ready(function() {
 			return false;
 		}
 
+		if( $('input[type=text][name=order_housenumber]').val().length > 10 ) {
+			$('.error_span').html(' Uw huisnummer mag maximaal 10 tekens lang zijn.');
+			$('.error_bag').removeClass('hidden');
+
+			$(this).html('Afrekenen');
+    		$(this).prop('disabled', false);
+			return false;
+		}
+
 		if( $('input[type=checkbox][name=legal_approval]:checked').length == 0 ) {
 			$('.error_span:first').html(' Uw goedkeuring is vereist om deze bestelling te kunnen plaatsen.');
 			$('.error_bag:first').removeClass('hidden');

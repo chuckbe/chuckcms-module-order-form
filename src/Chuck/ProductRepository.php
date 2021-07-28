@@ -47,7 +47,7 @@ class ProductRepository
         $json['is_pos_available'] = ($values->get('is_pos_available') == '1' ? true : false);
 
         $json['price']['final'] = $values->get('price')['final'];//verkoopprijs incl btw
-        $json['price']['discount'] = $values->get('price')['discount'];//kortingsprijs incl btw
+        $json['price']['discount'] = is_null($values->get('price')['discount']) ? '0.000000' : $values->get('price')['discount'];//kortingsprijs incl btw
         $json['price']['vat_delivery'] = $values->get('price')['vat_delivery'];
         $json['price']['vat_takeout'] = $values->get('price')['vat_takeout'];
         $json['price']['vat_on_the_spot'] = $values->get('price')['vat_on_the_spot'];
@@ -118,7 +118,7 @@ class ProductRepository
         $json['is_pos_available'] = ($values->get('is_pos_available') == '1' ? true : false);
 
         $json['price']['final'] = $values->get('price')['final'];//verkoopprijs incl btw
-        $json['price']['discount'] = $values->get('price')['discount'];//kortingsprijs incl btw
+        $json['price']['discount'] = is_null($values->get('price')['discount']) ? '0.000000' : $values->get('price')['discount'];//kortingsprijs incl btw
         $json['price']['vat_delivery'] = $values->get('price')['vat_delivery'];
         $json['price']['vat_takeout'] = $values->get('price')['vat_takeout'];
         $json['price']['vat_on_the_spot'] = $values->get('price')['vat_on_the_spot'];
