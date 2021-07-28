@@ -17,7 +17,7 @@
     <label for="action_value" class="col-sm-2 col-form-label">Toepassen op *</label>
     <div class="col-sm-10">
         <label for="apply_on_cart" class="d-block">
-            <input type="radio" name="apply_on" id="apply_on_cart" value="cart"> Winkelwagen
+            <input type="radio" name="apply_on" id="apply_on_cart" value="cart" checked> Winkelwagen
         </label>
         <label for="apply_on_product" class="d-block">
             <input type="radio" name="apply_on" id="apply_on_product" value="product"> Specifiek product (zonder extras)

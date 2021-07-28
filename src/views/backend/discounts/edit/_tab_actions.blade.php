@@ -17,7 +17,7 @@
     <label class="col-sm-2 col-form-label">Toepassen op *</label>
     <div class="col-sm-10">
         <label for="apply_on_cart" class="d-block">
-            <input type="radio" name="apply_on" id="apply_on_cart" value="cart" @if($discount->apply_on == 'cart') checked @endif> Winkelwagen
+            <input type="radio" name="apply_on" id="apply_on_cart" value="cart" @if($discount->apply_on == 'cart') checked @endif @if($discount->type == 'currency') disabled @endif> Winkelwagen
         </label>
         <label for="apply_on_product" class="d-block">
             <input type="radio" name="apply_on" id="apply_on_product" value="product" @if($discount->apply_on == 'product') checked @endif> Specifiek product (zonder extras)

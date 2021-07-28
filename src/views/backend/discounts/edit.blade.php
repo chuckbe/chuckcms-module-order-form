@@ -278,15 +278,18 @@ $(document).ready(function() {
         let apply_on = $('input[name="apply_on"]:checked').val();
         if ($(this).find('option:selected').val() == 'currency') {
             
-            if (apply_on == 'conditions') {
+            if (apply_on == 'conditions' || apply_on == 'cart') {
+                $('#apply_on_cart').prop('checked', false);
                 $('#apply_on_conditions').prop('checked', false);
-                $('#apply_on_cart').prop('checked', true);
+                $('#apply_on_product').prop('checked', true);
             }
             
+            $('#apply_on_cart').prop('disabled', true);
             $('#apply_on_conditions').prop('disabled', true);
 
         } else {
 
+            $('#apply_on_cart').prop('disabled', false);
             $('#apply_on_conditions').prop('disabled', false);
 
         }
