@@ -9,7 +9,15 @@ use Chuckbe\Chuckcms\Models\FormEntry;
 use ChuckSite;
 use Mollie;
 use URL;
+use Str;
 use Mail;
+use Illuminate\Support\Carbon;
+use DatePeriod;
+use DateTime;
+use DateInterval;
+
+use Chuckbe\ChuckcmsModuleOrderForm\Exports\OrdersExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class OrderController extends Controller
 {
@@ -25,13 +33,102 @@ class OrderController extends Controller
 
     public function index()
     {
-        $orders = FormEntry::where('slug', config('chuckcms-module-order-form.products.slug'))->orderByDesc('created_at')->get();
-        return view('chuckcms-module-order-form::backend.orders.index', compact('orders'));
+        if (!request()->has('date')) {
+            return redirect()->route('dashboard.module.order_form.orders.index', ['date' => date('Y-m-d', strtotime(now()->subDays(1)))]);
+        }
+
+        $orders = FormEntry::where('slug', config('chuckcms-module-order-form.products.slug'))->orderByDesc('created_at');
+
+        $dates = explode(',', request()->date);
+        $startDate = $dates[0];
+        $endDate = count($dates) > 1 ? $dates[1] : null;
+
+        if (is_null($endDate)) {
+            $d = explode('-', $startDate)[2];
+            $m = explode('-', $startDate)[1];
+            $y = explode('-', $startDate)[0];
+
+            $orders = $orders->where('entry->order_date', $d.'/'.$m.'/'.$y);
+        }
+
+        if (!is_null($endDate)) {
+            $datesArray = $this->getArrayForDates($startDate, $endDate);
+            $orders = $orders->whereIn('entry->order_date', $datesArray);
+        }
+
+        $orders = $orders->get();
+        return view('chuckcms-module-order-form::backend.orders.index', compact('orders', 'startDate', 'endDate'));
     }
 
     public function detail(FormEntry $order)
     {
         return view('chuckcms-module-order-form::backend.orders.detail', compact('order'));
+    }
+
+    public function excel() 
+    {
+        if (!request()->has('date')) {
+            return redirect()->route('dashboard.module.order_form.orders.excel', ['date' => date('Y-m-d', strtotime(now()->subDays(1)))]);
+        }
+
+        $orders = FormEntry::where('slug', config('chuckcms-module-order-form.products.slug'))->orderByDesc('created_at');
+
+        $dates = explode(',', request()->date);
+        $startDate = $dates[0];
+        $endDate = count($dates) > 1 ? $dates[1] : null;
+
+        if (is_null($endDate)) {
+            $d = explode('-', $startDate)[2];
+            $m = explode('-', $startDate)[1];
+            $y = explode('-', $startDate)[0];
+
+            $orders = $orders->where('entry->order_date', $d.'/'.$m.'/'.$y);
+        }
+
+        if (!is_null($endDate)) {
+            $datesArray = $this->getArrayForDates($startDate, $endDate);
+            $orders = $orders->whereIn('entry->order_date', $datesArray);
+        }
+
+        $orders = $orders->get();
+
+        $fileName = Str::slug(ChuckSite::getSite('name'), '_').'_orders_export.xlsx';
+        return Excel::download(new OrdersExport($orders), $fileName);
+    }
+
+    public function pdf()
+    {
+        ini_set('max_execution_time', 900);
+        
+        if (!request()->has('date')) {
+            return redirect()->route('dashboard.module.order_form.orders.pdf', ['date' => date('Y-m-d', strtotime(now()->subDays(1)))]);
+        }
+
+        $orders = FormEntry::where('slug', config('chuckcms-module-order-form.products.slug'))->orderByDesc('created_at');
+
+        $dates = explode(',', request()->date);
+        $startDate = $dates[0];
+        $endDate = count($dates) > 1 ? $dates[1] : null;
+
+        if (is_null($endDate)) {
+            $d = explode('-', $startDate)[2];
+            $m = explode('-', $startDate)[1];
+            $y = explode('-', $startDate)[0];
+
+            $orders = $orders->where('entry->order_date', $d.'/'.$m.'/'.$y);
+        }
+
+        if (!is_null($endDate)) {
+            $datesArray = $this->getArrayForDates($startDate, $endDate);
+            $orders = $orders->whereIn('entry->order_date', $datesArray);
+        }
+
+        $orders = $orders->get();
+
+        $pdf = \PDF::loadView('chuckcms-module-order-form::backend.orders.pdf.all', compact('orders'));
+        $fileName = Str::slug(ChuckSite::getSite('name'), '_').'_orders_pdf_export.pdf';
+
+        return $pdf->download($fileName);
     }
 
     public function updateDate(Request $request)
@@ -385,5 +482,29 @@ class OrderController extends Controller
                 }
             });
         }
+    }
+
+    public function getArrayForDates($startDate, $endDate)
+    {
+        if ($startDate == $endDate) {
+            $d = explode('-', $startDate)[2];
+            $m = explode('-', $startDate)[1];
+            $y = explode('-', $startDate)[0];
+
+            return [$d.'/'.$m.'/'.$y];
+        }
+
+        $period = new DatePeriod(
+             new DateTime($startDate),
+             new DateInterval('P1D'),
+             new DateTime(Carbon::parse($endDate)->addDays()->toDateString())
+        );
+
+        $dates = [];
+        foreach ($period as $key => $date) {
+            $dates[] = $date->format('d/m/Y');       
+        }
+
+        return $dates;
     }
 }

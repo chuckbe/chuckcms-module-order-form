@@ -20,11 +20,14 @@
 		</div>
 	</div>
 	<div class="row bg-light shadow-sm rounded p-3 mb-3 mx-1">
-		<div class="tools">
-			<a class="collapse" href="javascript:;"></a>
-			<a class="config" data-toggle="modal" href="#grid-config"></a>
-			<a class="reload" href="javascript:;"></a>
-			<a class="remove" href="javascript:;"></a>
+		<div class="col-sm-12 my-3">
+			<form action="" class="form-inline">
+				<input type="date" name="startDate" value="{{ $startDate }}" class="form-control-sm ml-auto">
+				<input type="date" name="endDate" value="{{ is_null($endDate) ? $startDate : $endDate }}" class="form-control-sm ml-3">
+				<button class="btn btn-sm btn-primary ml-3" id="getOrdersForDate">Bekijken</button>
+				<button class="btn btn-sm btn-outline-secondary ml-3" id="excelOrdersForDate"><i class="fa fa-file-excel-o"></i></button>
+				<button class="btn btn-sm btn-outline-secondary ml-3" id="pdfOrdersForDate"><i class="fa fa-file-pdf-o"></i></button>
+			</form>
 		</div>
 		<div class="col-sm-12 my-3">
 			<div class="table-responsive">
@@ -43,7 +46,7 @@
 					<tbody>
 						@php
 						$module = ChuckSite::module('chuckcms-module-order-form');
-						$ordersCount = strval(count($orders));
+						$ordersCount = strval(is_null($orders->first()) ? '0' : $orders->first()->id);
 						@endphp
 						@foreach($orders as $order)
 							<tr class="order_line" data-id="{{ $order->id }}">
@@ -95,5 +98,31 @@
 @endsection
 
 @section('scripts')
+<script>
+$(document).ready(function() {
+	$('body').on('click', '#getOrdersForDate', function (event) {
+		event.preventDefault();
 
+		let startDate = $('input[name=startDate]').val();
+		let endDate = $('input[name=endDate]').val();
+		window.location = '//'+location.host+location.pathname+'?date='+startDate+','+endDate;
+	});
+
+	$('body').on('click', '#excelOrdersForDate', function (event) {
+		event.preventDefault();
+
+		let startDate = $('input[name=startDate]').val();
+		let endDate = $('input[name=endDate]').val();
+		window.location = '//'+location.host+location.pathname+'/excel?date='+startDate+','+endDate;
+	});
+
+	$('body').on('click', '#pdfOrdersForDate', function (event) {
+		event.preventDefault();
+
+		let startDate = $('input[name=startDate]').val();
+		let endDate = $('input[name=endDate]').val();
+		window.location = '//'+location.host+location.pathname+'/pdf?date='+startDate+','+endDate;
+	});
+});
+</script>
 @endsection
