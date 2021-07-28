@@ -339,6 +339,25 @@
                             <input type="text" data-a-dec="." data-a-sep="" data-m-dec="6" data-a-pad=true class="autonumeric form-control" name="extra_price[]">
                           </div>
                         </div>
+
+                        <div class="col-sm-3 offset-sm-2">
+                          <div class="form-group form-group-default required">
+                            <label>BTW% voor levering *</label>
+                            <input type="text" data-a-dec="." data-a-sep="" data-m-dec="0" data-a-pad=true class="autonumeric form-control" name="extra_vat_delivery[]" data-v-min="0" data-v-max="21" required>
+                          </div>
+                        </div>
+                        <div class="col-sm-3">
+                          <div class="form-group form-group-default required">
+                            <label>BTW% voor afhaal *</label>
+                            <input type="text" data-a-dec="." data-a-sep="" data-m-dec="0" data-a-pad=true class="autonumeric form-control" name="extra_vat_takeout[]" data-v-min="0" data-v-max="21" required>
+                          </div>
+                        </div>
+                        <div class="col-sm-4">
+                          <div class="form-group form-group-default required">
+                            <label>BTW% voor on-the-spot *</label>
+                            <input type="text" data-a-dec="." data-a-sep="" data-m-dec="0" data-a-pad=true class="autonumeric form-control" name="extra_vat_on_the_spot[]" data-v-min="0" data-v-max="21" required>
+                          </div>
+                        </div>
                       </div>
                       @else
                         @foreach($product->json['extras'] as $extra)
