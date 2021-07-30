@@ -79,9 +79,18 @@
 							    	@endif
 							    </td>
 							    <td class="semi-bold">
-							    	<a href="{{ route('dashboard.module.order_form.orders.detail', ['order' => $order->id]) }}" class="btn btn-default btn-sm btn-rounded m-r-20">
-							    		<i data-feather="clipboard"></i> bekijken
+							    	<a href="{{ route('dashboard.module.order_form.orders.detail', ['order' => $order->id]) }}" class="btn btn-primary btn-sm btn-rounded d-inline-block">
+							    		<i class="fa fa-eye"></i>
 							    	</a>
+							    	<div class="dropdown d-inline-block">
+									  	<a class="btn btn-sm btn-outline-secondary btn-rounded" href="#" role="button" id="dropdownMenuLink{{ $order->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									    	<i class="fa fa-ellipsis-v"></i>
+									  	</a>
+
+									  	<div class="dropdown-menu" aria-labelledby="dropdownMenuLink{{ $order->id }}">
+									    	<a class="dropdown-item resendOrderConfirmationMail" href="#" data-id="{{ $order->id }}"><i class="fa fa-paper-plane-o"></i> Stuur bevestiging</a>
+									  	</div>
+									</div>
 							    </td>
 							</tr>
 						@endforeach
@@ -98,8 +107,10 @@
 @endsection
 
 @section('scripts')
+<script src="https://cdn.chuck.be/assets/plugins/sweetalert2.all.js"></script>
 <script>
 $(document).ready(function() {
+	let a_token = "{{ Session::token() }}"
 	$('body').on('click', '#getOrdersForDate', function (event) {
 		event.preventDefault();
 
@@ -122,6 +133,35 @@ $(document).ready(function() {
 		let startDate = $('input[name=startDate]').val();
 		let endDate = $('input[name=endDate]').val();
 		window.location = '//'+location.host+location.pathname+'/pdf?date='+startDate+','+endDate;
+	});
+
+	$('body').on('click', '.resendOrderConfirmationMail', function (event) {
+		event.preventDefault();
+
+		let order_id = $(this).attr('data-id');
+		$.ajax({
+	        method: 'POST',
+	        url: "{{ route('dashboard.module.order_form.orders.resend_confirmation') }}",
+	        data: { 
+	            order_id: order_id,
+	            _token: a_token
+	        }
+	    })
+	    .done(function(data) {
+	        if (data.status == "success"){
+	            swal({
+					title: 'Succes...',
+					text: "Bevestiging verstuurd!"
+				});
+	        } else{
+	            swal({
+					icon: 'error',
+					title: 'Error...',
+					text: 'Er is iets misgegaan!',
+				});
+	        }
+
+	    });
 	});
 });
 </script>

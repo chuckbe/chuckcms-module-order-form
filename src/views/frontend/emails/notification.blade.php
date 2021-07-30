@@ -168,8 +168,8 @@
                                         </tr>
                                         <tr>
                                             <td style="padding: 20px 0 0 0; font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding">
-                                                <b>Locatie:</b> {{ ChuckRepeater::find($order->entry['location'])->name }} op {{ $order->entry['order_date'] }}
-                                                    @if(ChuckRepeater::find($order->entry['location'])->time_required == true)
+                                                <b>Locatie:</b> {{ !is_null(ChuckRepeater::find($order->entry['location'])) ? ChuckRepeater::find($order->entry['location'])->name : '--' }} op {{ $order->entry['order_date'] }}
+                                                    @if(!is_null(ChuckRepeater::find($order->entry['location'])) && ChuckRepeater::find($order->entry['location'])->time_required == true)
                                                     om {{ $order->entry['order_time'] }}
                                                     @endif <br><br>
 
@@ -202,7 +202,7 @@
                                                 @endforeach
 
                                                 <br>
-                                                @if(ChuckRepeater::find($order->entry['location'])->type == 'delivery')
+                                                @if(!is_null(ChuckRepeater::find($order->entry['location'])) && ChuckRepeater::find($order->entry['location'])->type == 'delivery')
                                                 <b>Subtotaal</b>: € {{ number_format((float)$order->entry['order_price'], 2, ',', '.') }} <br>
                                                 <b>Verzending</b>: € {{ number_format((float)$order->entry['order_shipping'], 2, ',', '.') }} <br><br>
                                                 <b>Totaal</b>: € {{ number_format((float)$order->entry['order_price_with_shipping'], 2, ',', '.') }}

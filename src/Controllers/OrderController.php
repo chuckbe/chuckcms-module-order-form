@@ -456,6 +456,23 @@ class OrderController extends Controller
         return response()->json(['status' => 'success'], 200);
     }
 
+    public function resendConfirmation(Request $request)
+    {
+        $this->validate(request(), [
+            'order_id' => 'required'
+        ]);
+
+        $order = FormEntry::where('id', $request->order_id)->first();
+
+        if (is_null($order)) {
+            return response()->json(['status' => 'error'], 404);
+        }
+
+        $this->sendConfirmation($order);
+
+        return response()->json(['status' => 'success'], 200);
+    }
+
     public function sendConfirmation(FormEntry $order)
     {
         if( (ChuckSite::module('chuckcms-module-order-form')->getSetting('order.payment_upfront') && $order->entry['status'] == 'paid') || (ChuckSite::module('chuckcms-module-order-form')->getSetting('order.payment_upfront') == false) ){
@@ -473,11 +490,11 @@ class OrderController extends Controller
                 $m->from(ChuckSite::module('chuckcms-module-order-form')->getSetting('emails.from_email'), ChuckSite::module('chuckcms-module-order-form')->getSetting('emails.from_name'));
                 $m->to(ChuckSite::module('chuckcms-module-order-form')->getSetting('emails.to_email'), ChuckSite::module('chuckcms-module-order-form')->getSetting('emails.to_name'))->subject(ChuckSite::module('chuckcms-module-order-form')->getSetting('emails.notification_subject').$order->entry['order_number']);
                 
-                if( ChuckSite::module('chuckcms-module-order-form')->getSetting('emails.to_cc') !== false){
+                if( ChuckSite::module('chuckcms-module-order-form')->getSetting('emails.to_cc') !== false && !is_null(ChuckSite::module('chuckcms-module-order-form')->getSetting('emails.to_cc'))){
                     $m->cc(ChuckSite::module('chuckcms-module-order-form')->getSetting('emails.to_cc'));
                 }
 
-                if( ChuckSite::module('chuckcms-module-order-form')->getSetting('emails.to_bcc') !== false){
+                if( ChuckSite::module('chuckcms-module-order-form')->getSetting('emails.to_bcc') !== false && !is_null(ChuckSite::module('chuckcms-module-order-form')->getSetting('emails.to_bcc'))){
                     $m->bcc(ChuckSite::module('chuckcms-module-order-form')->getSetting('emails.to_bcc'));
                 }
             });
