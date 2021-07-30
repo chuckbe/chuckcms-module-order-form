@@ -81,48 +81,48 @@
 <script src="https://cdn.chuck.be/assets/plugins/sweetalert2.all.js"></script>
 <script>
 $( document ).ready(function (){
-	$('.product_delete').each(function(){
+	$('body').on('click', '.product_delete', function (event) {
+  		event.preventDefault();
+
 		var product_id = $(this).attr("data-id");
 		var token = '{{ Session::token() }}';
-	  	$(this).click(function (event) {
-	  		event.preventDefault();
-	  		swal({
-				title: 'Are you sure?',
-				text: "You won't be able to revert this!",
-				type: 'warning',
-				showCancelButton: true,
-				confirmButtonColor: '#3085d6',
-				cancelButtonColor: '#d33',
-				confirmButtonText: 'Yes, delete it!'
-			}).then((result) => {
-			  	if (result.value) { 
-			  		$.ajax({
-                        method: 'POST',
-                        url: "{{ route('dashboard.module.order_form.products.delete') }}",
-                        data: { 
-                        	product_id: product_id, 
-                        	_token: token
-                        }
-                    })
-                    .done(function (data) {
-                    	if(data == 'success'){
-                    		$(".product_line[data-id='"+product_id+"']").first().remove();
-                    		swal(
-					      		'Deleted!',
-					      		'The product has been deleted.',
-					      		'success'
-					    	)
-                    	} else {
-                    		swal(
-					      		'Oops!',
-					      		'Something went wrong...',
-					      		'danger'
-					    	)
-                    	}
-                    });
-			  	}
-			})
-	    });
+  		
+  		swal({
+			title: 'Are you sure?',
+			text: "You won't be able to revert this!",
+			type: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: 'Yes, delete it!'
+		}).then((result) => {
+		  	if (result.value) { 
+		  		$.ajax({
+                    method: 'POST',
+                    url: "{{ route('dashboard.module.order_form.products.delete') }}",
+                    data: { 
+                    	product_id: product_id, 
+                    	_token: token
+                    }
+                })
+                .done(function (data) {
+                	if(data == 'success'){
+                		$(".product_line[data-id='"+product_id+"']").first().remove();
+                		swal(
+				      		'Deleted!',
+				      		'The product has been deleted.',
+				      		'success'
+				    	)
+                	} else {
+                		swal(
+				      		'Oops!',
+				      		'Something went wrong...',
+				      		'danger'
+				    	)
+                	}
+                });
+		  	}
+		});
 	});
 });
 </script>
