@@ -19,6 +19,7 @@
 <script src="{{asset('chuckbe/chuckcms-module-order-form/scripts/cputils.js') }}"></script>
 <script src="{{asset('chuckbe/chuckcms-module-order-form/scripts/zip-full.min.js') }}"></script>
 <script src="{{asset('chuckbe/chuckcms-module-order-form/scripts/JSESCPOSBuilder.js') }}"></script>
+<script src="{{asset('chuckbe/chuckcms-module-order-form/scripts/JSPrintManager.js') }}"></script>
 
 <script src="{{asset('chuckbe/chuckcms-module-order-form/scripts/jquery.numpad.js')}}" type="text/javascript"></script>
 <script src="{{asset('chuckbe/chuckcms-module-order-form/scripts/popper.min.js')}}"></script>
