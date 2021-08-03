@@ -8,14 +8,6 @@ Bestelling #{{ $order->entry['order_number'] }}
   
 @endsection
 
-@section('css')
-  
-@endsection
-
-@section('scripts')
-  
-@endsection
-
 @section('content')
 <div class="container">
     <div class="row">
@@ -121,6 +113,18 @@ Bestelling #{{ $order->entry['order_number'] }}
 $( document ).ready(function() { 
   init(); 
 
+  $('body').on('click', '.editDateModal', function (event) {
+    event.preventDefault();
+    
+    $('#editDateModal').modal('show');
+  });
+
+  $('body').on('click', '.editAddressModal', function (event) {
+    event.preventDefault();
+    
+    $('#editAddressModal').modal('show');
+  });
+
   function init() {
     //Autonumeric plug-in
     $('.autonumeric').autoNumeric('init');
@@ -141,14 +145,6 @@ $( document ).ready(function() {
       ['para', ['ul', 'ol', 'paragraph']],
       ['height', ['height']]
     ]
-  });
-
-  $('.editDateModal').on('click', function() {
-    $('#editDateModal').modal('show');
-  });
-
-  $('.editAddressModal').on('click', function() {
-    $('#editAddressModal').modal('show');
   });
   
 });

@@ -4,9 +4,9 @@
   <div class="modal-content-wrapper">
     <div class="modal-content">
       <div class="modal-header clearfix text-left">
+        <h6>Wijzig de datum van de bestelling</h6>
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i>
         </button>
-        <h5>Wijzig de datum van de bestelling</h5>
       </div>
       <div class="modal-body">
         <form role="form" method="POST" action="{{ route('dashboard.module.order_form.products.update_date') }}">
@@ -14,7 +14,7 @@
             <div class="row">
               <div class="col-md-12">
                 <div class="form-group form-group-default required">
-                  <label>Datum</label>
+                  <label>Datum (dd/mm/yyyy)</label>
                   <input type="text" class="form-control" data-provide="datepicker" data-date-format="dd/mm/yyyy" data-date-week-start="1" name="order_date" value="{{ $order->entry['order_date'] }}" required>
                 </div>
               </div>
