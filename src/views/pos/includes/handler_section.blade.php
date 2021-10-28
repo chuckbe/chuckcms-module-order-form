@@ -24,10 +24,10 @@
                         </div>
                         @endforeach --}}
                         <div class="col-6">
-                            <button class="btn btn-sm w-100" id="openCouponsModal"><small><i class="fas fa-list"></i> LIJST</small></button>
+                            <button class="btn w-100" id="openCouponsModal"><i class="fas fa-list"></i> KORTINGEN</button>
                         </div>
                         <div class="col-6">
-                            <button class="btn btn-sm w-100"><small><i class="fas fa-qrcode"></i> SCAN</small></button>
+                            <button class="btn w-100"><i class="fas fa-qrcode"></i> SCAN</button>
                         </div>
                       </div>
                     </div>

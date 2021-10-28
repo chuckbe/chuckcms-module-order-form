@@ -8,7 +8,7 @@
 			<span>Voeg producten toe om te bestellen.</span>
 		</li>
 	</ul>
-	<ul class="list-group mb-3" id="cof_CartProductList" style="display:none;">
+	<ul class="list-group mb-1" id="cof_CartProductList" style="display:none;">
 		<li class="list-group-item d-flex justify-content-start lh-condensed cof_cartProductListItem" data-product-id="0" data-product-name="" data-attribute-name="" data-quantity="0" data-unit-price="0" data-total-price="0">
 			<div style="padding: 7px 15px 7px 0px;">
 				<img src="{{ asset('chuckbe/chuckcms-module-order-form/trash-solid.svg') }}" class="cof_deleteProductFromListButton" height="12" width="12" alt="Verwijder product" style="cursor:pointer;">
@@ -29,11 +29,35 @@
 			<span>Verzending (EUR)</span>
 			<strong class="cof_cartShippingPrice">€ 0,00</strong>
 		</li>
+		<li class="list-group-item d-flex justify-content-between d-none" id="cof_CartProductListDiscountLine">
+			<span>Korting (EUR)</span>
+			<strong class="cof_cartDiscountPrice">-€ 0,00</strong>
+		</li>
 		<li class="list-group-item d-flex justify-content-between" id="cof_CartProductListPriceLine">
 			<span>Totaal (EUR)</span>
 			<strong class="cof_cartTotalPrice">€ 0,00</strong>
 		</li>
 	</ul>
+	
+	<div class="d-block w-100 d-none" id="cof_orderDiscountCodeOpenBtnWrapper">
+		<a href="#" class="d-block pb-2 text-right" id="cof_orderDiscountCodeOpenBtn"><small>Heb je een kortingscode?</small></a>
+	</div>
+
+	<div class="card p-2 mb-3 d-none" id="cof_orderDiscountCard">
+		<div class="form-group mb-0">
+			<div class="input-group">
+				<input type="text" class="form-control rounded-0 rounded-left" id="cof_orderDiscountCode" name="discount_code" placeholder="Kortingscode">
+				<div class="input-append">
+					<button class="btn btn-secondary rounded-0 rounded-right" id="cof_orderDiscountCheckBtn">Check</button>
+				</div>
+			</div>
+		</div>
+		<div class="coupon_error_bag d-none">
+            <div class="alert alert-danger mt-2 mb-0">
+                <strong><span class="coupon_error_span">Error hier</span></strong>
+            </div>
+        </div>
+	</div>
 
 	<div class="card p-2 mb-3" id="cof_orderLegalCard" data-has-promo="{{ $settings['order']['promo_check'] }}">
 		<div class="form-group mb-2">

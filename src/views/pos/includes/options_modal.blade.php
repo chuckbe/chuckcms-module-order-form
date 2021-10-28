@@ -257,7 +257,7 @@
   </div>
 </div>
 
-<div role="alert" aria-live="assertive" aria-atomic="true"  class="toast text-success" id="customerChangedToast" style="position: absolute; bottom: 25px; right: 25px;">
+<div role="alert" aria-live="assertive" aria-atomic="true"  class="toast text-success" id="customerChangedToast" style="position: absolute; bottom: 25px; left: 25px;">
     <div class="toast-header">
       <strong class="mr-auto"><b>SCANNER</b></strong>
       <small>nu</small>

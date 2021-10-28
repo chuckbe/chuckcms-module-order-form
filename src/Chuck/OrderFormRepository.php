@@ -7,6 +7,7 @@ use Chuckbe\Chuckcms\Models\Repeater;
 use ChuckSite;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Auth;
 
 class OrderFormRepository
 {
@@ -37,7 +38,13 @@ class OrderFormRepository
 
     public function scripts()
     {
-        return view('chuckcms-module-order-form::frontend.scripts')->render();
+        $customer = null;
+
+        if (Auth::check() && Auth::user()->hasRole('customer')) {
+            $customer = $this->customerRepository->findByUserId(Auth::user()->id);
+        }
+
+        return view('chuckcms-module-order-form::frontend.scripts')->with('customer', $customer)->render();
     }
 
     public function styles()

@@ -12,7 +12,7 @@
                     @if($product->json['category'] == $category->id && $product->is_pos_available == true)
                     <div class="col-6 col-sm-4 col-md-3 p-1 cof_pos_product_card {{-- unavailable --}}" data-product-id="{{ $product->id }}" data-product-category-id="{{ $product->getJson('category') }}" data-product-name="{{ $product->getJson('name.nl') }}" data-q="{{ http_build_query($product->getJson('quantity'),'',',') }}" data-vat-delivery="{{ $product->json['price']['vat_delivery'] }}" data-vat-takeout="{{ $product->json['price']['vat_takeout'] }}" data-vat-on-the-spot="{{ $product->json['price']['vat_on_the_spot'] }}" data-current-price="{{ $product->json['price']['discount'] !== '0.000000' ? $product->json['price']['discount'] : $product->json['price']['final'] }}" data-product-attributes="{{ json_encode($product->json['attributes']) }}" data-product-options="{{ json_encode($product->json['options']) }}" @if(array_key_exists('extras', $product->json)) data-product-extras="{{ json_encode($product->json['extras']) }}" @endif>
                         <div class="card shadow-sm">
-                            <div class="card-body py-2 px-3">
+                            <div class="card-body py-3 px-4">
                                 <p class="card-title mb-2" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;"><small><b>{{ $product->getJson('name.nl') }}</b></small></p>
                                 <div class="row">
                                     <div class="col">

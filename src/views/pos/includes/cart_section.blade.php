@@ -37,14 +37,14 @@
                         </div> 
                     </div>
                     <div class="col-4 bestelOrderQuantity">
-                        <div class="bestelOrderQuantityControl trash cof_cartProductListItemSubtraction">
+                        <div class="bestelOrderQuantityControl trash cof_cartProductListItemSubtraction  ml-0">
                             <div class="cof_deleteProductFromListButton" style="cursor:pointer;">
                                 <i class="fas fa-trash"></i>
                                 {{-- ${(product.quantity > 1) ? '<i class="fas fa-minus"></i>': '<i class="fas fa-trash"></i>'} --}}
                             </div>
                         </div>
                         <input type="text" class="cof_cartProductListItemQuantity" name="quantity" readonly value="1">
-                        <div class="bestelOrderQuantityControl cof_cartProductListItemAddition">
+                        <div class="bestelOrderQuantityControl cof_cartProductListItemAddition mr-0">
                             <div class="addbtn"><i class="fas fa-plus"></i></div>
                         </div>
                     </div>

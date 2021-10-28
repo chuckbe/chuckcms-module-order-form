@@ -6,8 +6,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('chuckbe/chuckcms-module-order-form/css/bootstrap.min.css')}}"/>
     <link rel="stylesheet" href="{{asset('chuckbe/chuckcms-module-order-form/css/all.min.css')}}"/>
-    <link rel="stylesheet" href="{{asset('chuckbe/chuckcms-module-order-form/css/style.css')}}"/>
+    {{-- <link rel="stylesheet" href="{{asset('chuckbe/chuckcms-module-order-form/css/style.css')}}"/> --}}
 	<link rel="stylesheet" href="{{asset('chuckbe/chuckcms-module-order-form/scripts/jquery.numpad.css')}}">
+	@yield('css')
     <title>{{ ChuckSite::getSite('name') }} POS</title>
 </head>
 <body>

@@ -16,19 +16,22 @@ use DatePeriod;
 use DateTime;
 use DateInterval;
 
+use Chuckbe\ChuckcmsModuleOrderForm\Chuck\DiscountRepository;
 use Chuckbe\ChuckcmsModuleOrderForm\Exports\OrdersExport;
 use Maatwebsite\Excel\Facades\Excel;
 
 class OrderController extends Controller
 {
+    protected $discountRepository;
+    
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(DiscountRepository $discountRepository)
     {
-
+        $this->discountRepository = $discountRepository;
     }
 
     public function index()
@@ -223,6 +226,10 @@ class OrderController extends Controller
         $all_json['location'] = $request['location'];
         $all_json['order_date'] = $request['order_date'];
         $all_json['order_time'] = $request['order_time'];
+
+        $all_json['order_subtotal'] = round($request['subtotal'], 2);
+        $all_json['order_discount'] = round($request['discount'], 2);
+        
         $all_json['order_price'] = round($request['total'], 2);
         $all_json['order_shipping'] = round($request['shipping'], 2);
         $all_json['order_price_with_shipping'] = round(($request['total'] + $request['shipping']), 2);
@@ -523,5 +530,20 @@ class OrderController extends Controller
         }
 
         return $dates;
+    }
+
+    public function checkDiscountCode(Request $request)
+    {
+        $this->validate(request(), [
+            'code' => 'required'
+        ]);
+
+        $discount = $this->discountRepository->code($request->code);
+
+        if (is_null($discount)) {
+            return response()->json(['status' => 'not_found']);
+        }
+
+        return response()->json(['status' => 'success', 'discount' => $discount]);
     }
 }

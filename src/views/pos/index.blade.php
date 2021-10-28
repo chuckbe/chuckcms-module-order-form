@@ -21,3 +21,7 @@
 @section('scripts')
 @include('chuckcms-module-order-form::pos.scripts')
 @endsection
+
+@section('css')
+@include('chuckcms-module-order-form::pos.styles')
+@endsection

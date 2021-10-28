@@ -21,7 +21,7 @@ input[type=number] {
 	font-style: italic;
 }
 .hidden, .d-none {
-	display:none;
+	display:none!important;
 }
 </style>
 @php
