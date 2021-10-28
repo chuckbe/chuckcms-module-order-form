@@ -2,6 +2,7 @@
 
 namespace Chuckbe\ChuckcmsModuleOrderForm\Chuck;
 
+use Chuckbe\ChuckcmsModuleOrderForm\Chuck\CustomerRepository;
 use Chuckbe\Chuckcms\Models\FormEntry;
 use Chuckbe\Chuckcms\Models\Repeater;
 use ChuckSite;
@@ -14,8 +15,9 @@ class OrderFormRepository
 	private $formEntry;
     private $repeater;
 
-	public function __construct(FormEntry $formEntry, Repeater $repeater)
+	public function __construct(CustomerRepository $customerRepository, FormEntry $formEntry, Repeater $repeater)
     {
+        $this->customerRepository = $customerRepository;
         $this->formEntry = $formEntry;
         $this->repeater = $repeater;
     }
