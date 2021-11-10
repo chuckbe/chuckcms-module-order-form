@@ -1279,6 +1279,10 @@ $(document).ready(function() {
 
 function getSingleExtrasPriceFromProduct(product) 
 {
+	if (product.extras === false || product.extras == undefined) {
+		return 0;
+	}
+	
     let productExtras = JSON.parse(product.extras);
     let productExtrasValue = 0;
 

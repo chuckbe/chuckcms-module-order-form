@@ -314,6 +314,29 @@ class OrderController extends Controller
 
         if($order->save()){
 
+            if (ChuckSite::module('chuckcms-module-order-form')->getSetting('order.promo_check')
+                && $request['promo_approval'] !== null && $request['promo_approval'] !== 0 
+                && $request['promo_approval'] !== undefined) {
+                $json = $order->entry;
+                $json['promo_check'] = true
+                $order->entry = $json;
+                $order->update();
+
+                $promoClassName = config('chuckcms-module-order-form.promo.action');
+
+                if (! is_null($promoClassName)) {
+                    $promoClass = new $promoClassName;
+
+                    if (method_exists($promoClass, 'action')) {
+                        try {
+                            $promoClass->action($order);
+                        } catch (\Exception $e) {
+                            //void
+                        }
+                    }
+                }
+            }
+
             if(ChuckSite::module('chuckcms-module-order-form')->getSetting('order.payment_upfront')) {
                 $amount = number_format( ( (float)$order->entry['order_price_with_shipping'] ), 2, '.', '');
 
@@ -371,11 +394,46 @@ class OrderController extends Controller
         if($order == null) {
             return abort(404);
         } else {
+            $this->followupActions($order);
+
             return redirect(URL::to(ChuckSite::module('chuckcms-module-order-form')->getSetting('order.redirect_url')), 303)->with('order_number', $order_number);
         }
 
     }
 
+    public function followupActions(FormEntry $order)
+    {
+        if (ChuckSite::module('chuckcms-module-order-form')->getSetting('order.promo_check')
+            && array_key_exists('promo_check', $order->entry) && $order->entry['promo_check'] == true) {
+            $promoClassName = config('chuckcms-module-order-form.promo.followup');
+
+            if (! is_null($promoClassName)) {
+                $promoClass = new $promoClassName;
+
+                if (method_exists($promoClass, 'followup')) {
+                    try {
+                        $promoClass->followup($order);
+                    } catch (\Exception $e) {
+                        //void
+                    }
+                }
+            }
+        }
+
+        $orderFollowupClassName = config('chuckcms-module-order-form.order.followup');
+
+        if (! is_null($orderFollowupClassName)) {
+            $orderFollowupClass = new $orderFollowupClassName;
+
+            if (method_exists($orderFollowupClass, 'followup')) {
+                try {
+                    $orderFollowupClass->followup($order);
+                } catch (\Exception $e) {
+                    //void
+                }
+            }
+        }
+    }
 
 
 

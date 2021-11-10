@@ -61,6 +61,15 @@ return [
 		],
 	],
 
+	'promo' => [
+		'action' => null,
+		'followup' => null,
+	],
+
+	'order' => [
+		'followup' => null
+	],
+
 	// 'categories' => [
 	// 	'category_1' 	=> [
 	// 		'name' => 'Categorie 1',
