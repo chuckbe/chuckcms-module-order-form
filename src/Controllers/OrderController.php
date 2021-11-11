@@ -318,7 +318,7 @@ class OrderController extends Controller
                 && $request['promo_approval'] !== null && $request['promo_approval'] !== 0 
                 && $request['promo_approval'] !== undefined) {
                 $json = $order->entry;
-                $json['promo_check'] = true
+                $json['promo_check'] = true;
                 $order->entry = $json;
                 $order->update();
 
