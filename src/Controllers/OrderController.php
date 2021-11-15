@@ -315,8 +315,7 @@ class OrderController extends Controller
         if($order->save()){
 
             if (ChuckSite::module('chuckcms-module-order-form')->getSetting('order.promo_check')
-                && $request['promo_approval'] !== null && $request['promo_approval'] !== 0 
-                && $request['promo_approval'] !== undefined) {
+                && $request['promo_approval'] !== null && $request['promo_approval'] !== 0) {
                 $json = $order->entry;
                 $json['promo_check'] = true;
                 $order->entry = $json;
