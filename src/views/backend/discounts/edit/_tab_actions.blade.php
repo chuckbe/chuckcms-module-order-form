@@ -4,6 +4,7 @@
         <select class="custom-select action_type_input" id="action_type" name="action_type" required>
             <option value="percentage" @if($discount->type == 'percentage') selected @endif>Percentage</option>
             <option value="currency" @if($discount->type == 'currency') selected @endif>Bedrag</option>
+            <option value="gift" @if($discount->type == 'gift') selected @endif>Cadeau</option>
         </select>
     </div>
 </div>

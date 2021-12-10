@@ -276,12 +276,13 @@ $(document).ready(function() {
 
     $('body').on('change', '.action_type_input', function (event) {
         let apply_on = $('input[name="apply_on"]:checked').val();
-        if ($(this).find('option:selected').val() == 'currency') {
+        let action_type = $(this).find('option:selected').val();
+        if (action_type == 'currency' || action_type == 'gift') {
             
             if (apply_on == 'conditions' || apply_on == 'cart') {
                 $('#apply_on_cart').prop('checked', false);
                 $('#apply_on_conditions').prop('checked', false);
-                $('#apply_on_product').prop('checked', true);
+                $('#apply_on_product').prop('checked', true).trigger('change');
             }
             
             $('#apply_on_cart').prop('disabled', true);

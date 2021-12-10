@@ -4,6 +4,7 @@
         <select class="custom-select action_type_input" id="action_type" name="action_type" required>
             <option value="percentage">Percentage</option>
             <option value="currency">Bedrag</option>
+            <option value="gift">Cadeau</option>
         </select>
     </div>
 </div>
