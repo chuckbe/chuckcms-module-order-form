@@ -110,6 +110,7 @@ class POSController extends Controller
             'location_type' => 'required',
             'customer_id' => 'required',
             'products' => 'required',
+            'coupons' => 'nullable',
             'discounts' => 'nullable',
             'subtotal' => 'required',
             'discount' => 'required',
@@ -262,11 +263,24 @@ class POSController extends Controller
 
         $all_json['discounts'] = $discounts;
 
+        $coupons = [];
+        if (is_array($request['coupons']) && count($request['coupons']) > 0) {
+            foreach($request['coupons'] as $singleCoupon){
+                $coupon = [];
+                $coupon['id'] = $singleCoupon['id'];
+
+                $coupons[] = $coupon;
+            }
+        }
+
+        $all_json['coupons'] = $coupons;
+
         $order->entry = $all_json;
 
         if($order->save()){
             if (!$customer->guest) {
                 $customer->incrementLoyaltyPoints(floor(round($request['total'], 2)));
+                $customer->useCoupons($request['coupons']);
             }
             //No Payment upfront so send confirmation
             //$this->sendConfirmation($order);

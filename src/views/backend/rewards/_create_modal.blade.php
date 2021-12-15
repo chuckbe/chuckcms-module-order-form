@@ -52,6 +52,20 @@
                 </div>
               </div>
             </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group form-group-default required">
+                  <label>Selecteer korting</label>
+                  <select class="custom-select" id="create_reward_discount" name="discount" required>
+                        @foreach(ChuckRepeater::for(config('chuckcms-module-order-form.discounts.slug')) as $discount)
+                        @if($discount->type == "gift")
+                        <option value="{{ $discount->id }}">[discount] {{ $discount->name }}</option>
+                        @endif
+                        @endforeach
+                    </select>
+                </div>
+              </div>
+            </div>
           
           </div>
 

@@ -24,12 +24,14 @@ $( document ).ready(function() {
 		$('.img_lfm_link').filemanager('image', {prefix: domain});
 	}
 });
-function editModal(id, name, points, image){
+function editModal(id, name, points, image, discount){
 	$('#edit_reward_id').val(id);
 	$('#edit_reward_name').val(name);
 	$('#edit_reward_points').val(points);
 	$('#edit_reward_logo').val(image);
 	$('#editrewardholder').attr('src', "{{ ChuckSite::getSite('domain') }}/"+image);
+	$('#edit_reward_discount').find('option').prop('selected', false);
+	$('#edit_reward_discount').find('option[value="'+discount+'"]').prop('selected', true);
 	$('#editRewardModal').modal('show');
 }
 
@@ -77,7 +79,7 @@ function deleteModal(id, name){
 							</td>
 							<td class="v-align-middle semi-bold">
 								@can('edit redirects')
-								<a href="#" onclick="editModal({{ $reward->id }}, '{{ $reward->name }}', '{{ $reward->points }}', '{{ $reward->image }}')" class="btn btn-default btn-sm btn-rounded m-r-20">
+								<a href="#" onclick="editModal({{ $reward->id }}, '{{ $reward->name }}', '{{ $reward->points }}', '{{ $reward->image }}', '{{ $reward->discount }}')" class="btn btn-default btn-sm btn-rounded m-r-20">
 									<i data-feather="edit-2"></i> edit
 								</a>
 								@endcan

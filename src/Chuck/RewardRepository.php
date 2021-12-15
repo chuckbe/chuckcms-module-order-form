@@ -51,6 +51,7 @@ class RewardRepository
         $json['name'] = $values->get('name');
         $json['points'] = (int)$values->get('points');
         $json['image'] = $values->get('image');
+        $json['discount'] = $values->get('discount');
 
         $input['json'] = $json;
 
@@ -69,6 +70,7 @@ class RewardRepository
         $json['name'] = $values->get('name');
         $json['points'] = (int)$values->get('points');
         $json['image'] = $values->get('image');
+        $json['discount'] = $values->get('discount');
 
         $of_reward->json = $json;
 

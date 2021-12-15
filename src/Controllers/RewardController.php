@@ -3,6 +3,7 @@
 namespace Chuckbe\ChuckcmsModuleOrderForm\Controllers;
 
 use Chuckbe\ChuckcmsModuleOrderForm\Chuck\CustomerRepository;
+use Chuckbe\ChuckcmsModuleOrderForm\Chuck\CouponRepository;
 use Chuckbe\ChuckcmsModuleOrderForm\Chuck\RewardRepository;
 
 use Illuminate\Http\Request;
@@ -14,6 +15,8 @@ class RewardController extends Controller
 {
     private $customerRepository;
 
+    private $couponRepository;
+
     private $rewardRepository;
 
     /**
@@ -21,9 +24,13 @@ class RewardController extends Controller
      *
      * @return void
      */
-    public function __construct(CustomerRepository $customerRepository, RewardRepository $rewardRepository)
+    public function __construct(
+        CustomerRepository $customerRepository, 
+        CouponRepository $couponRepository, 
+        RewardRepository $rewardRepository)
     {
         $this->customerRepository = $customerRepository;
+        $this->couponRepository = $couponRepository;
         $this->rewardRepository = $rewardRepository;
     }
 
@@ -39,6 +46,7 @@ class RewardController extends Controller
             'name' => 'max:185|required',
             'points' => 'numeric|required',
             'image' => 'required',
+            'discount' => 'required',
             'id' => 'required_with:update'
         ]);
         

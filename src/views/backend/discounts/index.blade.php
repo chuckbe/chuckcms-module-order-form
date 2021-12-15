@@ -44,7 +44,7 @@
         					<th scope="row">{{ $discount->id }}</th>
                             <td>{{ $discount->json['name'] }}</td>
                             <td>{{ $discount->json['code'] }}</td>
-        					<td class="text-center">{!!'-'.$discount->value.($discount->type == 'percentage' ? '%' : '€')!!}</td>
+        					<td class="text-center">{!!($discount->type !== 'gift' ? '-' : '').$discount->value.($discount->type == 'percentage' ? '%' : ($discount->type == 'gift' ? ' x cadeau' : '€') )!!}</td>
         					<td>
         						@can('edit forms')
 					    		<a href="{{ route('dashboard.module.order_form.discounts.edit', ['discount' => $discount->id]) }}" class="btn btn-sm btn-outline-secondary rounded d-inline-block">

@@ -193,7 +193,7 @@
                     </div>
                     <select id="cof_customerSelectInput" class="custom-select">
                         @foreach($customers as $customer)
-                        <option value="{{ $customer->id }}" class="cof_customerSelectInputOption" data-is-guest="{{ $customer->guest ? 'true' : 'false' }}" data-customer-email="{{ $customer->email }}" data-ean="{{ $customer->ean }}" data-points="{{ $customer->loyalty_points }}">{{ $customer->surname.' '.$customer->name.' ('.$customer->email.')' }}</option>
+                        <option value="{{ $customer->id }}" class="cof_customerSelectInputOption" data-is-guest="{{ $customer->guest ? 'true' : 'false' }}" data-customer-email="{{ $customer->email }}" data-ean="{{ $customer->ean }}" data-points="{{ $customer->loyalty_points }}" data-coupons="{{ $customer->coupons->toJson() }}">{{ $customer->surname.' '.$customer->name.' ('.$customer->email.')' }}</option>
                         @endforeach
                     </select>
                     <div class="input-group-append">
@@ -232,9 +232,13 @@
                 <label>Selecteer een coupon uit de lijst</label>
                 <div class="btn-group-horizontal btn-group-toggle" data-toggle="buttons">
                     @foreach(ChuckRepeater::for(config('chuckcms-module-order-form.discounts.slug')) as $discount)
-                    @if($discount->active && \Carbon\Carbon::parse($discount->valid_from) < \Carbon\Carbon::parse(date('Y-m-d', strtotime(now()))) && \Carbon\Carbon::parse($discount->valid_until) > \Carbon\Carbon::parse(date('Y-m-d', strtotime(now()))))
+                    @if($discount->type !== 'gift' && $discount->active && \Carbon\Carbon::parse($discount->valid_from) < \Carbon\Carbon::parse(date('Y-m-d', strtotime(now()))) && \Carbon\Carbon::parse($discount->valid_until) > \Carbon\Carbon::parse(date('Y-m-d', strtotime(now()))))
                     <label class="btn btn-secondary mr-2 mb-3">
                         <input type="radio" name="coupon_selector" value="{{ $discount->id }}" data-name="{{ $discount->name }}" data-active="{{ $discount->active }}" data-valid-from="{{ \Carbon\Carbon::parse($discount->valid_from)->timestamp }}" data-valid-until="{{ \Carbon\Carbon::parse($discount->valid_until)->timestamp }}" data-customers="{{ is_array($discount->customers) ? implode(',', $discount->customers) : '' }}" data-minimum="{{ (int)$discount->minimum }}" data-available-total="{{ (int)$discount->available_total }}" data-available-customer="{{ (int)$discount->available_customer }}" data-conditions="{{ json_encode($discount->conditions) }}" data-discount-type="{{ $discount->type }}" data-discount-value="{{ $discount->value }}" data-apply-on="{{ $discount->apply_on }}" data-apply-product="{{ $discount->apply_product }}" data-uncompatible-discounts="{{ is_array($discount->uncompatible_discounts) ? implode(',', $discount->uncompatible_discounts) : '' }}" data-remove-incompatible="{{ $discount->remove_incompatible }}"> <span>{{ $discount->name.($discount->remove_incompatible ? '*' : '') }}</span>
+                    </label>
+                    @else
+                    <label class="btn btn-secondary mr-2 mb-3 d-none">
+                        <input type="radio" name="coupon_selector" value="{{ $discount->id }}" data-name="{{ $discount->name }}" data-active="{{ $discount->active }}" data-valid-from="{{ \Carbon\Carbon::parse($discount->valid_from)->timestamp }}" data-valid-until="{{ \Carbon\Carbon::parse($discount->valid_until)->timestamp }}" data-customers="{{ is_array($discount->customers) ? implode(',', $discount->customers) : '' }}" data-minimum="{{ (int)$discount->minimum }}" data-available-total="{{ (int)$discount->available_total }}" data-available-customer="{{ (int)$discount->available_customer }}" data-conditions="{{ json_encode($discount->conditions) }}" data-discount-type="{{ $discount->type }}" data-discount-value="{{ $discount->value }}" data-apply-on="{{ $discount->apply_on }}" data-apply-product="{{ $discount->apply_product }}" data-uncompatible-discounts="{{ is_array($discount->uncompatible_discounts) ? implode(',', $discount->uncompatible_discounts) : '' }}" data-remove-incompatible="{{ $discount->remove_incompatible }}" disabled> <span>{{ $discount->name.($discount->remove_incompatible ? '*' : '') }}</span>
                     </label>
                     @endif
                     @endforeach
@@ -267,6 +271,32 @@
     </div>
     <div class="toast-body">
       Klant werd succesvol gewijzigd!
+    </div>
+</div>
+
+<div role="alert" aria-live="assertive" aria-atomic="true"  class="toast text-danger" id="couponAlreadyInCartToast" style="position: absolute; bottom: 125px; left: 25px;">
+    <div class="toast-header">
+      <strong class="mr-auto"><b>COUPON</b></strong>
+      <small>nu</small>
+      <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="toast-body">
+      Coupon is reeds in gebruik!
+    </div>
+</div>
+
+<div role="alert" aria-live="assertive" aria-atomic="true"  class="toast text-success" id="couponAddedToCartToast" style="position: absolute; bottom: 125px; left: 25px;">
+    <div class="toast-header">
+      <strong class="mr-auto"><b>COUPON</b></strong>
+      <small>nu</small>
+      <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="toast-body">
+      Coupon werd toegevoegd!
     </div>
 </div>
 

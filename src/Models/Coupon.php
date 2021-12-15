@@ -37,10 +37,9 @@ class Coupon extends Eloquent
 
     public function getRewardAttribute()
     {
-    	$reward_slug = $this->json['reward'];
+    	$reward = $this->json['reward'];
     	return ChuckRepeater::for(config('chuckcms-module-order-form.rewards.slug'))
-    									->first(function ($value, $key) use ($reward_slug) {
-										    return $value->json['slug'] == $reward_slug;
-										});
+                ->where('id', $reward)
+				->first();
     }
 }

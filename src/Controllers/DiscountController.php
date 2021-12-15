@@ -71,7 +71,7 @@ class DiscountController extends Controller
             'condition_type' => 'nullable|array',
             'condition_value' => 'nullable|array',
 
-            'action_type' => 'required|in:percentage,currency',
+            'action_type' => 'required|in:percentage,currency,gift',
             'action_value' => 'required',
             'remove_incompatible' => 'required|in:0,1',
 

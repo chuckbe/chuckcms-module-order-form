@@ -67,7 +67,7 @@ class AccountController extends Controller
     public function coupons()
     {
         $customer = $this->customerRepository->findByUserId(Auth::user()->id);
-        $coupons = $this->couponRepository->forCustomer($customer);
+        $coupons = $customer->coupons;
         $template = Template::where('active', 1)->where('hintpath', $this->templateHintpath)->first();
         $blade = $this->templateHintpath.'::templates.'.$this->templateHintpath.'.'.config('chuckcms-module-order-form.account.template.coupons');
         

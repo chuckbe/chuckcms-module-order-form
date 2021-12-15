@@ -3,7 +3,7 @@
         <h4 class="bestelHeaderTitle">Bestelling</h4>
     </div>
     <div class="col-6 text-right bestelHeaderInstellingen h-100">
-        <button type="button" class="btn shadow-sm deletealles"><i class="fas fa-trash"></i></button>
+        <button type="button" class="btn shadow-sm" id ="cof_fullScreenToggleBtn"><i class="fas fa-expand-arrows-alt"></i></button>
         {{-- <button type="button" class="btn shadow-sm"><i class="fas fa-cog"></i></button> --}}
     </div>
 </div>

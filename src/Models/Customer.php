@@ -2,6 +2,7 @@
 
 namespace Chuckbe\ChuckcmsModuleOrderForm\Models;
 
+use Chuckbe\ChuckcmsModuleOrderForm\Models\Coupon;
 use Eloquent;
 
 class Customer extends Eloquent
@@ -84,6 +85,17 @@ class Customer extends Eloquent
         $this->json = $json;
 
         $this->update();
+    }
+
+    public function useCoupons($coupons)
+    {
+        if (!is_array($coupons)) {
+            return;
+        }
+
+        foreach ($coupons as $coupon) {
+            $this->coupons()->where('id', $coupon['id'])->update(['status' => Coupon::STATUS_USED]);
+        }
     }
 
     public function getJson(string $string)

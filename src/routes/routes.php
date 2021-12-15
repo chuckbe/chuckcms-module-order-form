@@ -76,7 +76,7 @@ Route::group(['middleware' => ['web']], function() {
 			Route::get('/mijn-account/coupons', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\AccountController@coupons')->name('dashboard.module.order_form.account.coupons');
 			Route::get('/mijn-account/punten-inruilen', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\AccountController@swapPoints')->name('dashboard.module.order_form.account.swap_points');
 
-			Route::post('/mijn-account/punten-inruilen/swap', 'RewardController@swap')->name('swap.points');
+			Route::post('/mijn-account/punten-inruilen/swap', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\RewardController@swap')->name('swap.points');
 		});
 	});
 

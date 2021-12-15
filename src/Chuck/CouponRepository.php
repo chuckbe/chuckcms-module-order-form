@@ -97,19 +97,38 @@ class CouponRepository
         $input = [];
 
         $input['slug'] = config('chuckcms-module-order-form.coupons.slug');
-        $input['url'] = config('chuckcms-module-order-form.coupons.url').str_slug($values->get('name'), '-');
+        $input['url'] = config('chuckcms-module-order-form.coupons.url').str_slug($reward->name, '-');
         $input['page'] = config('chuckcms-module-order-form.coupons.page');
-
+        
         $json = [];
-        $json['name'] = $values->get('name');
-        $json['is_displayed'] = ($values->get('is_displayed') == '1' ? true : false);
-        $json['order'] = (int)$values->get('order');
+        $json['reward'] = $reward->id;
+        $json['discount'] = $reward->discount;
+        $json['products'] = [$this->repeater->where('slug', config('chuckcms-module-order-form.discounts.slug'))->where('id', $reward->discount)->first()->apply_product];
 
-        $input['json'] = $json;
+        $coupon = $this->coupon->create([
+            'customer_id' => $customer->id,
+            'number' => $this->generateCouponNumber(),
+            'status' => Coupon::STATUS_AWAITING,
+            'json' => $json
+        ]);
 
-        $of_category = $this->repeater->create($input);
+        $json = $customer->json;
+        $json['loyalty_points'] = (int)$customer->json['loyalty_points'] - $reward->points;
+        $customer->json = $json;
+        $customer->save();
 
-        return $of_category;
+        return $coupon;
+    }
+
+    public function generateCouponNumber()
+    {
+        $uid = rand(1000000000000, 9999999999999);
+        $uids = $this->coupon->where('number', $uid)->get();
+        if (count($uids) > 0) {
+            $this->generateCouponNumber();
+        } else {
+            return $uid;
+        }
     }
 
 }

@@ -41,9 +41,23 @@
                         <i class="fa fa-picture-o"></i> Upload
                       </a>
                     </span>
-                    <input id="edit_reward_logo" name="logo" class="img_lfm_input form-control" accept="image/x-png" type="text">
+                    <input id="edit_reward_logo" name="image" class="img_lfm_input form-control" accept="image/x-png" type="text">
                   </div>
                   <img id="editrewardholder" src="" style="margin-top:15px;max-height:100px;">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group form-group-default required">
+                  <label>Selecteer korting</label>
+                  <select class="custom-select" id="edit_reward_discount" name="discount" required>
+                        @foreach(ChuckRepeater::for(config('chuckcms-module-order-form.discounts.slug')) as $discount)
+                        @if($discount->type == "gift")
+                        <option value="{{ $discount->id }}">[discount] {{ $discount->name }}</option>
+                        @endif
+                        @endforeach
+                    </select>
                 </div>
               </div>
             </div>
