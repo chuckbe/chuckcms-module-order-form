@@ -15,6 +15,7 @@ use Illuminate\Support\Carbon;
 use DatePeriod;
 use DateTime;
 use DateInterval;
+use ChuckRepeater;
 
 use Chuckbe\ChuckcmsModuleOrderForm\Chuck\DiscountRepository;
 use Chuckbe\ChuckcmsModuleOrderForm\Exports\OrdersExport;
@@ -46,6 +47,12 @@ class OrderController extends Controller
         $startDate = $dates[0];
         $endDate = count($dates) > 1 ? $dates[1] : null;
 
+        $selectedLocation = !request()->has('location') ? null : ChuckRepeater::find(request()->get('location'));
+
+        if (!is_null($selectedLocation)) {
+            $orders = $orders->where('entry->location', $selectedLocation->id);
+        }
+
         if (is_null($endDate)) {
             $d = explode('-', $startDate)[2];
             $m = explode('-', $startDate)[1];
@@ -60,7 +67,12 @@ class OrderController extends Controller
         }
 
         $orders = $orders->get();
-        return view('chuckcms-module-order-form::backend.orders.index', compact('orders', 'startDate', 'endDate'));
+
+        $total = $orders->sum(function ($order) {
+            return round($order->entry['order_price'], 2);
+        });
+
+        return view('chuckcms-module-order-form::backend.orders.index', compact('orders', 'startDate', 'endDate', 'selectedLocation', 'total'));
     }
 
     public function detail(FormEntry $order)
@@ -79,6 +91,12 @@ class OrderController extends Controller
         $dates = explode(',', request()->date);
         $startDate = $dates[0];
         $endDate = count($dates) > 1 ? $dates[1] : null;
+
+        $selectedLocation = !request()->has('location') ? null : ChuckRepeater::find(request()->get('location'));
+
+        if (!is_null($selectedLocation)) {
+            $orders = $orders->where('entry->location', $selectedLocation->id);
+        }
 
         if (is_null($endDate)) {
             $d = explode('-', $startDate)[2];
@@ -112,6 +130,12 @@ class OrderController extends Controller
         $dates = explode(',', request()->date);
         $startDate = $dates[0];
         $endDate = count($dates) > 1 ? $dates[1] : null;
+
+        $selectedLocation = !request()->has('location') ? null : ChuckRepeater::find(request()->get('location'));
+
+        if (!is_null($selectedLocation)) {
+            $orders = $orders->where('entry->location', $selectedLocation->id);
+        }
 
         if (is_null($endDate)) {
             $d = explode('-', $startDate)[2];

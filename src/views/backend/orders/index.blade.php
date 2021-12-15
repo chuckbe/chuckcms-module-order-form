@@ -19,14 +19,42 @@
 			</nav>
 		</div>
 	</div>
+	<div class="row mb-3">
+		<div class="col-sm-12">
+			<div class="row px-3">
+				<div class="col-sm-6 pr-sm-4 mb-3 mb-sm-0">
+					<div class="row bg-light shadow-sm rounded">
+						<div class="col-sm-12 p-3">
+							<h3 class="mb-0">{{ count($orders) }}</h3>
+							<small>bestellingen</small>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6 pl-sm-4">
+					<div class="row bg-light shadow-sm rounded">
+						<div class="col-sm-12 p-3">
+							<h3 class="mb-0">€ {{ number_format($total, 2, ',', '.') }}</h3>
+							<small>totaal</small>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 	<div class="row bg-light shadow-sm rounded p-3 mb-3 mx-1">
 		<div class="col-sm-12 my-3">
 			<form action="" class="form-inline">
-				<input type="date" name="startDate" value="{{ $startDate }}" class="form-control-sm ml-auto">
-				<input type="date" name="endDate" value="{{ is_null($endDate) ? $startDate : $endDate }}" class="form-control-sm ml-3">
-				<button class="btn btn-sm btn-primary ml-3" id="getOrdersForDate">Bekijken</button>
-				<button class="btn btn-sm btn-outline-secondary ml-3" id="excelOrdersForDate"><i class="fa fa-file-excel-o"></i></button>
-				<button class="btn btn-sm btn-outline-secondary ml-3" id="pdfOrdersForDate"><i class="fa fa-file-pdf-o"></i></button>
+				<input type="date" name="startDate" value="{{ $startDate }}" class="form-control-sm mr-3 mb-3">
+				<input type="date" name="endDate" value="{{ is_null($endDate) ? $startDate : $endDate }}" class="form-control-sm mr-3 mb-3">
+				<select name="location" class="custom-select-sm mr-3 mb-3 mb-sm-0">
+					<option value="0" @if(is_null($selectedLocation)) selected @endif>Alle locaties</option>
+					@foreach(ChuckRepeater::for(config('chuckcms-module-order-form.locations.slug')) as $location)
+					<option value="{{ $location->id }}" @if(!is_null($selectedLocation) && $selectedLocation->id == $location->id) selected @endif>{{ $location->name }}</option>
+					@endforeach
+				</select>
+				<button class="btn btn-sm btn-primary mr-3 mb-3 mb-sm-0" id="getOrdersForDate">Bekijken</button>
+				<button class="btn btn-sm btn-outline-secondary mr-3 mb-3 mb-sm-0" id="excelOrdersForDate"><i class="fa fa-file-excel-o"></i></button>
+				<button class="btn btn-sm btn-outline-secondary mr-3 mb-3 mb-sm-0" id="pdfOrdersForDate"><i class="fa fa-file-pdf-o"></i></button>
 			</form>
 		</div>
 		<div class="col-sm-12 my-3">
@@ -116,7 +144,14 @@ $(document).ready(function() {
 
 		let startDate = $('input[name=startDate]').val();
 		let endDate = $('input[name=endDate]').val();
-		window.location = '//'+location.host+location.pathname+'?date='+startDate+','+endDate;
+		
+		let selectedLocation = $('select[name=location]').find('option:selected').first().val();
+
+		if (selectedLocation == 0) {
+			window.location = '//'+location.host+location.pathname+'?date='+startDate+','+endDate;
+		}
+		
+		window.location = '//'+location.host+location.pathname+'?date='+startDate+','+endDate+'&location='+selectedLocation;
 	});
 
 	$('body').on('click', '#excelOrdersForDate', function (event) {
@@ -124,7 +159,14 @@ $(document).ready(function() {
 
 		let startDate = $('input[name=startDate]').val();
 		let endDate = $('input[name=endDate]').val();
-		window.location = '//'+location.host+location.pathname+'/excel?date='+startDate+','+endDate;
+		
+		let selectedLocation = $('select[name=location]').find('option:selected').first().val();
+
+		if (selectedLocation == 0) {
+			window.location = '//'+location.host+location.pathname+'/excel?date='+startDate+','+endDate;
+		}
+
+		window.location = '//'+location.host+location.pathname+'/excel?date='+startDate+','+endDate+'&location='+selectedLocation;
 	});
 
 	$('body').on('click', '#pdfOrdersForDate', function (event) {
@@ -132,7 +174,14 @@ $(document).ready(function() {
 
 		let startDate = $('input[name=startDate]').val();
 		let endDate = $('input[name=endDate]').val();
-		window.location = '//'+location.host+location.pathname+'/pdf?date='+startDate+','+endDate;
+		
+		let selectedLocation = $('select[name=location]').find('option:selected').first().val();
+
+		if (selectedLocation == 0) {
+			window.location = '//'+location.host+location.pathname+'/pdf?date='+startDate+','+endDate;
+		}
+
+		window.location = '//'+location.host+location.pathname+'/pdf?date='+startDate+','+endDate+'&location='+selectedLocation;
 	});
 
 	$('body').on('click', '.resendOrderConfirmationMail', function (event) {
