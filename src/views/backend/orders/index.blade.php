@@ -46,15 +46,15 @@
 			<form action="" class="form-inline">
 				<input type="date" name="startDate" value="{{ $startDate }}" class="form-control-sm mr-3 mb-3">
 				<input type="date" name="endDate" value="{{ is_null($endDate) ? $startDate : $endDate }}" class="form-control-sm mr-3 mb-3">
-				<select name="location" class="custom-select-sm mr-3 mb-3 mb-sm-0">
+				<select name="location" class="custom-select-sm mr-3 mb-3">
 					<option value="0" @if(is_null($selectedLocation)) selected @endif>Alle locaties</option>
 					@foreach(ChuckRepeater::for(config('chuckcms-module-order-form.locations.slug')) as $location)
 					<option value="{{ $location->id }}" @if(!is_null($selectedLocation) && $selectedLocation->id == $location->id) selected @endif>{{ $location->name }}</option>
 					@endforeach
 				</select>
-				<button class="btn btn-sm btn-primary mr-3 mb-3 mb-sm-0" id="getOrdersForDate">Bekijken</button>
-				<button class="btn btn-sm btn-outline-secondary mr-3 mb-3 mb-sm-0" id="excelOrdersForDate"><i class="fa fa-file-excel-o"></i></button>
-				<button class="btn btn-sm btn-outline-secondary mr-3 mb-3 mb-sm-0" id="pdfOrdersForDate"><i class="fa fa-file-pdf-o"></i></button>
+				<button class="btn btn-sm btn-primary mr-3 mb-3" id="getOrdersForDate">Bekijken</button>
+				<button class="btn btn-sm btn-outline-secondary mr-3 mb-3" id="excelOrdersForDate"><i class="fa fa-file-excel-o"></i></button>
+				<button class="btn btn-sm btn-outline-secondary mb-3" id="pdfOrdersForDate"><i class="fa fa-file-pdf-o"></i></button>
 			</form>
 		</div>
 		<div class="col-sm-12 my-3">
