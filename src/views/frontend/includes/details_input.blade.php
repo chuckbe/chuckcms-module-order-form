@@ -11,6 +11,7 @@
                     data-dates-disabled="{{ is_null($location->dates_disabled) ? '' : $location->dates_disabled }}" 
                     data-location-type="{{ $location->type }}" 
                     data-delivery-cost="{{ is_null($location->delivery_cost) ? 0 : $location->delivery_cost }}" 
+                    data-delivery-free-from="{{ is_null($location->delivery_free_from) ? 0 : $location->delivery_free_from }}" 
                     data-time-required="{{ is_null($location->time_required) ? 0 : $location->time_required }}" 
                     data-time-min="{{ $location->time_min }}" 
                     data-time-max="{{ $location->time_max }}" 

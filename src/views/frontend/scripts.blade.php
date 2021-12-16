@@ -63,6 +63,7 @@ $(document).ready(function() {
 
 	if($('.cof_location_radio:checked').attr('data-location-type') == 'delivery') {
 		location_shipping_price = $('.cof_location_radio:checked').attr('data-delivery-cost');
+
 		$('.cof_cartShippingPrice').text('€ '+parseFloat(location_shipping_price).toFixed(2).replace('.', ','));
 	}
 	calculateProductQty();
@@ -672,7 +673,7 @@ $(document).ready(function() {
         var discount_price = getDiscountPrice() + 0;
 
         var price = Number((subtotal - (discount_price <= subtotal ? discount_price : subtotal)).toFixed(2));
-        var shipping = calculateShippingPrice();
+        var shipping = calculateShippingPrice(price);
         
 		if ( price == 0.00 ) {
 			$('.error_span:first').html(' U heeft geen producten geselecteerd...');
@@ -1161,7 +1162,7 @@ $(document).ready(function() {
 	function calculateTotalPrice() {
 		total_price = getTotalPrice();
 		discount_price = getDiscountPrice();
-		shipping_price = calculateShippingPrice();
+		shipping_price = calculateShippingPrice((total_price - discount_price));
 
 		total_with_shipping_price = total_price - discount_price + shipping_price;
 		$('.cof_cartTotalPrice').text('€ '+parseFloat(total_with_shipping_price).toFixed(2).replace('.', ','));
@@ -1186,7 +1187,7 @@ $(document).ready(function() {
 		}
 	}
 
-	function calculateShippingPrice() {
+	function calculateShippingPrice(total) {
 		if($('.cof_location_radio:checked').attr('data-location-type') == 'delivery') {
 			$('#cof_CartProductListShippingLine').removeClass('d-none');
 			$('#cof_CartProductListShippingLine').removeClass('hidden');
@@ -1196,6 +1197,11 @@ $(document).ready(function() {
 		}
 
 		location_shipping_price = $('.cof_location_radio:checked').attr('data-delivery-cost');
+		location_shipping_free_from = $('.cof_location_radio:checked').attr('data-delivery-free-from');
+
+		if (location_shipping_free_from > 0 && total >= location_shipping_free_from) {
+			location_shipping_price = 0;
+		}
 		$('.cof_cartShippingPrice').text('€ '+parseFloat(location_shipping_price).toFixed(2).replace('.', ','));
 
 		return parseFloat(location_shipping_price);

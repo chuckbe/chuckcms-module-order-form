@@ -58,6 +58,7 @@ class LocationRepository
         $json['dates_disabled'] = is_null($values->get('dates_disabled')) ? '' : $values->get('dates_disabled');
         
         $json['delivery_cost'] = (float)$values->get('delivery_cost');
+        $json['delivery_free_from'] = (float)$values->get('delivery_free_from');
         $json['delivery_limited_to'] = $values->get('delivery_limited_to') == 'null' ? null : $values->get('delivery_limited_to');
         $json['delivery_radius'] = (int)$values->get('delivery_radius');
         $json['delivery_radius_from'] = $values->get('delivery_radius_from');
@@ -101,6 +102,7 @@ class LocationRepository
         $json['dates_disabled'] = is_null($values->get('dates_disabled')) ? '' : $values->get('dates_disabled');
         
         $json['delivery_cost'] = (float)$values->get('delivery_cost');
+        $json['delivery_free_from'] = (float)$values->get('delivery_free_from');
         $json['delivery_limited_to'] = $values->get('delivery_limited_to') == 'null' ? null : $values->get('delivery_limited_to');
         $json['delivery_radius'] = (int)$values->get('delivery_radius');
         $json['delivery_radius_from'] = $values->get('delivery_radius_from');

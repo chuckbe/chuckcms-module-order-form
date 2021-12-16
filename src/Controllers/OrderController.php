@@ -18,6 +18,7 @@ use DateInterval;
 use ChuckRepeater;
 
 use Chuckbe\ChuckcmsModuleOrderForm\Chuck\DiscountRepository;
+use Chuckbe\ChuckcmsModuleOrderForm\Chuck\CustomerRepository;
 use Chuckbe\ChuckcmsModuleOrderForm\Exports\OrdersExport;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -30,9 +31,10 @@ class OrderController extends Controller
      *
      * @return void
      */
-    public function __construct(DiscountRepository $discountRepository)
+    public function __construct(DiscountRepository $discountRepository, CustomerRepository $customerRepository)
     {
         $this->discountRepository = $discountRepository;
+        $this->customerRepository = $customerRepository;
     }
 
     public function index()

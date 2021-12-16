@@ -36,6 +36,7 @@ class LocationController extends Controller
             'days_of_week_disabled' => 'nullable',
             'dates_disabled' => 'nullable',
             'delivery_cost' => 'required|numeric|between:0,99.99',
+            'delivery_free_from' => 'required|numeric|between:0,99.99',
             'delivery_limited_to' => 'in:null,postalcode,radius',
             'delivery_radius' => 'required|numeric',
             'delivery_radius_from' => 'required',

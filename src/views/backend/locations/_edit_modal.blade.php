@@ -60,13 +60,19 @@
             </div>
 
             <div class="row">
-              <div class="col-sm-6">
+              <div class="col-sm-4">
                 <div class="form-group form-group-default">
                   <label>Leveringskost</label>
                   <input type="text" min="0.00" steps="0.01" id="edit_location_delivery_cost" name="delivery_cost" class="form-control" value="0" required>
                 </div>
               </div>
-              <div class="col-sm-6">
+              <div class="col-sm-4">
+                <div class="form-group form-group-default">
+                  <label>Levering gratis vanaf</label>
+                  <input type="text" min="0.00" steps="0.01" id="edit_delivery_free_from" name="delivery_free_from" class="form-control" value="0" required>
+                </div>
+              </div>
+              <div class="col-sm-4">
                 <div class="form-group form-group-default form-group-default-select2">
                   <label class="">Levering beperkt tot?</label>
                   <select class="custom-select" id="edit_location_delivery_limited_to" name="delivery_limited_to" data-placeholder="Selecteer een beperking">
