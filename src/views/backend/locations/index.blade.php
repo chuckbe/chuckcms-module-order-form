@@ -4,12 +4,6 @@
 Locaties
 @endsection
 
-@section('add_record')
-@can('create redirects')
-<a href="#" data-target="#createLocationModal" data-toggle="modal" class="btn btn-link text-primary m-l-20 hidden-md-down">Voeg Nieuwe Locatie Toe</a>
-@endcan
-@endsection
-
 @section('css')
 @endsection
 

@@ -4,10 +4,6 @@
 Bestelling #{{ $order->entry['order_number'] }}
 @endsection
 
-@section('add_record')
-  
-@endsection
-
 @section('content')
 <div class="container">
     <div class="row">

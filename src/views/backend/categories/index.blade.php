@@ -4,12 +4,6 @@
 Categorieën
 @endsection
 
-@section('add_record')
-@can('create redirects')
-<a href="#" data-target="#createCategoryModal" data-toggle="modal" class="btn btn-link text-primary m-l-20 hidden-md-down">Voeg Nieuwe Categorie Toe</a>
-@endcan
-@endsection
-
 @section('css')
 @endsection
 

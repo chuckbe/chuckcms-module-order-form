@@ -4,12 +4,6 @@
 	Kortingen & Coupons
 @endsection
 
-@section('add_record')
-	@can('create forms')
-	<a href="{{ route('dashboard.module.order_form.discounts.create') }}" class="btn btn-link text-primary m-l-20 hidden-md-down">Voeg Nieuw Korting Toe</a>
-	@endcan
-@endsection
-
 @section('content')
 <div class="container min-height">
     <div class="row">

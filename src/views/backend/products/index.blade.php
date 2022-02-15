@@ -4,14 +4,8 @@
 	Producten
 @endsection
 
-@section('add_record')
-	@can('create forms')
-	<a href="{{ route('dashboard.module.order_form.products.create') }}" class="btn btn-link text-primary m-l-20 hidden-md-down">Voeg Nieuw Product Toe</a>
-	@endcan
-@endsection
-
 @section('content')
-<div class="container p-3">
+<div class="container min-height p-3">
 	<div class="row">
 		<div class="col-sm-12">
 			<nav aria-label="breadcrumb">

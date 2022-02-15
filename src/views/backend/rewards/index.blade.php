@@ -4,12 +4,6 @@
 Beloningen
 @endsection
 
-@section('add_record')
-@can('create redirects')
-<a href="#" data-target="#createRewardModal" data-toggle="modal" class="btn btn-link text-primary m-l-20 hidden-md-down">Voeg Nieuwe Beloning Toe</a>
-@endcan
-@endsection
-
 @section('css')
 @endsection
 

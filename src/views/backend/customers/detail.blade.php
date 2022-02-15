@@ -4,10 +4,6 @@
 Klant: {{ $customer->surname.' '.$customer->name }}
 @endsection
 
-@section('add_record')
-	
-@endsection
-
 @section('css')
 	
 @endsection
