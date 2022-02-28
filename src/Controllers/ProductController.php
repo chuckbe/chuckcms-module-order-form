@@ -33,7 +33,10 @@ class ProductController extends Controller
 
     public function create()
     {
-        return view('chuckcms-module-order-form::backend.products.create');
+        $subproducts = $this->productRepository->get()->filter(function($i) {
+            return $i->json['extras'] == [] && $i->json['options'] == [] && $i->json['attributes'] == [];
+        });
+        return view('chuckcms-module-order-form::backend.products.create', compact('subproducts'));
     }
 
     public function edit(Repeater $product)

@@ -3,7 +3,7 @@
     <div class="col-sm-9">
         <select class="custom-select" name="customers[]" id="discount_customers" multiple>
             @foreach($customers as $customer)
-            <option value="{{ $customer->id }}">{{ $customer->surname.' '.$customer->name. ' ('.$customer->email.')' }}</option>
+                <option value="{{ $customer->id }}">{{ $customer->surname.' '.$customer->name. ' ('.$customer->email.')' }}</option>
             @endforeach
         </select>
         <small>* Indien geselecteerd is deze korting alleen toegankelijk voor geregistreerde klanten</small>
