@@ -56,6 +56,14 @@ class ProductController extends Controller
             'quantity.*' => 'required'
         ]);
 
+        $subproducts = $request->get('subproducts');
+
+        foreach ($subproducts as $key => $subproductGroup) {
+            if($subproductGroup['name'] !== null && (!isset($subproductGroup['products']) || empty($subproductGroup['products']))){
+                return back()->withErrors(['noproducts' => ['add products to subproducts']]);
+            }
+        }
+
         $product = $this->productRepository->save($request);
 
         return redirect()->route('dashboard.module.order_form.products.index');

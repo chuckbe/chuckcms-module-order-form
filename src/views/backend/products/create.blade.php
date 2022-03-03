@@ -351,7 +351,7 @@
 										</div>
 									</div>
 								</div>
-
+								
 								<div class="col-sm-12">
 									<div class="row d-none" id="addNewSubproductWrapper">
 										<div class="col-sm-6">
@@ -364,7 +364,7 @@
 										</div>
 										<div class="col-sm-3">
 											<label for="new_subproduct_extra_price">Extra prijs:</label>
-											<input type="text" id="new_subproduct_extra_price" class="form-control h-auto" style="padding-top: 3px; padding-bottom: 3px;" placeholder="€0,00" value="0" aria-label="extraprijs" aria-describedby="extra prijs" required>
+											<input type="text" id="new_subproduct_extra_price" class="form-control h-auto" style="padding-top: 3px; padding-bottom: 3px;"  value="0" aria-label="extraprijs" aria-describedby="extra prijs" required>
 										</div>
 										<div class="col-sm-3 pt-4">
 											<button type="button" class="btn btn-sm btn-outline-success" id="new_subproduct_button" data-group="1"><small>+ subproduct toevoegen</small></button>
@@ -410,11 +410,12 @@ $( document ).ready(function() {
 
 		//init media manager inputs 
 		var domain = "{{ URL::to('dashboard/media')}}";
-		$('.img_lfm_link').filemanager('image', {prefix: domain});
+		$('.img_lfm_link').lfm('image', {prefix: domain});
 	}
 
 	$('body').on('click', '.addAttributeRowButton', function (event) {
 		event.preventDefault();
+
 		$('.attribute_input_row:first').clone().appendTo('.attributeInputContainer');
 
 		vardatainput = $('.attribute_input_row:last').find('.img_lfm_link').attr('data-input');
@@ -422,9 +423,13 @@ $( document ).ready(function() {
 
 		$('.attribute_input_row:last').find('.img_lfm_link').attr('data-input', vardatainput+'_'+$('.attribute_input_row').length);
 		$('.attribute_input_row:last').find('.img_lfm_link').attr('data-preview', vardatapreview+'_'+$('.attribute_input_row').length);
+
 		inputid = $('.attribute_input_row:last').find('.img_lfm_input').attr('id');
+
 		$('.attribute_input_row:last').find('.img_lfm_input').attr('id',inputid+'_'+$('.attribute_input_row').length);
+
 		holderid = $('.attribute_input_row:last').find('.img_lfm_holder').attr('id');
+
 		$('.attribute_input_row:last').find('.img_lfm_holder').attr('id',holderid+'_'+$('.attribute_input_row').length);
 
 		toggleRemoveButton();
@@ -434,6 +439,7 @@ $( document ).ready(function() {
 
 	$('body').on('click', '.removeAttributeRowButton', function (event) {
 		event.preventDefault();
+
 		$(this).parents('.attribute_input_row').remove();
 
 		toggleRemoveButton();
@@ -443,6 +449,7 @@ $( document ).ready(function() {
 
 	$('body').on('click', '.addOptionRowButton', function (event) {
 		event.preventDefault();
+
 		$('.option_input_row:first').clone().appendTo('.optionInputContainer');
 
 		vardatainput = $('.option_input_row:last').find('.img_lfm_link').attr('data-input');
@@ -450,9 +457,13 @@ $( document ).ready(function() {
 
 		$('.option_input_row:last').find('.img_lfm_link').attr('data-input', vardatainput+'_'+$('.option_input_row').length);
 		$('.option_input_row:last').find('.img_lfm_link').attr('data-preview', vardatapreview+'_'+$('.option_input_row').length);
+
 		inputid = $('.option_input_row:last').find('.img_lfm_input').attr('id');
+
 		$('.option_input_row:last').find('.img_lfm_input').attr('id',inputid+'_'+$('.option_input_row').length);
+
 		holderid = $('.option_input_row:last').find('.img_lfm_holder').attr('id');
+
 		$('.option_input_row:last').find('.img_lfm_holder').attr('id',holderid+'_'+$('.option_input_row').length);
 
 		toggleRemoveOptionButton();
@@ -462,6 +473,7 @@ $( document ).ready(function() {
 
 	$('body').on('click', '.removeOptionRowButton', function (event) {
 		event.preventDefault();
+
 		$(this).parents('.option_input_row').remove();
 
 		toggleRemoveOptionButton();
@@ -470,6 +482,7 @@ $( document ).ready(function() {
 
 	$('body').on('click', '.addExtraRowButton', function (event) {
 		event.preventDefault();
+
 		$('.extra_input_row:first').clone().appendTo('.extraInputContainer');
 
 		vardatainput = $('.extra_input_row:last').find('.img_lfm_link').attr('data-input');
@@ -477,9 +490,13 @@ $( document ).ready(function() {
 
 		$('.extra_input_row:last').find('.img_lfm_link').attr('data-input', vardatainput+'_'+$('.extra_input_row').length);
 		$('.extra_input_row:last').find('.img_lfm_link').attr('data-preview', vardatapreview+'_'+$('.extra_input_row').length);
+
 		inputid = $('.extra_input_row:last').find('.img_lfm_input').attr('id');
+
 		$('.extra_input_row:last').find('.img_lfm_input').attr('id',inputid+'_'+$('.extra_input_row').length);
+
 		holderid = $('.extra_input_row:last').find('.img_lfm_holder').attr('id');
+
 		$('.extra_input_row:last').find('.img_lfm_holder').attr('id',holderid+'_'+$('.extra_input_row').length);
 
 		toggleRemoveExtraButton();
@@ -489,6 +506,7 @@ $( document ).ready(function() {
 
 	$('body').on('click', '.removeExtraRowButton', function (event) {
 		event.preventDefault();
+		
 		$(this).parents('.extra_input_row').remove();
 
 		toggleRemoveExtraButton();
@@ -519,40 +537,55 @@ $( document ).ready(function() {
 	}
 	
 });
-$('body').on('click','#addNewSubproductsGroupBtn', function (event) {
+
+$('body').on('click', '#addNewSubproductsGroupBtn', function (event) {
 	event.preventDefault()
+	
 	$('.subproducts_wrapper:first').clone().appendTo('.subproducts_group_container');
-    if($('.subproducts_wrapper').length > 1) {
+    
+	if ($('.subproducts_wrapper').length > 1) {
 		$('.subproducts_wrapper:last').attr('data-group', $('.subproducts_wrapper').length);
 		$('.subproducts_wrapper:last').find('.subproductgroupname').attr('name', 'subproducts['+$('.subproducts_wrapper').length+'][name]');
 		$('.subproducts_wrapper:last').find('.subproductgrouplabel').attr('name', 'subproducts['+$('.subproducts_wrapper').length+'][label]');
 		$('.subproducts_wrapper:last').find('.subproductgroupmin').attr('name', 'subproducts['+$('.subproducts_wrapper').length+'][min]');
 		$('.subproducts_wrapper:last').find('.subproductgroupmax').attr('name', 'subproducts['+$('.subproducts_wrapper').length+'][max]');
+		$('.subproducts_wrapper:last').find('.subproductgroupname').val('');
+		$('.subproducts_wrapper:last').find('.subproductgrouplabel').val('');
+		$('.subproducts_wrapper:last').find('.subproductgroupmin').val('');
+		$('.subproducts_wrapper:last').find('.subproductgroupmax').val('');
 		$('.subproducts_wrapper:last').find('.remove_subproducts_group_btn').removeClass('d-none');
 		$('.subproducts_wrapper:last').find('.remove_line_button').trigger('click');
 		$('.subproducts_wrapper:last').find('.subproducts_input_line:first').remove();
 	}
 });
-$('body').on('click','.remove_subproducts_group_btn', function (event) {
+
+$('body').on('click', '.remove_subproducts_group_btn', function (event) {
 	event.preventDefault()
+	
 	if($('.subproducts_wrapper').length > 1) {
 		$(this).parents('.subproducts_wrapper').remove();
 		$('#new_subproduct_button').attr('data-group', '0');
 		$('#addNewSubproductWrapper').addClass('d-none');
 	}
-	
 });
+
 $('body').on('click', '.add_subproduct_btn', function (event) {
 	event.preventDefault();
+	
 	let group_id = $(this).parents('.subproducts_wrapper').attr('data-group');
+	
 	$('#new_subproduct_button').attr('data-group', group_id);
 	$('#new_subproduct').prop("selectedIndex", 0);
-	$('#new_subproduct_extra_price').val('');
+	$('#new_subproduct_extra_price').val('0');
 	$('#addNewSubproductWrapper').removeClass('d-none');
 });
-$('body').on('click', '.remove_line_button', function() {
+
+$('body').on('click', '.remove_line_button', function(event) {
+	event.preventDefault();
+
 	let checker = $(this).parents('._input_container').find('._input_line').length;
 	let group_id = $(this).parents('.conditions_wrapper').attr('data-group');
+
 	if(checker > 1 || group_id !== '1') {
 		$(this).parents('._input_line').remove();
 	} else {
@@ -560,45 +593,40 @@ $('body').on('click', '.remove_line_button', function() {
 		$(this).parents('._input_line').find('select').prop('disabled', true);
 	}
 });
-$('body').on('click', '#new_subproduct_button', function() {
-	$('#new_subproduct_error').addClass('d-none');
+
+$('body').on('click', '#new_subproduct_button', function(event) {
+	event.preventDefault();
+
 	let group_id = $(this).attr('data-group');
+
+	$('#new_subproduct_error').addClass('d-none');
+
     if ($('.subproducts_wrapper[data-group="'+group_id+'"]').length == 0) {
 		group_id = $('.conditions_wrapper:first').attr('data-group');
 	}
+
 	if($('#new_subproduct').find('option:selected').first().val().length == 0 || $('#new_subproduct_extra_price').val().length === 0) {
 		$('#new_subproduct_error').removeClass('d-none');
 		return;
 	}
+
 	new_subproduct = $('#new_subproduct').find('option:selected').first().val();
 	new_extra_price = $('#new_subproduct_extra_price').val();
-	if($('.subproducts_input_line').length > 1) {
-        if(group_id == '1' && $('.subproducts_input_line:first').hasClass('d-none')) {
-            $('.subproducts_input_line:first').removeClass('d-none');
-            $('.subproducts_input_line:first').find('select').prop('disabled', false);
-        } else {
-            $('.subproducts_input_line:first').clone().appendTo('.subproducts_wrapper[data-group="'+group_id+'"]');
-            $('.subproducts_wrapper[data-group="'+group_id+'"]')
-                .find('.conditions_input_line:last')
-                .removeClass('d-none');
-            $('.subproducts_wrapper[data-group="'+group_id+'"]')
-                .find('.subproducts_input_line:last')
-                .find('select').prop('disabled', false);
-        }
-    } else {
-        if(group_id == '1' && $('.subproducts_input_line:first').hasClass('d-none')) {
-            $('.subproducts_input_line:first').removeClass('d-none');
-            $('.subproducts_input_line:first').find('select').prop('disabled', false);
-        } else {
-            $('.subproducts_input_line:first').clone().appendTo('.subproducts_wrapper[data-group="'+group_id+'"]');
-            $('.subproducts_wrapper[data-group="'+group_id+'"]')
-                    .find('.subproducts_input_line:last')
-                    .removeClass('d-none');
-            $('.subproducts_wrapper[data-group="'+group_id+'"]')
-                    .find('.subproducts_input_line:last')
-                    .find('select').prop('disabled', false);
-        }
-    }
+
+
+	if(group_id == '1' && $('.subproducts_input_line:first').hasClass('d-none')) {
+		$('.subproducts_input_line:first').removeClass('d-none');
+		$('.subproducts_input_line:first').find('select').prop('disabled', false);
+	} else {
+		$('.subproducts_input_line:first').clone().appendTo('.subproducts_wrapper[data-group="'+group_id+'"]');
+		$('.subproducts_wrapper[data-group="'+group_id+'"]')
+			.find('.subproducts_input_line:last')
+			.removeClass('d-none');
+		$('.subproducts_wrapper[data-group="'+group_id+'"]')
+			.find('.subproducts_input_line:last')
+			.find('select').prop('disabled', false);
+	}
+
 
     $('.subproducts_wrapper[data-group="'+group_id+'"]')
         .find('.subproducts_input_line:last')
@@ -620,16 +648,6 @@ $('body').on('click', '#new_subproduct_button', function() {
 		.find('.subproducts_input_line:last')
 		.find('.subproducts_extra_price').first()
 		.prop('name', 'subproducts['+group_id+'][products]['+new_subproduct+'][extra_price]');
-
-	// $('.subproducts_wrapper[data-group="'+group_id+'"]')
-	// 	.find('.conditions_input_line:last')
-	// 	.find('.condition_value_input').first()
-	// 	.find('option').addClass('d-none').prop('selected', false).prop('disabled', true);
-        
-    // $('.subproducts_wrapper[data-group="'+group_id+'"]')
-    //     .find('.subproducts_input_line:last')
-    //     .find('.condition_value_input').first()
-    //     .find('option[data-type="'+new_type+'"]').removeClass('d-none').prop('disabled', false);
         
 	$('.subproducts_wrapper[data-group="'+group_id+'"]')
 		.find('.subproducts_input_line:last')

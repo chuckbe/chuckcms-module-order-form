@@ -92,23 +92,31 @@ class ProductRepository
         }
         $json['extras'] = $extras;
 
-        
 
         $subproducts = [];
+       
         foreach ($values->get('subproducts') as $key => $subproductGroup) {
-            if($values->get('subproducts')[$key]['name'] !== null && $values->get('subproducts')[$key]['label'] !== null && isset($values->get('subproducts')[$key]['products']) && !empty($values->get('subproducts')[$key]['products'])){
-                $subproducts[$key]['name']      = $values->get('subproducts')[$key]['name'];
-                $subproducts[$key]['label']     = $values->get('subproducts')[$key]['label'];
-                $subproducts[$key]['min']       = $values->get('subproducts')[$key]['min'];
-                $subproducts[$key]['max']       = $values->get('subproducts')[$key]['max'];
-                $subproducts[$key]['products']  = array_replace([], $values->get('subproducts')[$key]['products']);
+            $products = [];
+
+            foreach ($subproductGroup['products'] as $product) {
+                $products[] = $product;
             }
+
+            if ($values->get('subproducts')[$key]['name'] !== null && $values->get('subproducts')[$key]['label'] !== null){
+                $subproducts[]  = array(
+                    'name'      => $values->get('subproducts')[$key]['name'],
+                    'label'     => $values->get('subproducts')[$key]['label'],
+                    'min'       => $values->get('subproducts')[$key]['min'],
+                    'max'       => $values->get('subproducts')[$key]['max'], 
+                    'products'  => $products
+                );
+            }
+
         }
 
         $json['subproducts'] = $subproducts;
 
         $input['json'] = $json;
-        
 
         $product = $this->repeater->create($input);
 
@@ -197,5 +205,6 @@ class ProductRepository
         }
         return 'false';
     }
+
 
 }
