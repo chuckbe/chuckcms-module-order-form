@@ -41,7 +41,10 @@ class ProductController extends Controller
 
     public function edit(Repeater $product)
     {
-        return view('chuckcms-module-order-form::backend.products.edit', compact('product'));
+        $subproducts = $this->productRepository->get()->filter(function($i) {
+            return $i->json['extras'] == [] && $i->json['options'] == [] && $i->json['attributes'] == [];
+        });
+        return view('chuckcms-module-order-form::backend.products.edit', compact('product','subproducts'));
     }
 
     public function save(Request $request)
@@ -92,6 +95,14 @@ class ProductController extends Controller
             'price.final' => 'required',
             'quantity.*' => 'required'
         ]);
+
+        $subproducts = $request->get('subproducts');
+
+        foreach ($subproducts as $key => $subproductGroup) {
+            if($subproductGroup['name'] !== null && (!isset($subproductGroup['products']) || empty($subproductGroup['products']))){
+                return back()->withErrors(['noproducts' => ['add products to subproducts']]);
+            }
+        }
 
         $product = $this->productRepository->update($request);
 

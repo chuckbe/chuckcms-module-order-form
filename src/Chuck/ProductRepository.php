@@ -111,7 +111,6 @@ class ProductRepository
                     'products'  => $products
                 );
             }
-
         }
 
         $json['subproducts'] = $subproducts;
@@ -187,6 +186,28 @@ class ProductRepository
         }
         $json['extras'] = $extras;
 
+        $subproducts = [];
+       
+        foreach ($values->get('subproducts') as $key => $subproductGroup) {
+            $products = [];
+
+            foreach ($subproductGroup['products'] as $product) {
+                $products[] = $product;
+            }
+
+            if ($values->get('subproducts')[$key]['name'] !== null && $values->get('subproducts')[$key]['label'] !== null){
+                $subproducts[]  = array(
+                    'name'      => $values->get('subproducts')[$key]['name'],
+                    'label'     => $values->get('subproducts')[$key]['label'],
+                    'min'       => $values->get('subproducts')[$key]['min'],
+                    'max'       => $values->get('subproducts')[$key]['max'], 
+                    'products'  => $products
+                );
+            }
+        }
+
+        $json['subproducts'] = $subproducts;
+
         $of_product->json = $json;
 
         $of_product->update();
@@ -197,6 +218,7 @@ class ProductRepository
     public function delete(int $id)
     {
     	$product = $this->repeater->where('slug', config('chuckcms-module-order-form.products.slug'))->where('id', $id)->first();
+
         if ($product) {
             if ($product->delete()) {
                 return 'success';
@@ -205,6 +227,5 @@ class ProductRepository
         }
         return 'false';
     }
-
 
 }
