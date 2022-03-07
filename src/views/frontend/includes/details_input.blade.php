@@ -2,7 +2,7 @@
 	<label for="bestelling">Gegevens</label><br>
 	<div class="row">
 		@foreach(ChuckRepeater::for(config('chuckcms-module-order-form.locations.slug'))->sortBy('json.order') as $location)
-		<div class="col">
+		<div class="col col-xl-6">
 			<div class="form-group">
                 <label><input type="radio" class="cof_location_radio" 
                     data-location-key="{{ $location->id }}" 

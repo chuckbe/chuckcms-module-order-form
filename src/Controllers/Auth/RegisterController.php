@@ -4,15 +4,11 @@ namespace Chuckbe\ChuckcmsModuleOrderForm\Controllers\Auth;
 
 use Chuckbe\ChuckcmsModuleOrderForm\Models\Customer;
 use Chuckbe\ChuckcmsModuleOrderForm\Models\Coupon;
-
 use Chuckbe\Chuckcms\Models\User;
 use Chuckbe\Chuckcms\Models\Template;
-
 use Chuckbe\Chuckcms\Chuck\UserRepository;
-
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
-
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -40,7 +36,8 @@ class RegisterController extends BaseController
      */
     protected $redirectTo = '/mijn-account';
 
-    protected function redirectTo() { 
+    protected function redirectTo()
+    { 
         return '/mijn-account';
     }
 

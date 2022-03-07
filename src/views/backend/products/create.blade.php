@@ -315,11 +315,11 @@
 											</div>
 											<div class="col-sm-2">
 												<label>Minimale waarde</label>
-												<input type="number" class="form-control subproductgroupmin" min="1" name="subproducts[1][min]">
+												<input type="number" class="form-control subproductgroupmin" min="1" value="1" name="subproducts[1][min]">
 											</div>
 											<div class="col-sm-2">
 												<label>Maximale waarde</label>
-												<input type="number" class="form-control subproductgroupmax" min="1" name="subproducts[1][max]">
+												<input type="number" class="form-control subproductgroupmax" min="1" value="1" name="subproducts[1][max]">
 											</div>
 											<div class="col-12 pt-3">
 												<small class="d-inline-block float-right mr-2 mt-2"><button class="btn btn-sm btn-outline-primary add_subproduct_btn" role="button"><small>+ products</small></button></small>
@@ -346,7 +346,7 @@
 											</div>
 											<div class="col-12 col-sm-6">
 												<label class="sr-only">extra prijs *</label>
-												<input type="text" class="form-control h-auto subproducts_extra_price" style="padding-top: 3px; padding-bottom: 3px;" placeholder="€0,00" value="0" aria-label="extraprijs" aria-describedby="extra prijs" readonly required>
+												<input type="text" class="form-control h-auto subproducts_extra_price" style="padding-top: 3px; padding-bottom: 3px;" value="0" aria-label="extraprijs" aria-describedby="extra prijs" readonly required>
 											</div>
 										</div>
 									</div>
@@ -551,8 +551,8 @@ $('body').on('click', '#addNewSubproductsGroupBtn', function (event) {
 		$('.subproducts_wrapper:last').find('.subproductgroupmax').attr('name', 'subproducts['+$('.subproducts_wrapper').length+'][max]');
 		$('.subproducts_wrapper:last').find('.subproductgroupname').val('');
 		$('.subproducts_wrapper:last').find('.subproductgrouplabel').val('');
-		$('.subproducts_wrapper:last').find('.subproductgroupmin').val('');
-		$('.subproducts_wrapper:last').find('.subproductgroupmax').val('');
+		$('.subproducts_wrapper:last').find('.subproductgroupmin').val('1');
+		$('.subproducts_wrapper:last').find('.subproductgroupmax').val('1');
 		$('.subproducts_wrapper:last').find('.remove_subproducts_group_btn').removeClass('d-none');
 		$('.subproducts_wrapper:last').find('.remove_line_button').trigger('click');
 		$('.subproducts_wrapper:last').find('.subproducts_input_line:first').remove();

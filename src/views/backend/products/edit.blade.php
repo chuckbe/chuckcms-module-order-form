@@ -568,7 +568,7 @@
 <script src="{{ URL::to('vendor/laravel-filemanager/js/lfm.js') }}"></script>
 <script src="//cdn.chuck.be/assets/plugins/jquery-autonumeric/autoNumeric.js"></script>
 <script>
-$( document ).ready(function() { 
+$(document).ready(function() {
   init();
 
   function init() {
@@ -582,6 +582,7 @@ $( document ).ready(function() {
 
   $('body').on('click', '.addAttributeRowButton', function (event) {
     event.preventDefault();
+
     $('.attribute_input_row:first').clone().appendTo('.attributeInputContainer');
     
     vardatainput = $('.attribute_input_row:last').find('.img_lfm_link').attr('data-input');
@@ -601,6 +602,7 @@ $( document ).ready(function() {
 
   $('body').on('click', '.removeAttributeRowButton', function (event) {
     event.preventDefault();
+
     $(this).parents('.attribute_input_row').remove();
 
     toggleRemoveButton();
@@ -609,6 +611,7 @@ $( document ).ready(function() {
 
   $('body').on('click', '.addOptionRowButton', function (event) {
     event.preventDefault();
+
     $('.option_input_row:first').clone().appendTo('.optionInputContainer');
 
     vardatainput = $('.option_input_row:last').find('.img_lfm_link').attr('data-input');
@@ -628,6 +631,7 @@ $( document ).ready(function() {
 
   $('body').on('click', '.removeOptionRowButton', function (event) {
     event.preventDefault();
+
     $(this).parents('.option_input_row').remove();
 
     toggleRemoveOptionButton();
@@ -636,6 +640,7 @@ $( document ).ready(function() {
 
   $('body').on('click', '.addExtraRowButton', function (event) {
     event.preventDefault();
+
     $('.extra_input_row:first').clone().appendTo('.extraInputContainer');
 
     vardatainput = $('.extra_input_row:last').find('.img_lfm_link').attr('data-input');
@@ -655,10 +660,13 @@ $( document ).ready(function() {
 
   $('body').on('click', '.removeExtraRowButton', function (event) {
     event.preventDefault();
+
     $(this).parents('.extra_input_row').remove();
 
     toggleRemoveExtraButton();
   }); 
+
+  
 
   function toggleRemoveButton() {
     if($('.attribute_input_row').length > 1) {
@@ -698,8 +706,8 @@ $('body').on('click', '#addNewSubproductsGroupBtn', function (event) {
 		$('.subproducts_wrapper:last').find('.subproductgroupmax').attr('name', 'subproducts['+$('.subproducts_wrapper').length+'][max]');
 		$('.subproducts_wrapper:last').find('.subproductgroupname').val('');
 		$('.subproducts_wrapper:last').find('.subproductgrouplabel').val('');
-		$('.subproducts_wrapper:last').find('.subproductgroupmin').val('');
-		$('.subproducts_wrapper:last').find('.subproductgroupmax').val('');
+		$('.subproducts_wrapper:last').find('.subproductgroupmin').val('1');
+		$('.subproducts_wrapper:last').find('.subproductgroupmax').val('1');
 		$('.subproducts_wrapper:last').find('.remove_subproducts_group_btn').removeClass('d-none');
 		$('.subproducts_wrapper:last').find('.remove_line_button').trigger('click');
 		$('.subproducts_wrapper:last').find('.subproducts_input_line:first').remove();

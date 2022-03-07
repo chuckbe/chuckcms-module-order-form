@@ -80,6 +80,8 @@ Route::group(['middleware' => ['web']], function() {
 		});
 	});
 
+	Route::post('/product/detail', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\ProductController@detail')->name('cof.product_details');
+
 	Route::post('/cof/place-order', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\OrderController@postOrder')->name('cof.place_order');
 	Route::post('/cof/get-status', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\OrderController@orderStatus')->name('cof.status');
 	Route::post('/cof/is-address-eligible', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\ShippingController@isAddressEligible')->name('cof.is_address_eligible');

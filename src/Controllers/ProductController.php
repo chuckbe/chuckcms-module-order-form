@@ -34,7 +34,7 @@ class ProductController extends Controller
     public function create()
     {
         $subproducts = $this->productRepository->get()->filter(function($i) {
-            return $i->json['extras'] == [] && $i->json['options'] == [] && $i->json['attributes'] == [];
+            return $i->json['extras'] == [] && $i->json['options'] == [] && $i->json['attributes'] == [] && (!isset($i->json['subproducts']) || $i->json['subproducts'] == []);
         });
         return view('chuckcms-module-order-form::backend.products.create', compact('subproducts'));
     }
@@ -42,7 +42,7 @@ class ProductController extends Controller
     public function edit(Repeater $product)
     {
         $subproducts = $this->productRepository->get()->filter(function($i) {
-            return $i->json['extras'] == [] && $i->json['options'] == [] && $i->json['attributes'] == [];
+            return $i->json['extras'] == [] && $i->json['options'] == [] && $i->json['attributes'] == [] && (!isset($i->json['subproducts']) || $i->json['subproducts'] == []);
         });
         return view('chuckcms-module-order-form::backend.products.edit', compact('product','subproducts'));
     }
@@ -107,6 +107,13 @@ class ProductController extends Controller
         $product = $this->productRepository->update($request);
 
         return redirect()->route('dashboard.module.order_form.products.index');
+    }
+
+    public function detail(Request $request)
+    {
+        $product = $this->productRepository->find('id', $request->get('_id'))->first();
+
+        return response()->json(['product'=>$product]);
     }
     
 }

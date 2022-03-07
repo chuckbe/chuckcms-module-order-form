@@ -1,4 +1,4 @@
-<div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 mb-4 chuck_ofm_product_tile" data-product-id="{{ $product->id }}" data-category-id="{{ $category->id }}" data-product-name="{{ $product->json['name'][app()->getLocale()] }}">
+<div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 mb-4 chuck_ofm_product_tile" data-product-id="{{ $product->id }}" data-category-id="{{ $category->id }}" data-product-name="{{ $product->json['name'][app()->getLocale()] }}"@if(array_key_exists('subproducts', $product->json) && count($product->json['subproducts']) > 0) data-product-description="{{$product->json['description'][app()->getLocale()]}}"@endif>
 	<div class="thumbnail d-flex align-items-start flex-column" style="border: 1px solid #ddd;border-radius: 4px;padding:10px;height:100%;">
 		@if($settings['form']['display_images'])
 		<img src="{{ $product->json['featured_image'] ?? 'https://via.placeholder.com/500x333.jpg?text=No+Image+Found' }}" class="cof_productImage img-fluid" data-product-id="{{ $product->id }}" alt="">
@@ -52,9 +52,13 @@
 			<div class="col-sm-6 col-6">
 				<div class="input-group mb-3">
 					@if(array_key_exists('options', $product->json) && count($product->json['options']) > 0 || array_key_exists('extras', $product->json) && count($product->json['extras']) > 0 )
-					<button class="btn btn-outline-primary btn-block cof_btnAddProductOptionsToCart" data-product-id="{{ $product->id }}" data-product-options="{{ json_encode($product->json['options']) }}" @if(array_key_exists('extras', $product->json)) data-product-extras="{{ json_encode($product->json['extras']) }}" @endif>Toevoegen</button>
+						<button class="btn btn-outline-primary btn-block cof_btnAddProductOptionsToCart" data-product-id="{{ $product->id }}" data-product-options="{{ json_encode($product->json['options']) }}" @if(array_key_exists('extras', $product->json)) data-product-extras="{{ json_encode($product->json['extras']) }}" @endif>Toevoegen</button>
 					@else
-					<button class="btn btn-outline-primary btn-block cof_btnAddProductToCart" data-product-id="{{ $product->id }}">Toevoegen</button>
+						@if(array_key_exists('subproducts', $product->json) && count($product->json['subproducts']) > 0)
+							<button class="btn btn-outline-primary btn-block cof_btnAddProductWithSubproductToCart" data-product-id="{{ $product->id }}" data-product-subproducts="{{json_encode($product->json['subproducts'])}}">Toevoegen</button>
+						@else
+							<button class="btn btn-outline-primary btn-block cof_btnAddProductToCart" data-product-id="{{ $product->id }}">Toevoegen</button>
+						@endif
 					@endif
 				</div>
 			</div>
