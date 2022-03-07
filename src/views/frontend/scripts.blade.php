@@ -325,7 +325,7 @@ $(document).ready(function() {
 					if(index > 0) {
 						$('.subproduct_group_modal_row:last').find('.subproduct_group_product:first').clone().appendTo('.subproduct_group_modal_row:last .subproduct_group_product_row');
 					}
-					getProductDetails(product.id);
+					// getProductDetails(product.id);
 					// $('.subproduct_group_modal_row:last .subproduct_group_product_row .subproduct_group_product .subproduct_group_product_name').text(product)
 				});
 			}
