@@ -42,7 +42,7 @@ class ProductController extends Controller
     public function edit(Repeater $product)
     {
         $subproducts = $this->productRepository->get()->filter(function($i) {
-            return $i->json['extras'] == [] && $i->json['options'] == [] && $i->json['attributes'] == [] && (!isset($i->json['subproducts']) || $i->json['subproducts'] == []);
+            return $i->json['extras'] == [] && $i->json['options'] == [] && $i->json['attributes'] == [] && isset($i->json['quantity']) && (!isset($i->json['subproducts']) || $i->json['subproducts'] == []);
         });
         return view('chuckcms-module-order-form::backend.products.edit', compact('product','subproducts'));
     }
@@ -111,7 +111,7 @@ class ProductController extends Controller
 
     public function detail(Request $request)
     {
-        $product = $this->productRepository->find('id', $request->get('_id'))->first();
+        $product = $this->productRepository->find($request->get('_id'));
 
         return response()->json(['product'=>$product]);
     }
