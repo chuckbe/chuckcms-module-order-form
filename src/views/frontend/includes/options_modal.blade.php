@@ -71,7 +71,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="container" id="subproductModalBody" style="max-height: 50vh; overflow-y: scroll;">
+                    <div class="container d-none" id="subproductModalBody" style="max-height: 50vh; overflow-y: scroll;">
                         <div class="row subproduct_group_modal_row py-3">
                             <div class="col-12 d-flex">
                                 <h6 class="subproduct_product_group_label">Group 1 Label</h6>
@@ -109,7 +109,14 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary btn-block" id="addProductWithSubproductToCartButton">Toevoegen</button>
+                    <div class="d-flex w-100">
+                        <div class="col">
+                            <span id="subproduct_group_total_price"></span>
+                        </div>
+                        <div class="col">
+                            <button type="button" class="btn btn-primary btn-block" id="addProductWithSubproductToCartButton">Toevoegen</button>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>
