@@ -357,8 +357,6 @@ $(document).ready(function() {
 					})
 					.done(function(data){
 						let currentLoc = $('.cof_location_radio:checked').val();
-						// console.log(data.product.json['quantity'][currentLoc]);
-						// console.log(data.product);
 						$('#'+productId+' .subproduct_group_product_name').text(data.product.json['name']['{{app()->getLocale()}}']);
 						if(data.product.json['quantity'][currentLoc] > 0){
 							$('#'+productId).attr('data-max-qty', data.product.json['quantity'][currentLoc]);
@@ -434,7 +432,9 @@ $(document).ready(function() {
 			quantity = $('.cof_productQuantityInput[data-product-id='+product_id+']').val();
 			product_name = $('.chuck_ofm_product_tile[data-product-id='+product_id+']').attr('data-product-name');
 
-			total_price = parseFloat(current_price) * parseInt(quantity);
+
+			// total_price = parseFloat(current_price) * parseInt(quantity);
+			total_price = parseFloat($(this).attr('data-total-price'));
 			cart_count = parseInt($('#cof_cartTotalQuanity').attr('data-cof-quantity'));
 
 			let subProductGroups = getSubproductGroups();
