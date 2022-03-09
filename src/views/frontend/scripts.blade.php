@@ -295,6 +295,8 @@ $(document).ready(function() {
 		$('.subproduct_group_modal_row:not(:first)').remove();
 		$('.subproduct_group_modal_row:last .card:not(:first)').remove();
 		$('#subproductModal #subproduct_group_total_price').text('');
+		$('#subproductModal .product_qty').val('0');
+		$('.subproduct_product_group_selected').text('0');
 
 
 
@@ -306,6 +308,7 @@ $(document).ready(function() {
 		$('#subproductModal #addProductWithSubproductToCartButton').attr('data-current-price', current_price);
 		$('#subproductModal #addProductWithSubproductToCartButton').attr('data-quantity', quantity);
 		$('#subproductModal #addProductWithSubproductToCartButton').attr('data-total-price', total_price);
+		$('#subproductModal #subproduct_group_total_price').attr('data-current-price', total_price);
 		$('#subproductModal #subproduct_group_total_price').text('€ '+parseFloat(total_price).toFixed('2').replace('.', ','));
 
 
@@ -373,19 +376,22 @@ $(document).ready(function() {
 
 	$('body').on('click', '.subproduct_group_product_qty .addbtn', function(event){
 		event.preventDefault();
+		
 		let upperLimit = parseInt($(this).closest('.subproduct_group_modal_row').find('.subproduct_product_group_max').text()) - parseInt($(this).closest('.subproduct_group_modal_row').find('.subproduct_product_group_selected').text());
 		let max = $(this).closest('.subproduct_group_product').attr('data-max-qty');
 		let current_total_price = $('#subproductModal #addProductWithSubproductToCartButton').attr('data-total-price');
 		let this_extra_price = parseFloat($(this).closest('.subproduct_group_product').attr('data-extra-price'));
 		let newValue = parseInt($(this).closest('.subproduct_group_product_qty').find('.product_qty').val()) + 1;
+		
 		product_id = $('#subproductModal #addProductWithSubproductToCartButton').attr('data-product-id');
+		
 		if(upperLimit !== 0 && (max == '-1' || newValue < max)){
 			$(this).closest('.subproduct_group_modal_row').find('.subproduct_product_group_selected').removeClass('text-danger');
 			$(this).closest('.subproduct_group_product_qty').find('.product_qty').val(newValue);
 			$(this).closest('.subproduct_group_modal_row').find('.subproduct_product_group_selected').text(parseInt($(this).closest('.subproduct_group_modal_row').find('.subproduct_product_group_selected').text()) + 1);
 			$('#subproductModal #addProductWithSubproductToCartButton').attr('data-total-price', parseFloat(current_total_price) + this_extra_price);
-			let dcp = parseFloat($('.cof_productItemPriceDisplay[data-product-id='+product_id+']').attr('data-current-price')) + this_extra_price;
-			$('.cof_productItemPriceDisplay[data-product-id='+product_id+']').attr('data-current-price', dcp)
+			let dcp = parseFloat($('#subproduct_group_total_price').attr('data-current-price')) + this_extra_price;
+			$('#subproduct_group_total_price').attr('data-current-price', dcp)
 			$('#subproductModal #subproduct_group_total_price').text('€ '+ dcp.toFixed('2').replace('.', ','));
 		}
 	});
@@ -393,10 +399,16 @@ $(document).ready(function() {
 	$('body').on('click', '.subproduct_group_product_qty .reducebtn', function(event){
 		event.preventDefault();
 
+		let current_total_price = $('#subproductModal #addProductWithSubproductToCartButton').attr('data-total-price');
+		let this_extra_price = parseFloat($(this).closest('.subproduct_group_product').attr('data-extra-price'));
+
 		let newValue = parseInt($(this).closest('.subproduct_group_product_qty').find('.product_qty').val()) - 1;
 		if(newValue >= 0){
 			$(this).closest('.subproduct_group_product_qty').find('.product_qty').val(newValue);
 			$(this).closest('.subproduct_group_modal_row').find('.subproduct_product_group_selected').text(parseInt($(this).closest('.subproduct_group_modal_row').find('.subproduct_product_group_selected').text()) - 1);
+			let dcp = parseFloat($('#subproduct_group_total_price').attr('data-current-price')) - this_extra_price;
+			$('#subproduct_group_total_price').attr('data-current-price', dcp)
+			$('#subproductModal #subproduct_group_total_price').text('€ '+ dcp.toFixed('2').replace('.', ','));
 		}
 	});
 
@@ -433,8 +445,6 @@ $(document).ready(function() {
 				$('#cof_emptyCartNotice').hide();
 				$('#cof_CartProductList').show();
 				selector = '.cof_cartProductListItem:first';
-
-				
 
 				updateProductListItemSubproducts(selector, product_id, subProductGroups_json, quantity, current_price, total_price);
 
@@ -735,7 +745,6 @@ $(document).ready(function() {
 		$('#optionsModal').modal('hide');
 	});
 
-
 	$('body').on('click', '.cof_btnAddProductOptionsToCart', function (event) {
 		event.preventDefault();
 
@@ -854,6 +863,17 @@ $(document).ready(function() {
 	});
 
 	$('body').on('click', '#cof_placeOrderBtnNow', function (event) {
+		var products = getProducts();
+		console.log(products);
+	});
+
+
+	$('body').on('click', '#cof_placeOrderBtnNow-testing', function (event) {
+		event.preventDefault();
+
+		// @to-do set it back after testing
+
+
 		$('.error_bag:first').addClass('hidden');
 		$(this).html('Even geduld ...');
         $(this).prop('disabled', true);
@@ -1255,9 +1275,12 @@ $(document).ready(function() {
 
 
 		if(subProductGroups_json.length > 0 && subProductGroups_json !== undefined && subProductGroups_json !== '[]') {
+			
 			subprods = JSON.parse(subProductGroups_json);
+			
 			$(''+selector+'').find('.cof_cartProductListItemOptions:last').addClass('d-block').removeClass('d-none');
 			$(''+selector+'').find('.cof_cartProductListItemExtras:last').addClass('d-block').removeClass('d-none');
+			
 			for (var i = 0; i < subprods.length; i++) {
 				if(i > 0) {
 					$(''+selector+'').find('.cof_cartProductListItemOptions:first').clone().appendTo($(''+selector+'').find('.cof_cartProductListDetails:first'));
