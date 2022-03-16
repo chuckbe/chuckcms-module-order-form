@@ -45,11 +45,14 @@ class OrderController extends Controller
 
         $orders = FormEntry::where('slug', config('chuckcms-module-order-form.products.slug'))->orderByDesc('created_at');
 
+        
+
         $dates = explode(',', request()->date);
         $startDate = $dates[0];
         $endDate = count($dates) > 1 ? $dates[1] : null;
 
         $selectedLocation = !request()->has('location') ? null : ChuckRepeater::find(request()->get('location'));
+
 
         if (!is_null($selectedLocation)) {
             $orders = $orders->where('entry->location', $selectedLocation->id);
@@ -61,6 +64,7 @@ class OrderController extends Controller
             $y = explode('-', $startDate)[0];
 
             $orders = $orders->where('entry->order_date', $d.'/'.$m.'/'.$y);
+            
         }
 
         if (!is_null($endDate)) {
@@ -288,6 +292,13 @@ class OrderController extends Controller
                 $item['options'] = json_decode($product['options']);
             } else {
                 $item['options'] = false;
+            }
+
+            if($product['subproducts'] !== false){
+                $item['subproducts'] = json_decode($product['subproducts']);
+
+            } else {
+                $item['subproducts'] = false;
             }
 
             if($product['extras'] !== false){
