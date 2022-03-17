@@ -294,13 +294,6 @@ class OrderController extends Controller
                 $item['options'] = false;
             }
 
-            if($product['subproducts'] !== false){
-                $item['subproducts'] = json_decode($product['subproducts']);
-
-            } else {
-                $item['subproducts'] = false;
-            }
-
             if($product['extras'] !== false){
                 $item_extras = json_decode($product['extras']);
                 $extras = [];
@@ -319,6 +312,14 @@ class OrderController extends Controller
                 }
             } else {
                 $item['extras'] = false;
+            }
+
+            if($product['subproducts'] !== false){
+                
+                $item['subproducts'] = json_decode($product['subproducts']);
+
+            } else {
+                $item['subproducts'] = false;
             }
 
             if(array_key_exists('discounts', $product)) {

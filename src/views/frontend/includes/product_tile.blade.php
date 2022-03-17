@@ -51,14 +51,21 @@
 			@else
 			<div class="col-sm-6 col-6">
 				<div class="input-group mb-3">
-					@if(array_key_exists('options', $product->json) && count($product->json['options']) > 0 || array_key_exists('extras', $product->json) && count($product->json['extras']) > 0 )
-						<button class="btn btn-outline-primary btn-block cof_btnAddProductOptionsToCart" data-product-id="{{ $product->id }}" data-product-options="{{ json_encode($product->json['options']) }}" @if(array_key_exists('extras', $product->json)) data-product-extras="{{ json_encode($product->json['extras']) }}" @endif>Toevoegen</button>
+					@if(array_key_exists('options', $product->json) && count($product->json['options']) > 0 || array_key_exists('extras', $product->json) && count($product->json['extras']) > 0 || array_key_exists('subproducts', $product->json) && count($product->json['subproducts']) > 0)
+						<button 
+							class="btn btn-outline-primary btn-block cof_btnAddProductOptionsToCart" 
+							data-product-id="{{ $product->id }}" 
+							data-product-options="{{ json_encode($product->json['options']) }}" 
+							@if(array_key_exists('extras', $product->json)) data-product-extras="{{ json_encode($product->json['extras']) }}" @endif 
+							@if(array_key_exists('subproducts', $product->json)) data-product-subproducts="{{ json_encode($product->json['subproducts']) }}" @endif>
+							Toevoegen
+						</button>
 					@else
-						@if(array_key_exists('subproducts', $product->json) && count($product->json['subproducts']) > 0)
+						{{-- @if(array_key_exists('subproducts', $product->json) && count($product->json['subproducts']) > 0)
 							<button class="btn btn-outline-primary btn-block cof_btnAddProductWithSubproductToCart" data-product-id="{{ $product->id }}" data-product-subproducts="{{json_encode($product->json['subproducts'])}}">Toevoegen</button>
-						@else
+						@else --}}
 							<button class="btn btn-outline-primary btn-block cof_btnAddProductToCart" data-product-id="{{ $product->id }}">Toevoegen</button>
-						@endif
+						{{-- @endif --}}
 					@endif
 				</div>
 			</div>
