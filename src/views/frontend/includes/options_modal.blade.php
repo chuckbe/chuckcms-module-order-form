@@ -103,7 +103,7 @@
 </div>
 
 
-<div class="modal fade" id="subproductModal" tabindex="-1" role="dialog" aria-labelledby="subproductModalLabel" aria-hidden="true">
+{{-- <div class="modal fade" id="subproductModal" tabindex="-1" role="dialog" aria-labelledby="subproductModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document" style="max-width: 1140px;">
         <div class="modal-content">
             <form action="" id="subproduct-form">
@@ -168,4 +168,4 @@
             </form>
         </div>
     </div>
-</div>
+</div> --}}

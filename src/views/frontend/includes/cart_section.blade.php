@@ -22,6 +22,14 @@
 				<small class="text-muted d-none cof_cartProductListItemExtras">
 					<span class="cof_cartProductListItemOptionName">Optie 1</span> <span class="cof_cartProductListItemOptionValue">Waarde</span>
 				</small>
+				<small class="text-muted d-none cof_cartProductListItemSubproducts">
+					<span class="cof_cartProductListItemSubproductGroupName">Group 1</span>
+					<span class="cof_cartProductListItemSubproductGroupItems">
+						<ul>
+							<li>Product 1</li>
+						</ul>
+					</span>
+				</small>
 			</div>
 			<span class="text-muted cof_cartProductListItemTotalPrice">€ 0,00</span>
 		</li>
