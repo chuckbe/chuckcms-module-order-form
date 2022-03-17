@@ -385,7 +385,7 @@ $(document).ready(function() {
 	// 				$('.subproduct_group_modal_row:last').find('.subproduct_group_product#'+productId).attr('data-extra-price', parseFloat(product.extra_price).toFixed(2));
 					
 	// 				$.ajax({
-	// 					url: "{{route('cof.product_details')}}",
+	// 					url: "",
 	// 					type: 'POST',
 	// 					data: {
 	// 						_id : product.id,
@@ -689,6 +689,7 @@ $(document).ready(function() {
 
 
 		total_price = parseFloat(current_price) * parseInt(quantity);
+	
 
 		product_options = getSelectedProductOptions();
 		product_options_json = JSON.stringify(product_options);
@@ -702,7 +703,7 @@ $(document).ready(function() {
 		cart_count = parseInt($('#cof_cartTotalQuanity').attr('data-cof-quantity'));
 
 
-		if(product_subproducts_json.length){
+		if(product_subproducts.length){
 			let checker = [];
 			$('.subproduct_group_modal_row').each(function(i, obj) {
 			
@@ -816,12 +817,14 @@ $(document).ready(function() {
 					}
 				});
 
+
 				if(changed == 0) {
 					
 					$('.cof_cartProductListItem:first').clone().appendTo('#cof_CartProductList');
 					$('.cof_cartProductListItem:last').find('.cof_cartProductListItemSubproducts:not(:first)').remove();
 
 					selector = '.cof_cartProductListItem:last';
+
 					updateProductListItemAttributes(selector, product_id, product_name, attribute_name, product_options_json, product_extras_json, product_subproducts_json, quantity, current_price, total_price);
 
 					$('#cof_CartProductListPriceLine').insertAfter($('.cof_cartProductListItem:last'));
@@ -1336,6 +1339,7 @@ $(document).ready(function() {
 		current_price = parseFloat(current_price) + extras_price;
 		total_price = parseFloat(total_price) + (quantity * extras_price);
 
+
 		$(''+selector+'').attr('data-product-options', prod_json);
 		$(''+selector+'').attr('data-product-extras', prodex_json);
 		$(''+selector+'').attr('data-subproducts', subproducts_json);
@@ -1803,12 +1807,8 @@ $(document).ready(function() {
 					$('#subproductModalBody .subproduct_group_modal_row:last').find('.subproduct_group_product#'+productId).attr('data-extra-price', parseFloat(product.extra_price).toFixed(2));
 
 					$.ajax({
-						url: "{{route('cof.product_details')}}",
-						type: 'POST',
-						data: {
-							_id : product.id,
-							_token: $('meta[name="csrf-token"]').attr('content')
-						}
+						url: "/product/"+product.id+"/json",
+						type: 'get'
 					})
 					.done(function(data){
 						
@@ -1837,7 +1837,6 @@ $(document).ready(function() {
 			$('#optionsModal .modal-img img').attr( 'src', '');
 		}
 		
-
 	}
 
 	$('body').on('click', '#options-form .options_modal_item_radio label.form-check-label', function (event) {

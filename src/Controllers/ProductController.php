@@ -109,9 +109,16 @@ class ProductController extends Controller
         return redirect()->route('dashboard.module.order_form.products.index');
     }
 
-    public function detail(Request $request)
+    // public function json(Request $request)
+    // {
+    //     $product = $this->productRepository->find($request->get('_id'));
+
+    //     return response()->json(['product'=>$product]);
+    // }
+
+    public function json($id)
     {
-        $product = $this->productRepository->find($request->get('_id'));
+        $product = $this->productRepository->find($id);
 
         return response()->json(['product'=>$product]);
     }

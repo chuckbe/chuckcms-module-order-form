@@ -25,7 +25,7 @@
 				<small class="text-muted d-none cof_cartProductListItemSubproducts">
 					<span class="cof_cartProductListItemSubproductGroupName">Group 1</span>
 					<span class="cof_cartProductListItemSubproductGroupItems">
-						<ul>
+						<ul class="pl-2 ps-2">
 							<li>Product 1</li>
 						</ul>
 					</span>

@@ -80,7 +80,10 @@ Route::group(['middleware' => ['web']], function() {
 		});
 	});
 
-	Route::post('/product/detail', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\ProductController@detail')->name('cof.product_details');
+	// Route::post('/product/json', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\ProductController@json')->name('cof.product.json');
+
+	Route::get('/product/{id}/json', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\ProductController@json')->name('cof.product.json');
+
 
 	Route::post('/cof/place-order', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\OrderController@postOrder')->name('cof.place_order');
 	Route::post('/cof/get-status', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\OrderController@orderStatus')->name('cof.status');
