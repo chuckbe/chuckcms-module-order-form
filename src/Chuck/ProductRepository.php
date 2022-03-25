@@ -224,6 +224,15 @@ class ProductRepository
         return 'false';
     }
 
+    public function getProductsAvailableForSub()
+    {
+
+        $productsAvailableForSub = $this->repeater->where('slug', config('chuckcms-module-order-form.products.slug'))->get()->filter(function($i) {
+            return $i->json['extras'] == [] && $i->json['options'] == [] && $i->json['attributes'] == [] && (!isset($i->json['subproducts']) || $i->json['subproducts'] == []);
+        });
+        return $productsAvailableForSub;
+    }
+
     public function delete(int $id)
     {
         $product = $this->repeater->where('slug', config('chuckcms-module-order-form.products.slug'))->where('id', $id)->first();
