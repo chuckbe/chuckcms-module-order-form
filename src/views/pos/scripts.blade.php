@@ -130,7 +130,7 @@ $('body').on('click', '#addProductFromModalToCartButton', function (event) {
     }
     
     product = getProductDetailsFromModal(product_id);
-
+   
     addToCart(product);
 
     $('#optionsModal').modal('hide');
@@ -1826,9 +1826,8 @@ function getProductDetailsFromModal(product_id) {
         current_price: getSelectedProductUnitPrice(product_id),
         total_price: (getSelectedProductQuantity(product_id) * getSelectedProductUnitPrice(product_id))
     }
-    return;
-
-    // return product;
+    
+    return product;
 }
 
 function getProductDetailsFromCartItemElement(cart_id, elem, copy_quantity = true) {
@@ -2064,8 +2063,7 @@ function getSelectedProductSubproductsExtraPrice(product_id)
     if(!$('#subproductModalBody').hasClass('d-none')) {
         $('.subproduct_group_modal_row').each(function() {
             if(parseInt($(this).find('.product_qty').val()) > 0){
-            subproducts_extras_price = parseFloat(extras_price) + (
-                $(this).find('input:checked').first().attr('data-product-extra-item-price') !== undefined ?  parseFloat($(this).find('.product_extra_price').attr('data-exta-price')) : 0);
+                subproducts_extras_price += $(this).find('.product_extra_price').first().attr('data-product-extra-item-price') !== undefined ?  parseFloat($(this).find('.product_extra_price').attr('data-exta-price')) : 0;
             }
         });
     }
@@ -2103,9 +2101,8 @@ function getSelectedProductUnitPrice(product_id)
         return Number(base_price) + Number(extras_price);
     }
 
-    console.log(parseFloat(subproducts_extra_price));
 
-    // return Number(attribute_price) + Number(extras_price) + parseFloat(subproducts_extra_price);
+    return Number(attribute_price) + Number(extras_price) + parseFloat(subproducts_extra_price);
 }
 
 
