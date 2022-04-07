@@ -59,7 +59,8 @@
                             <div class="col-12">
                                 <div class="row subproduct_group_product_row pt-3">
                                     <div class="col col-xl-3 card subproduct_group_product py-3">
-                                        <img src="https://donuttello.com/photos/shares/donuts/Donuttello-Selection-Kaneel.jpg">
+                                        <div class="w-100 py-5"></div>
+                                        {{-- <img src="https://donuttello.com/photos/shares/donuts/Donuttello-Selection-Kaneel.jpg"> --}}
                                         <div class="d-flex">
                                             <small class="subproduct_group_product_name">name here</small>
                                             <small class="text-muted d-none ml-auto product_extra_price"></small>
