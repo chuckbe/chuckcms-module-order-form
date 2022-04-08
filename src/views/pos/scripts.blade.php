@@ -381,7 +381,6 @@ $('body').on('click', '.subproduct_group_product_qty .reducebtn', function(event
 /* INIT */
 function init() {
     restoreCartsFromStorage();
-
     calculateProductAvailability();
 }
 /* END OF INIT */
@@ -3094,6 +3093,7 @@ function printTicketFromCart(cart_id, order_number, order_date, order_time) {
         customer: cart.customer_id
     };
 
+
     printJob(job);
 }
 
@@ -3146,7 +3146,6 @@ function getFormattedItemsForTicket(products, discounts) {
             items = items.concat(formatLinesForProduct(products[p], false, checkIfProductHasOptionsOrExtrasOrDiscounts(products[p+1])));
         }
     };
-
     return items;
 }
 
@@ -3244,6 +3243,13 @@ function formatLinesForProduct(product, isLastProduct, nextProductHasOptionsOrEx
     for (var phex = 0; phex < product.extras.length; phex++) {
         if (!$.isEmptyObject(product.extras[phex])) {
             productHasExtras = true;
+        }
+    };
+
+    let productHasSubproducts = false;
+    for (var phex = 0; phex < product.subproducts.length; phex++) {
+        if (!$.isEmptyObject(product.subproducts[phex])) {
+            productHasSubproducts = true;
         }
     };
 
@@ -3403,6 +3409,46 @@ function formatLinesForProduct(product, isLastProduct, nextProductHasOptionsOrEx
         };
     }
 
+    if (product.subproducts.length > 0) {
+        for (var psub = 0; psub < product.subproducts.length; psub++) {
+            if (!$.isEmptyObject(product.subproducts[psub])) {
+                let extraLine = "";
+                extraLine += "  1 ";
+                let products = product.subproducts[psub].products;
+                for(var psubp = 0; psubp < products.length; psubp++){
+                    extraLine += products[psubp].p_name+" x "+products[psubp].p_qty+": ";
+                    if (extraLine.length < 41) {
+                    let neededLineLength = (40 - extraLine.length);
+                        for (var ell = 0; ell < neededLineLength; ell++) {
+                            extraLine += " ";
+                        };
+                    }
+
+                    if (extraLine.length > 40) {
+                        extraLine = truncateString(extraLine, 37);
+                    }
+                    
+                    let extraSubProductPrice = parseFloat(products[psubp].p_qty*products[psubp].p_extra_price).toFixed(2);
+
+                    if (extraSubProductPrice > 9.99 && extraSubProductPrice < 100 ) {
+                        extraLine += " ";
+                    }
+
+                    if (extraSubProductPrice > 0.99 && extraSubProductPrice < 10) {
+                        extraLine += "  ";
+                    }
+
+                    if (extraSubProductPrice == 0) {
+                        extraLine += "  ";
+                    }
+                    extraLine += extraSubProductPrice;
+                }
+
+                lines.push(extraLine);
+            }
+        };
+    }
+
     if (product.discounts.length > 0 && product.discount > 0) {
         let discountLine = "";
         discountLine += "    KORTING: ";
@@ -3522,6 +3568,14 @@ function checkIfProductHasOptionsOrExtrasOrDiscounts(product) {
     if (product.extras.length > 0) {
         for (var pext = 0; pext < product.extras.length; pext++) {
             if (!$.isEmptyObject(product.extras[pext])) { 
+                return true;
+            }
+        };
+    }
+
+    if (product.subproducts.length > 0) {
+        for (var pext = 0; pext < product.subproducts.length; pext++) {
+            if (!$.isEmptyObject(product.subproducts[pext])) { 
                 return true;
             }
         };
