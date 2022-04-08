@@ -633,7 +633,19 @@ function addToCart(product, cartId = null) {
         $('.cof_cartTab[data-cart-id='+cart_id+']').find('.cof_CartProductList').show();
 
         selector = '.cof_cartProductListItem:first';
-        updateProductListItemAttributes(cart_id, selector, product_id, product.name, product.attribute, JSON.stringify(product.options), JSON.stringify(product.extras), product.quantity, product.current_price, product.total_price);
+        updateProductListItemAttributes(
+            cart_id, 
+            selector, 
+            product_id, 
+            product.name, 
+            product.attribute, 
+            JSON.stringify(product.options), 
+            JSON.stringify(product.extras),
+            JSON.stringify(product.subproducts), 
+            product.quantity, 
+            product.current_price, 
+            product.total_price
+        );
 
         if (cartId === null) {
             addProductToCartInStorage(product, cart_id);
@@ -661,7 +673,8 @@ function addToCart(product, cartId = null) {
             product.name, 
             product.attribute, 
             JSON.stringify(product.options), 
-            JSON.stringify(product.extras), 
+            JSON.stringify(product.extras),
+            JSON.stringify(product.subproducts),  
             product.quantity, 
             product.current_price, 
             product.total_price);
@@ -696,6 +709,7 @@ function addProductToCartInStorage(product, cartId) {
                 attribute: product.attribute,
                 options: product.options,
                 extras: product.extras,
+                subproducts: product.subproducts,
                 quantity: product.quantity,
                 current_price: product.current_price,
                 total_price: product.total_price,
@@ -746,7 +760,7 @@ function updateProductToCartInStorage(product, cartId) {
             let products = carts[g].products;
 
             for (var i = 0; i < products.length; i++) {
-                if (products[i].id == product.id && products[i].attribute == product.attribute && JSON.stringify(products[i].options) == JSON.stringify(product.options) && JSON.stringify(products[i].extras) == JSON.stringify(product.extras) ) {
+                if (products[i].id == product.id && products[i].attribute == product.attribute && JSON.stringify(products[i].options) == JSON.stringify(product.options) && JSON.stringify(products[i].extras) == JSON.stringify(product.extras) && JSON.stringify(products[i].subproducts) == JSON.stringify(product.subproducts) ) {
                     products[i].quantity = parseInt(products[i].quantity) + parseInt(product.quantity);
                     products[i].total_price = parseFloat(products[i].total_price) + parseFloat(product.total_price);
                 }
@@ -793,10 +807,11 @@ function cartHasProduct(cart_id, product) {
         return checker;
     }
     product_extras_json = JSON.stringify(product.extras) == '[]' ? '' : JSON.stringify(product.extras);
+    product_subproducts_json = JSON.stringify(product.subproducts) == '[]' ? '' : JSON.stringify(product.subproducts);
     product_options_json = JSON.stringify(product.options) == '[]' ? '' : JSON.stringify(product.options);
     
     $('.cof_cartTab[data-cart-id='+cart_id+']').find('.cof_cartProductListItem[data-product-id='+product.id+']').each(function() {
-        if(product.attribute == $(this).attr('data-attribute-name') && ""+product_options_json+"" == $(this).attr('data-product-options') && ""+product_extras_json+"" == $(this).attr('data-product-extras')) {
+        if(product.attribute == $(this).attr('data-attribute-name') && ""+product_options_json+"" == $(this).attr('data-product-options') && ""+product_extras_json+"" == $(this).attr('data-product-extras') && ""+product_subproducts_json+"" == $(this).attr('data-product-subproducts')) {
             checker = true;
             return true;
         }
@@ -810,9 +825,10 @@ function cartProductListItemUniqueSelector(cart_id, product) {
 
     product_extras_json = JSON.stringify(product.extras) == '[]' ? '' : JSON.stringify(product.extras);
     product_options_json = JSON.stringify(product.options) == '[]' ? '' : JSON.stringify(product.options);
+    product_subproducts_json = JSON.stringify(product.subproducts) == '[]' ? '' : JSON.stringify(product.subproducts);
 
     $('.cof_cartTab[data-cart-id='+cart_id+']').find('.cof_cartProductListItem[data-product-id='+product.id+']').each(function() {
-        if(product.attribute == $(this).attr('data-attribute-name') && ""+product_options_json+"" == $(this).attr('data-product-options') && ""+product_extras_json+"" == $(this).attr('data-product-extras')) {
+        if(product.attribute == $(this).attr('data-attribute-name') && ""+product_options_json+"" == $(this).attr('data-product-options') && ""+product_extras_json+"" == $(this).attr('data-product-extras') && ""+product_subproducts_json+"" == $(this).attr('data-product-subproducts')) {
             random = Math.random().toString(36).substr(2, 5);
             $(this).attr('data-unique-el', random);
             return false;
@@ -838,6 +854,8 @@ function resetCartTab(cartId) {
     $('.cof_cartTab[data-cart-id='+cartId+']').find('.cof_cartProductListItem:first').find('.cof_cartProductListItemOptions:first').removeClass('d-block').addClass('d-none');
     $('.cof_cartTab[data-cart-id='+cartId+']').find('.cof_cartProductListItem:first').find('.cof_cartProductListItemExtras:not(:first)').remove();
     $('.cof_cartTab[data-cart-id='+cartId+']').find('.cof_cartProductListItem:first').find('.cof_cartProductListItemExtras:first').removeClass('d-block').addClass('d-none');
+    $('.cof_cartTab[data-cart-id='+cartId+']').find('.cof_cartProductListItem:first').find('.cof_cartProductListItemSubproducts:not(:first)').remove();
+    $('.cof_cartTab[data-cart-id='+cartId+']').find('.cof_cartProductListItem:first').find('.cof_cartProductListItemSubproducts:first').removeClass('d-block').addClass('d-none');
     $('.cof_cartTab[data-cart-id='+cartId+']').find('.cof_CartProductList').hide();
 }
 
@@ -1827,8 +1845,6 @@ function getProductDetailsFromModal(product_id) {
         total_price: (getSelectedProductQuantity(product_id) * getSelectedProductUnitPrice(product_id))
     }
 
-    console.log('the unit price :: ',getSelectedProductUnitPrice(product_id));
-    
     return product;
 }
 
@@ -1851,6 +1867,7 @@ function getProductDetailsFromCartItemElement(cart_id, elem, copy_quantity = tru
         attribute: elem.parents('.cof_cartProductListItem').first().attr('data-attribute-name').length > 0 ? elem.parents('.cof_cartProductListItem').first().attr('data-attribute-name') : '',
         options: elem.parents('.cof_cartProductListItem').first().attr('data-product-options').length > 0 ? JSON.parse(elem.parents('.cof_cartProductListItem').first().attr('data-product-options')) : JSON.parse('[]'),
         extras: elem.parents('.cof_cartProductListItem').first().attr('data-product-extras').length > 0 ? JSON.parse(elem.parents('.cof_cartProductListItem').first().attr('data-product-extras')) : JSON.parse('[]'),
+        subproducts: elem.parents('.cof_cartProductListItem').first().attr('data-product-subproducts').length > 0 ? JSON.parse(elem.parents('.cof_cartProductListItem').first().attr('data-product-subproducts')) : JSON.parse('[]'),
         quantity: quantity,
         vat: {
             delivery: Number($('.cof_pos_product_card[data-product-id='+product_id+']').attr('data-vat-delivery')),
@@ -1886,6 +1903,7 @@ function getProductDetailsFromCartItem(product_id, copy_quantity = true) {
         attribute: $(selector).first().attr('data-attribute-name').length > 0 ? $(selector).first().attr('data-attribute-name') : '',
         options: $(selector).first().attr('data-product-options').length > 0 ? JSON.parse($(selector).first().attr('data-product-options')) : JSON.parse('[]'),
         extras: $(selector).first().attr('data-product-extras').length > 0 ? JSON.parse($(selector).first().attr('data-product-extras')) : JSON.parse('[]'),
+        subproducts: $(selector).first().attr('data-product-subproducts').length > 0 ? JSON.parse($(selector).first().attr('data-product-subproducts')) : JSON.parse('[]'),
         quantity: quantity,
         vat: {
             delivery: Number($(card_selector).attr('data-vat-delivery')),
@@ -2068,11 +2086,11 @@ function getSelectedProductSubproductsExtraPrice(product_id)
     }
 
     $('.subproduct_group_product').each(function() {
-        console.log('do we get here? 2', $(this).find('.product_qty').val());
+        
         let sp_qty = parseInt($(this).find('.product_qty').val());
 
         if(sp_qty == 0){
-            continue;
+            return;
         }
 
         sp_extra_price = 0;
@@ -2115,7 +2133,6 @@ function getSelectedProductUnitPrice(product_id)
     extras_price = getSelectedProductExtrasPrice(product_id);
     subproducts_extra_price = getSelectedProductSubproductsExtraPrice(product_id);
 
-    console.log('check this :: ', base_price, attribute_price, extras_price, subproducts_extra_price);
     if(attribute_price > 0) {
         return Number(attribute_price) + Number(extras_price) + parseFloat(subproducts_extra_price);
     }
@@ -2595,7 +2612,7 @@ function resetFirstProduct()
     $('.cof_cartProductListItem:first').find('.cof_cartProductListItemOptions:first').removeClass('d-block').addClass('d-none');
 }
 
-function updateProductListItemAttributes(cart_id, selector, product_id, product_name, attribute_name, product_options_json, product_extras_json, quantity, current_price, total_price)
+function updateProductListItemAttributes(cart_id, selector, product_id, product_name, attribute_name, product_options_json, product_extras_json, product_subproducts_json, quantity, current_price, total_price)
 {
     productListItem = $('.cof_cartTab[data-cart-id='+cart_id+']').find(''+selector+'');
 
@@ -2615,8 +2632,15 @@ function updateProductListItemAttributes(cart_id, selector, product_id, product_
         prodex_json = '';
     }
 
+    if(product_subproducts_json.length > 0 && product_subproducts_json !== undefined && product_subproducts_json !== '[]') {
+        prodsubprod_json = ""+product_subproducts_json+"";
+    } else {
+        prodsubprod_json = '';
+    }
+
     productListItem.attr('data-product-options', prod_json);
     productListItem.attr('data-product-extras', prodex_json);
+    productListItem.attr('data-product-subproducts', prodsubprod_json);
     productListItem.attr('data-quantity', quantity);
     productListItem.attr('data-unit-price', current_price);
     productListItem.attr('data-total-price', total_price);
@@ -2662,8 +2686,6 @@ function updateProductListItemAttributes(cart_id, selector, product_id, product_
         };
     } 
 
-
-
     productListItem.find('.cof_cartProductListItemExtras:not(:first)').remove();
     productListItem.find('.cof_cartProductListItemExtras:first').appendTo(productListItem.find('.cof_cartProductListDetails:first'));
     productListItem.find('.cof_cartProductListItemExtras:first').removeClass('d-block').addClass('d-none');
@@ -2696,7 +2718,45 @@ function updateProductListItemAttributes(cart_id, selector, product_id, product_
         if(!extra_faulty_check) {
             productListItem.find('.cof_cartProductListItemExtras:last').addClass('d-none').removeClass('d-block');
         }
-    } 
+    }
+    
+    productListItem.find('.cof_cartProductListItemSubproducts:not(:first)').remove();
+    productListItem.find('.cof_cartProductListItemSubproducts:first').appendTo(productListItem.find('.cof_cartProductListDetails:first'));
+    productListItem.find('.cof_cartProductListItemSubproducts:first').removeClass('d-block').addClass('d-none');
+
+    if(product_subproducts_json !== '' && product_subproducts_json !== undefined && product_subproducts_json !== '[]') {
+        product_subproducts = JSON.parse(product_subproducts_json);
+        productListItem.find('.cof_cartProductListItemSubproducts:last')
+                        .detach()
+                        .insertAfter($(productListItem.find('.cof_cartProductListItemExtras:last')))
+                        .addClass('d-block')
+                        .removeClass('d-none');
+        
+        for (var i = 0; i < product_subproducts.length; i++) {
+            if(i > 0) {
+                $(''+selector+'').find('.cof_cartProductListItemSubproducts:first').clone().appendTo($(''+selector+'').find('.cof_cartProductListDetails:first'));
+            }
+            for(var p=0; p<product_subproducts[i]['products'].length; p++) {
+                if (p > 0){
+                    $(''+selector+'')
+                    .find('.cof_cartProductListItemSubproducts:last')
+                    .find('.cof_cartProductListItemSubproductGroupItems ul li:first')
+                    .clone()
+                    .appendTo($(''+selector+'').find('.cof_cartProductListItemSubproducts:last').find('.cof_cartProductListItemSubproductGroupItems ul:last'));
+                }
+                if (product_subproducts[i]['products'][p]['p_extra_price'] == 0) {
+                    $(''+selector+'').find('.cof_cartProductListItemSubproducts:last')
+                    .find('.cof_cartProductListItemSubproductGroupItems ul li:last')
+                    .text(product_subproducts[i]['products'][p]['p_name']+' x '+product_subproducts[i]['products'][p]['p_qty']);
+                }else{
+                    $(''+selector+'').find('.cof_cartProductListItemSubproducts:last')
+                    .find('.cof_cartProductListItemSubproductGroupItems ul li:last')
+                    .text(product_subproducts[i]['products'][p]['p_name']+' x '+product_subproducts[i]['products'][p]['p_qty']+' (extra: '+'€ '+parseFloat(product_subproducts[i]['products'][p]['p_extra_price']*product_subproducts[i]['products'][p]['p_qty']).toFixed(2).replace('.', ',')+' )');
+                }
+            }
+        }
+        
+    }
 
     productListItem.find('.cof_cartProductListItemFullName').text(full_name);
     productListItem.find('.cof_cartProductListItemQuantity:not(input)').text(quantity);

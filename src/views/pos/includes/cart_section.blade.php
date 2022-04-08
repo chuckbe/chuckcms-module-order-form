@@ -34,6 +34,13 @@
                             <small class="text-muted d-none cof_cartProductListItemExtras">
                               <span class="cof_cartProductListItemOptionName">Optie 1</span> <span class="cof_cartProductListItemOptionValue">Waarde</span>
                             </small>
+                            <small class="text-muted d-none cof_cartProductListItemSubproducts">
+                                <span class="cof_cartProductListItemSubproductGroupItems">
+                                    <ul class="pl-2 ps-2 mb-0">
+                                        <li>Product 1</li>
+                                    </ul>
+                                </span>
+                            </small>
                         </div> 
                     </div>
                     <div class="col-4 bestelOrderQuantity">
