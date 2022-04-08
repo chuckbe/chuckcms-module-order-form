@@ -700,6 +700,7 @@ $(document).ready(function() {
 		product_subproducts = getSubproductGroups();
 		product_subproducts_json = JSON.stringify(product_subproducts);
 
+
 		cart_count = parseInt($('#cof_cartTotalQuanity').attr('data-cof-quantity'));
 
 
@@ -1430,6 +1431,8 @@ $(document).ready(function() {
 				if(i > 0) {
 					$(''+selector+'').find('.cof_cartProductListItemSubproducts:first').clone().appendTo($(''+selector+'').find('.cof_cartProductListDetails:first'));
 				}
+				$(''+selector+'').find('.cof_cartProductListItemSubproducts:last').find('.cof_cartProductListItemSubproductGroupItems:last ul li:not(:first)').remove();
+				
 
 				$(''+selector+'').find('.cof_cartProductListItemSubproducts:last').find('.cof_cartProductListItemSubproductGroupName').text(product_subproducts[i]['name']);
 				

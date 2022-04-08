@@ -2736,6 +2736,7 @@ function updateProductListItemAttributes(cart_id, selector, product_id, product_
             if(i > 0) {
                 productListItem.find('.cof_cartProductListItemSubproducts:first').clone().appendTo(productListItem.find('.cof_cartProductListDetails:first'));
             }
+            productListItem.find('.cof_cartProductListItemSubproducts:last').find('.cof_cartProductListItemSubproductGroupItems:last ul li:not(:first)').remove();
             for(var p=0; p<product_subproducts[i]['products'].length; p++) {
                 if (p > 0){
                     productListItem
@@ -2744,6 +2745,7 @@ function updateProductListItemAttributes(cart_id, selector, product_id, product_
                     .clone()
                     .appendTo(productListItem.find('.cof_cartProductListItemSubproducts:last').find('.cof_cartProductListItemSubproductGroupItems ul:last'));
                 }
+                
                 if (product_subproducts[i]['products'][p]['p_extra_price'] == 0) {
                     productListItem.find('.cof_cartProductListItemSubproducts:last')
                     .find('.cof_cartProductListItemSubproductGroupItems ul li:last')
