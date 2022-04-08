@@ -626,7 +626,7 @@ function getActiveCart() {
 function addToCart(product, cartId = null) {
     product_id = product.id
     cart_id = cartId === null ? getActiveCart() : cartId;
-
+    
     cart_count = cartCount(cart_id);
 
     if (isCartEmpty(cart_id)) {
@@ -2620,6 +2620,7 @@ function updateProductListItemAttributes(cart_id, selector, product_id, product_
     productListItem.attr('data-product-name', product_name);
     productListItem.attr('data-attribute-name', attribute_name);
     
+    
     if(product_options_json.length > 0 && product_options_json !== undefined && product_options_json !== '[]') {
         prod_json = ""+product_options_json+"";
     } else {
@@ -2734,22 +2735,22 @@ function updateProductListItemAttributes(cart_id, selector, product_id, product_
         
         for (var i = 0; i < product_subproducts.length; i++) {
             if(i > 0) {
-                $(''+selector+'').find('.cof_cartProductListItemSubproducts:first').clone().appendTo($(''+selector+'').find('.cof_cartProductListDetails:first'));
+                productListItem.find('.cof_cartProductListItemSubproducts:first').clone().appendTo(productListItem.find('.cof_cartProductListDetails:first'));
             }
             for(var p=0; p<product_subproducts[i]['products'].length; p++) {
                 if (p > 0){
-                    $(''+selector+'')
+                    productListItem
                     .find('.cof_cartProductListItemSubproducts:last')
                     .find('.cof_cartProductListItemSubproductGroupItems ul li:first')
                     .clone()
-                    .appendTo($(''+selector+'').find('.cof_cartProductListItemSubproducts:last').find('.cof_cartProductListItemSubproductGroupItems ul:last'));
+                    .appendTo(productListItem.find('.cof_cartProductListItemSubproducts:last').find('.cof_cartProductListItemSubproductGroupItems ul:last'));
                 }
                 if (product_subproducts[i]['products'][p]['p_extra_price'] == 0) {
-                    $(''+selector+'').find('.cof_cartProductListItemSubproducts:last')
+                    productListItem.find('.cof_cartProductListItemSubproducts:last')
                     .find('.cof_cartProductListItemSubproductGroupItems ul li:last')
                     .text(product_subproducts[i]['products'][p]['p_name']+' x '+product_subproducts[i]['products'][p]['p_qty']);
                 }else{
-                    $(''+selector+'').find('.cof_cartProductListItemSubproducts:last')
+                    productListItem.find('.cof_cartProductListItemSubproducts:last')
                     .find('.cof_cartProductListItemSubproductGroupItems ul li:last')
                     .text(product_subproducts[i]['products'][p]['p_name']+' x '+product_subproducts[i]['products'][p]['p_qty']+' (extra: '+'€ '+parseFloat(product_subproducts[i]['products'][p]['p_extra_price']*product_subproducts[i]['products'][p]['p_qty']).toFixed(2).replace('.', ',')+' )');
                 }
