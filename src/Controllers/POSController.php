@@ -237,6 +237,26 @@ class POSController extends Controller
                 $item['extras'] = false;
             }
 
+            if(array_key_exists('subproducts', $product) && $product['subproducts'] !== []){
+                $item_subproducts = $product['subproducts'];
+                $subproducts = [];
+                if($item_subproducts !== false) {
+                    foreach($item_subproducts as $item_subproduct) {
+                        if(count((array)$item_subproduct) > 0) {
+                            $subproducts[] = $item_subproduct;
+                        }
+                    }
+                }
+
+                if(count($subproducts) > 0) {
+                    $item['subproducts'] = $subproducts;
+                } else {
+                    $item['subproducts'] = false;
+                }
+            } else {
+                $item['subproducts'] = false;
+            }
+
             if(array_key_exists('discounts', $product)) {
                 $item['discounts'] = $product['discounts'];
             }
@@ -248,6 +268,7 @@ class POSController extends Controller
             $items[] = $item;
             
         }
+
 
         $all_json['items'] = $items;
 
