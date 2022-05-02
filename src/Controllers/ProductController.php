@@ -19,8 +19,7 @@ class ProductController extends Controller
      *
      * @return void
      */
-    public function __construct(
-        ProductRepository $productRepository)
+    public function __construct(ProductRepository $productRepository)
     {
         $this->productRepository = $productRepository;
     }
@@ -33,12 +32,16 @@ class ProductController extends Controller
 
     public function create()
     {
-        return view('chuckcms-module-order-form::backend.products.create');
+        $subproducts = $this->productRepository->getProductsAvailableForSub();
+
+        return view('chuckcms-module-order-form::backend.products.create', compact('subproducts'));
     }
 
     public function edit(Repeater $product)
     {
-        return view('chuckcms-module-order-form::backend.products.edit', compact('product'));
+        $subproducts = $this->productRepository->getProductsAvailableForSub();
+
+        return view('chuckcms-module-order-form::backend.products.edit', compact('product','subproducts'));
     }
 
     public function save(Request $request)
@@ -52,6 +55,12 @@ class ProductController extends Controller
             'price.final' => 'required',
             'quantity.*' => 'required'
         ]);
+
+        $emptySubproductGroups = collect($request->get('subproducts'))->where('name', '!==', null)->where('products', '==', [])->all();
+
+        if (!empty($emptySubproductGroups)) {
+            return back()->withErrors(['noproducts' => ['add products to subproducts']]);
+        }
 
         $product = $this->productRepository->save($request);
 
@@ -82,9 +91,24 @@ class ProductController extends Controller
             'quantity.*' => 'required'
         ]);
 
+        $emptySubproductGroups = collect($request->get('subproducts'))
+            ->where('name', '!==', null)
+            ->where('products', '==', [])
+            ->all();
+
+        if (!empty($emptySubproductGroups)) {
+            return back()->withErrors(['noproducts' => ['add products to subproducts']]);
+        }
+
         $product = $this->productRepository->update($request);
 
         return redirect()->route('dashboard.module.order_form.products.index');
     }
-    
+
+    public function json($id)
+    {
+        $product = $this->productRepository->find($id);
+
+        return response()->json(['product'=>$product]);
+    }
 }

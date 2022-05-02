@@ -75,4 +75,35 @@ class ChuckModuleOrderForm
         return $this->orderFormRepository->totalSalesLast7DaysQty();
     }
 
+    public function getSubproducts($subproducts = [])
+    {
+        if (!is_array($subproducts) || (is_array($subproducts) && count($subproducts) == 0)) {
+            return json_encode([]);
+        }
+
+        $subproductIds = $this->getSubproductIds($subproducts);
+
+        $products = $this->productRepository->whereIn($subproductIds);
+
+        foreach($subproducts as $spKey => $subproductGroup) {
+            foreach ($subproductGroup['products'] as $spgKey => $spgP) {
+                $subproducts[$spKey]['products'][$spgKey]['product'] = $products->where('id', $spgP['id'])->first();
+            }
+        }
+
+        return json_encode($subproducts);
+    }
+
+    private function getSubproductIds(array $subproducts)
+    {
+        $ids = [];
+        foreach ($subproducts as $subproductGroup) {
+            foreach ($subproductGroup['products'] as $spgP) {
+                $ids[] = $spgP['id'];
+            }
+        }
+
+        return array_unique($ids);
+    }
+
 }

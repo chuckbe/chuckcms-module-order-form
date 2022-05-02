@@ -66,16 +66,62 @@
                         </div>
                     </div>
                 </div>
+                <div class="container d-none" id="subproductModalBody" style="max-height: 50vh; overflow-y: scroll;">
+                    <div class="row subproduct_group_modal_row py-3">
+                        <div class="col-12 d-flex">
+                            <h6 class="subproduct_product_group_label">Group 1 Label</h6>
+                            <div class="d-flex ml-auto">
+                                <span>
+                                    <span class="subproduct_product_group_selected">0</span>/<span class="subproduct_product_group_max">0</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="row subproduct_group_product_row pt-3">
+                                <div class="col col-xl-3 card subproduct_group_product py-3">
+                                    <img src="https://donuttello.com/photos/shares/donuts/Donuttello-Selection-Kaneel.jpg">
+                                    <div class="d-flex">
+                                        <small class="subproduct_group_product_name">name here</small>
+                                        <small class="text-muted d-none ml-auto product_extra_price"></small>
+                                    </div>
+                                    <div class="d-flex position-absolute top-0 w-100 px-3" style="right: -1px">
+                                        <div class="d-flex subproduct_group_product_qty bg-light py-2 ml-auto" style="max-width: 100px">
+                                            <div class="col d-flex flex-wrap justify-content-center">
+                                                <div class="reducebtn" style="cursor:pointer;">
+                                                    <i class="fas fa-minus"></i>
+                                                </div>
+                                            </div>
+                                            <div class="col col-md-4 px-0">
+                                                <input type="text" class="p-0 m-0 w-100 text-center border-0 product_qty" name="quantity" readonly="" value="0">
+                                            </div>
+                                            <div class="col d-flex flex-wrap justify-content-center">
+                                                <div class="addbtn" style="cursor:pointer;">
+                                                    <i class="fas fa-plus"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary btn-block" id="addProductFromModalToCartButton">Toevoegen</button>
+                <div class="d-flex w-100">
+                    <div class="col d-none">
+                        <span id="subproduct_group_total_price"></span>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-primary btn-block" id="addProductFromModalToCartButton">Toevoegen</button>
+                    </div>
+                </div>
+                {{-- <button type="button" class="btn btn-primary btn-block" id="addProductFromModalToCartButton">Toevoegen</button> --}}
             </div>
         </form>
     </div>
   </div>
 </div>
-
-
 
 
 

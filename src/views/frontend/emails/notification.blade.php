@@ -174,11 +174,12 @@
                                                     @endif <br><br>
 
                                                 @if($order->entry['remarks'] !== null && $order->entry['remarks'] !== '')
-                                                <b>Opmerking: </b>
-                                                <p style="white-space:pre-line!important">{{ $order->entry['remarks'] }}</p> <br><br>
+                                                    <b>Opmerking: </b>
+                                                    <p style="white-space:pre-line!important">{{ $order->entry['remarks'] }}</p> <br><br>
                                                 @endif
 
                                                 @foreach($order->entry['items'] as $itemID => $item)
+
                                                     <p>{{ $item['qty'] }}x "{{ $item['attributes'] == false ? $item['name'] : $item['name'] . ' - ' . $item['attributes'] }}" (€ {{ number_format((float)$item['price'], 2, ',', '.') }}) => € {{ number_format((float)$item['totprice'], 2, ',', '.') }}</p>
                                                     @if($item['options'] !== false)
                                                     <small>
@@ -198,16 +199,28 @@
                                                     @endforeach
                                                     </small>
                                                     @endif
+                                                    @if(array_key_exists('subproducts', $item) && $item['subproducts'] !== false)
+                                                        <small>
+                                                            @foreach($item['subproducts'] as $subproduct)
+                                                                {{ $subproduct['name'] }}<br>
+                                                                <ul>
+                                                                    @foreach ($subproduct['products'] as $product)
+                                                                        <li>{{$product['p_name']}} x {{$product['p_qty']}} {{$product['p_extra_price'] !== 0 ? '( extra-price: € '.number_format(floatval($product['p_extra_price'])*$product['p_qty'], 2, ',', '.').' )': '' }}</li>
+                                                                    @endforeach
+                                                                </ul>
+                                                            @endforeach
+                                                        </small>
+                                                    @endif
                                                     <hr>
                                                 @endforeach
 
                                                 <br>
                                                 @if(!is_null(ChuckRepeater::find($order->entry['location'])) && ChuckRepeater::find($order->entry['location'])->type == 'delivery')
-                                                <b>Subtotaal</b>: € {{ number_format((float)$order->entry['order_price'], 2, ',', '.') }} <br>
-                                                <b>Verzending</b>: € {{ number_format((float)$order->entry['order_shipping'], 2, ',', '.') }} <br><br>
-                                                <b>Totaal</b>: € {{ number_format((float)$order->entry['order_price_with_shipping'], 2, ',', '.') }}
+                                                    <b>Subtotaal</b>: € {{ number_format((float)$order->entry['order_price'], 2, ',', '.') }} <br>
+                                                    <b>Verzending</b>: € {{ number_format((float)$order->entry['order_shipping'], 2, ',', '.') }} <br><br>
+                                                    <b>Totaal</b>: € {{ number_format((float)$order->entry['order_price_with_shipping'], 2, ',', '.') }}
                                                 @else
-                                                <b>Totaal</b>: € {{ number_format((float)$order->entry['order_price'], 2, ',', '.') }}
+                                                    <b>Totaal</b>: € {{ number_format((float)$order->entry['order_price'], 2, ',', '.') }}
                                                 @endif
                                                 <br><br>
                                                 Naam: {{ $order->entry['first_name'] . ' ' . $order->entry['last_name'] }} <br>

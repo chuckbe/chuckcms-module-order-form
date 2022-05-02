@@ -9,9 +9,9 @@ use Illuminate\Http\Request;
 
 class ProductRepository
 {
-	private $repeater;
+    private $repeater;
 
-	public function __construct(Repeater $repeater)
+    public function __construct(Repeater $repeater)
     {
         $this->repeater = $repeater;
     }
@@ -26,17 +26,29 @@ class ProductRepository
         return $this->repeater->where('slug', config('chuckcms-module-order-form.products.slug'))->get();
     }
 
+    /**
+     * Get all the products for given array of ids
+     *
+     * @var string
+     **/
+    public function whereIn(array $ids)
+    {
+        return $this->repeater->where('slug', config('chuckcms-module-order-form.products.slug'))
+            ->whereIn('id', $ids)
+            ->get();
+    }
+
     public function save(Request $values)
     {
-    	$input = [];
+        $input = [];
 
-    	$input['slug'] = config('chuckcms-module-order-form.products.slug');
-        $input['url'] = config('chuckcms-module-order-form.products.url').str_slug(array_values($values->get('name'))[0], '-');
+        $input['slug'] = config('chuckcms-module-order-form.products.slug');
+        $input['url'] = config('chuckcms-module-order-form.products.url') . str_slug(array_values($values->get('name'))[0], '-');
         $input['page'] = config('chuckcms-module-order-form.products.page');
 
-    	$json = [];
+        $json = [];
 
-        foreach(ChuckSite::getSupportedLocales() as $langKey => $langValue){
+        foreach (ChuckSite::getSupportedLocales() as $langKey => $langValue) {
             $json['name'][$langKey] = $values->get('name')[$langKey];
             $json['description'][$langKey] = $values->get('description')[$langKey];
         }
@@ -53,15 +65,15 @@ class ProductRepository
         $json['price']['vat_on_the_spot'] = $values->get('price')['vat_on_the_spot'];
 
         $quantity = [];
-        foreach(ChuckRepeater::for(config('chuckcms-module-order-form.locations.slug')) as $location) {
-            $quantity[$location->id] = $values->get('quantity')[''.$location->id.''];
+        foreach (ChuckRepeater::for(config('chuckcms-module-order-form.locations.slug')) as $location) {
+            $quantity[$location->id] = $values->get('quantity')['' . $location->id . ''];
         }
         $json['quantity'] = $quantity;
 
         $json['featured_image'] = $values->get('featured_image');
 
         $attributes = [];
-        if($values->get('attribute_name')[0] !== '' && $values->get('attribute_name')[0] !== null) {
+        if ($values->get('attribute_name')[0] !== '' && $values->get('attribute_name')[0] !== null) {
             foreach ($values->get('attribute_name') as $key => $attributeName) {
                 $attributes[$key]['name'] = $values->get('attribute_name')[$key];
                 $attributes[$key]['price'] = $values->get('attribute_price')[$key];
@@ -71,7 +83,7 @@ class ProductRepository
         $json['attributes'] = $attributes;
 
         $options = [];
-        if($values->get('option_name')[0] !== '' && $values->get('option_name')[0] !== null) {
+        if ($values->get('option_name')[0] !== '' && $values->get('option_name')[0] !== null) {
             foreach ($values->get('option_name') as $key => $optionName) {
                 $options[$key]['name'] = $values->get('option_name')[$key];
                 $options[$key]['type'] = $values->get('option_type')[$key];
@@ -81,7 +93,7 @@ class ProductRepository
         $json['options'] = $options;
 
         $extras = [];
-        if($values->get('extra_name')[0] !== '' && $values->get('extra_name')[0] !== null) {
+        if ($values->get('extra_name')[0] !== '' && $values->get('extra_name')[0] !== null) {
             foreach ($values->get('extra_name') as $key => $extraName) {
                 $extras[$key]['name'] = $values->get('extra_name')[$key];
                 $extras[$key]['price'] = $values->get('extra_price')[$key];
@@ -91,6 +103,29 @@ class ProductRepository
             }
         }
         $json['extras'] = $extras;
+
+
+        $subproducts = [];
+
+        foreach ($values->get('subproducts') as $key => $subproductGroup) {
+            $products = [];
+
+            foreach ($subproductGroup['products'] as $product) {
+                $products[] = $product;
+            }
+
+            if ($values->get('subproducts')[$key]['name'] !== null && $values->get('subproducts')[$key]['label'] !== null) {
+                $subproducts[]  = array(
+                    'name'      => $values->get('subproducts')[$key]['name'],
+                    'label'     => $values->get('subproducts')[$key]['label'],
+                    'min'       => $values->get('subproducts')[$key]['min'],
+                    'max'       => $values->get('subproducts')[$key]['max'],
+                    'products'  => $products
+                );
+            }
+        }
+
+        $json['subproducts'] = $subproducts;
 
         $input['json'] = $json;
 
@@ -103,11 +138,11 @@ class ProductRepository
     {
         $of_product = $this->repeater->where('id', $values->get('product_id'))->firstOrFail();
 
-        $of_product->url = config('chuckcms-module-order-form.products.url').str_slug(array_values($values->get('name'))[0], '-');
+        $of_product->url = config('chuckcms-module-order-form.products.url') . str_slug(array_values($values->get('name'))[0], '-');
 
         $json = [];
 
-        foreach(ChuckSite::getSupportedLocales() as $langKey => $langValue){
+        foreach (ChuckSite::getSupportedLocales() as $langKey => $langValue) {
             $json['name'][$langKey] = $values->get('name')[$langKey];
             $json['description'][$langKey] = $values->get('description')[$langKey];
         }
@@ -124,15 +159,15 @@ class ProductRepository
         $json['price']['vat_on_the_spot'] = $values->get('price')['vat_on_the_spot'];
 
         $quantity = [];
-        foreach(ChuckRepeater::for(config('chuckcms-module-order-form.locations.slug')) as $location) {
-            $quantity[$location->id] = $values->get('quantity')[''.$location->id.''];
+        foreach (ChuckRepeater::for(config('chuckcms-module-order-form.locations.slug')) as $location) {
+            $quantity[$location->id] = $values->get('quantity')['' . $location->id . ''];
         }
         $json['quantity'] = $quantity;
 
         $json['featured_image'] = $values->get('featured_image');
 
         $attributes = [];
-        if($values->get('attribute_name')[0] !== '' && $values->get('attribute_name')[0] !== null) {
+        if ($values->get('attribute_name')[0] !== '' && $values->get('attribute_name')[0] !== null) {
             foreach ($values->get('attribute_name') as $key => $attributeName) {
                 $attributes[$key]['name'] = $values->get('attribute_name')[$key];
                 $attributes[$key]['price'] = $values->get('attribute_price')[$key];
@@ -142,7 +177,7 @@ class ProductRepository
         $json['attributes'] = $attributes;
 
         $options = [];
-        if($values->get('option_name')[0] !== '' && $values->get('option_name')[0] !== null) {
+        if ($values->get('option_name')[0] !== '' && $values->get('option_name')[0] !== null) {
             foreach ($values->get('option_name') as $key => $optionName) {
                 $options[$key]['name'] = $values->get('option_name')[$key];
                 $options[$key]['type'] = $values->get('option_type')[$key];
@@ -152,7 +187,7 @@ class ProductRepository
         $json['options'] = $options;
 
         $extras = [];
-        if($values->get('extra_name')[0] !== '' && $values->get('extra_name')[0] !== null) {
+        if ($values->get('extra_name')[0] !== '' && $values->get('extra_name')[0] !== null) {
             foreach ($values->get('extra_name') as $key => $optionName) {
                 $extras[$key]['name'] = $values->get('extra_name')[$key];
                 $extras[$key]['price'] = $values->get('extra_price')[$key];
@@ -163,6 +198,28 @@ class ProductRepository
         }
         $json['extras'] = $extras;
 
+        $subproducts = [];
+
+        foreach ($values->get('subproducts') as $key => $subproductGroup) {
+            $products = [];
+
+            foreach ($subproductGroup['products'] as $product) {
+                $products[] = $product;
+            }
+
+            if ($values->get('subproducts')[$key]['name'] !== null && $values->get('subproducts')[$key]['label'] !== null) {
+                $subproducts[]  = array(
+                    'name'      => $values->get('subproducts')[$key]['name'],
+                    'label'     => $values->get('subproducts')[$key]['label'],
+                    'min'       => $values->get('subproducts')[$key]['min'],
+                    'max'       => $values->get('subproducts')[$key]['max'],
+                    'products'  => $products
+                );
+            }
+        }
+
+        $json['subproducts'] = $subproducts;
+
         $of_product->json = $json;
 
         $of_product->update();
@@ -170,16 +227,34 @@ class ProductRepository
         return $of_product;
     }
 
-    public function delete(int $id)
+    public function find($id)
     {
-    	$product = $this->repeater->where('slug', config('chuckcms-module-order-form.products.slug'))->where('id', $id)->first();
+        $product = $this->repeater->where('slug', config('chuckcms-module-order-form.products.slug'))->where('id', $id)->first();
         if ($product) {
-            if ($product->delete()) {
-                return 'success';
-            }
-            return 'error';    
+            return $product;
         }
         return 'false';
     }
 
+    public function getProductsAvailableForSub()
+    {
+
+        $productsAvailableForSub = $this->repeater->where('slug', config('chuckcms-module-order-form.products.slug'))->get()->filter(function($i) {
+            return $i->json['extras'] == [] && $i->json['options'] == [] && $i->json['attributes'] == [] && (!isset($i->json['subproducts']) || $i->json['subproducts'] == []);
+        });
+        return $productsAvailableForSub;
+    }
+
+    public function delete(int $id)
+    {
+        $product = $this->repeater->where('slug', config('chuckcms-module-order-form.products.slug'))->where('id', $id)->first();
+
+        if ($product) {
+            if ($product->delete()) {
+                return 'success';
+            }
+            return 'error';
+        }
+        return 'false';
+    }
 }

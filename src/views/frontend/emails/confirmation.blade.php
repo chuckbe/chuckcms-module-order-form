@@ -200,6 +200,18 @@
                                                     @endforeach
                                                     </small>
                                                     @endif
+                                                    @if(array_key_exists('subproducts', $item) && $item['subproducts'] !== false)
+                                                        <small>
+                                                            @foreach($item['subproducts'] as $subproduct)
+                                                                {{ $subproduct['name'] }}<br>
+                                                                <ul>
+                                                                    @foreach ($subproduct['products'] as $product)
+                                                                        <li>{{$product['p_name']}} x {{$product['p_qty']}} {{$product['p_extra_price'] !== 0 ? '( extra-price: € '.number_format(floatval($product['p_extra_price'])*$product['p_qty'], 2, ',', '.').' )': '' }}</li>
+                                                                    @endforeach
+                                                                </ul>
+                                                            @endforeach
+                                                        </small>
+                                                    @endif
                                                     <hr>
                                                 @endforeach
 
