@@ -19,8 +19,7 @@ class ProductController extends Controller
      *
      * @return void
      */
-    public function __construct(
-        ProductRepository $productRepository)
+    public function __construct(ProductRepository $productRepository)
     {
         $this->productRepository = $productRepository;
     }
@@ -34,18 +33,14 @@ class ProductController extends Controller
     public function create()
     {
         $subproducts = $this->productRepository->getProductsAvailableForSub();
-        // $subproducts = $this->productRepository->get()->filter(function($i) {
-        //     return $i->json['extras'] == [] && $i->json['options'] == [] && $i->json['attributes'] == [] && (!isset($i->json['subproducts']) || $i->json['subproducts'] == []);
-        // });
+
         return view('chuckcms-module-order-form::backend.products.create', compact('subproducts'));
     }
 
     public function edit(Repeater $product)
     {
         $subproducts = $this->productRepository->getProductsAvailableForSub();
-        // $subproducts = $this->productRepository->get()->filter(function($i) {
-        //     return $i->json['extras'] == [] && $i->json['options'] == [] && $i->json['attributes'] == [] && isset($i->json['quantity']) && (!isset($i->json['subproducts']) || $i->json['subproducts'] == []);
-        // });
+
         return view('chuckcms-module-order-form::backend.products.edit', compact('product','subproducts'));
     }
 
@@ -63,17 +58,9 @@ class ProductController extends Controller
 
         $emptySubproductGroups = collect($request->get('subproducts'))->where('name', '!==', null)->where('products', '==', [])->all();
 
-        if(!empty( $emptySubproductGroups)){
+        if (!empty($emptySubproductGroups)) {
             return back()->withErrors(['noproducts' => ['add products to subproducts']]);
         }
-
-        // $subproducts = $request->get('subproducts');
-
-        // foreach ($subproducts as $key => $subproductGroup) {
-        //     if($subproductGroup['name'] !== null && (!isset($subproductGroup['products']) || empty($subproductGroup['products']))){
-        //         return back()->withErrors(['noproducts' => ['add products to subproducts']]);
-        //     }
-        // }
 
         $product = $this->productRepository->save($request);
 
@@ -104,23 +91,19 @@ class ProductController extends Controller
             'quantity.*' => 'required'
         ]);
 
-        $emptySubproductGroups = collect($request->get('subproducts'))->where('name', '!==', null)->where('products', '==', [])->all();
+        $emptySubproductGroups = collect($request->get('subproducts'))
+            ->where('name', '!==', null)
+            ->where('products', '==', [])
+            ->all();
 
-        if(!empty( $emptySubproductGroups)){
+        if (!empty($emptySubproductGroups)) {
             return back()->withErrors(['noproducts' => ['add products to subproducts']]);
         }
-
-        // foreach ($subproducts as $key => $subproductGroup) {
-        //     if($subproductGroup['name'] !== null && (!isset($subproductGroup['products']) || empty($subproductGroup['products']))){
-        //         return back()->withErrors(['noproducts' => ['add products to subproducts']]);
-        //     }
-        // }
 
         $product = $this->productRepository->update($request);
 
         return redirect()->route('dashboard.module.order_form.products.index');
     }
-
 
     public function json($id)
     {
@@ -128,5 +111,4 @@ class ProductController extends Controller
 
         return response()->json(['product'=>$product]);
     }
-    
 }
