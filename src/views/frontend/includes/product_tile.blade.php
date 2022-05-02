@@ -61,11 +61,7 @@
 							Toevoegen
 						</button>
 					@else
-						{{-- @if(array_key_exists('subproducts', $product->json) && count($product->json['subproducts']) > 0)
-							<button class="btn btn-outline-primary btn-block cof_btnAddProductWithSubproductToCart" data-product-id="{{ $product->id }}" data-product-subproducts="{{json_encode($product->json['subproducts'])}}">Toevoegen</button>
-						@else --}}
-							<button class="btn btn-outline-primary btn-block cof_btnAddProductToCart" data-product-id="{{ $product->id }}">Toevoegen</button>
-						{{-- @endif --}}
+						<button class="btn btn-outline-primary btn-block cof_btnAddProductToCart" data-product-id="{{ $product->id }}">Toevoegen</button>
 					@endif
 				</div>
 			</div>
