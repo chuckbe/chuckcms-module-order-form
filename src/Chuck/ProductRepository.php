@@ -26,6 +26,18 @@ class ProductRepository
         return $this->repeater->where('slug', config('chuckcms-module-order-form.products.slug'))->get();
     }
 
+    /**
+     * Get all the products for given array of ids
+     *
+     * @var string
+     **/
+    public function whereIn(array $ids)
+    {
+        return $this->repeater->where('slug', config('chuckcms-module-order-form.products.slug'))
+            ->whereIn('id', $ids)
+            ->get();
+    }
+
     public function save(Request $values)
     {
         $input = [];

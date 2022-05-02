@@ -3049,6 +3049,7 @@ function setOptionsModal(product_id, product_name, current_price, quantity, tota
                     let currentLoc = $('.cof_location_radio:checked').val();
                     
                     $('#'+productId+' .subproduct_group_product_name').text(data.product.json['name']['{{app()->getLocale()}}']);
+                    //$('.subproduct_group_product#'+productId+' img').attr('src', data.product.json['featured_image']);
                     
                     if (data.product.json['quantity'][currentLoc] > 0){
                         

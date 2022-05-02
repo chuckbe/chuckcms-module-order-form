@@ -4,7 +4,9 @@
             <form action="" id="options-form">
                 <div class="modal-header">
                     <div class="modal-img pr-3 d-none"><img src="" class="img-responsive" style="max-width:100px; max-height: 100px; object-fit: cover" alt="" /></div>
-                    <h5 class="modal-title font-cera-bold" id="optionsModalLabel">Selecteer de opties voor: <span class="options_product_name"></span></h5>
+                    <h5 class="modal-title font-cera-bold" id="optionsModalLabel">
+                        Selecteer de opties voor: <span class="options_product_name"></span>
+                    </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -57,29 +59,51 @@
                                 </div>
                             </div>
                             <div class="col-12">
-                                <div class="row subproduct_group_product_row pt-3">
-                                    <div class="col col-xl-3 card subproduct_group_product py-3">
-                                        <div class="w-100 py-5"></div>
-                                        {{-- <img src="https://donuttello.com/photos/shares/donuts/Donuttello-Selection-Kaneel.jpg"> --}}
-                                        <div class="d-flex">
-                                            <small class="subproduct_group_product_name">name here</small>
-                                            <small class="text-muted d-none ml-auto product_extra_price"></small>
-                                        </div>
-                                        <div class="d-flex position-absolute top-0 w-100 px-3" style="right: -1px">
-                                            <div class="d-flex subproduct_group_product_qty bg-light py-2 ml-auto" style="max-width: 100px">
-                                                <div class="col d-flex flex-wrap justify-content-center">
-                                                    <div class="reducebtn" style="cursor:pointer;">
-                                                        <i class="fas fa-minus"></i>
+                                <div class="subproduct_group_error d-none alert alert-danger" role="alert">Je hebt nog niet voldoende producten geselecteerd!</div>
+                            </div>
+                            <div class="col-12">
+                                <div class="row subproduct_group_product_row pt-2">
+                                    <div class="col col-sm-6 col-md-3 subproduct_group_product px-2 mb-3">
+                                        <div class="card border-0">
+                                            <img class="subproduct_group_product_img rounded-top" src="https://via.placeholder.com/500x333.jpg?text=No+Image+Found">
+                                            <div class="d-flex pt-1 pl-1">
+                                                <small class="subproduct_group_product_name">name here</small>
+                                                <small class="text-muted d-none ml-auto product_extra_price"></small>
+                                            </div>
+                                            <div class="d-flex position-absolute top-0 w-100 px-0" style="right: 0px">
+                                                <div class="d-flex subproduct_group_product_qty bg-light ml-auto" style="border-top-right-radius:.25rem!important;max-width: 120px">
+                                                    <div class="col d-flex flex-wrap justify-content-center py-2 px-1">
+                                                        <div class="reducebtn" style="cursor:pointer;">
+                                                            <i class="fas fa-minus"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col px-0">
+                                                        <input type="text" class="p-0 m-0 w-100 h-100 text-center border-0 product_qty px-1" name="quantity" readonly="" value="0">
+                                                    </div>
+                                                    <div class="col d-flex flex-wrap justify-content-center py-2 px-1">
+                                                        <div class="addbtn" style="cursor:pointer;">
+                                                            <i class="fas fa-plus"></i>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="col col-md-4 px-0">
-                                                    <input type="text" class="p-0 m-0 w-100 text-center border-0 product_qty" name="quantity" readonly="" value="0">
-                                                </div>
-                                                <div class="col d-flex flex-wrap justify-content-center">
-                                                    <div class="addbtn" style="cursor:pointer;">
-                                                        <i class="fas fa-plus"></i>
+                                                
+
+
+                                                {{-- <div class="d-flex subproduct_group_product_qty bg-light py-2 ml-auto" style="max-width: 100px">
+                                                    <div class="col d-flex flex-wrap justify-content-center">
+                                                        <div class="reducebtn" style="cursor:pointer;">
+                                                            <i class="fas fa-minus"></i>
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                    <div class="col col-md-4 px-0">
+                                                        <input type="text" class="p-0 m-0 w-100 text-center border-0 product_qty" name="quantity" readonly="" value="0">
+                                                    </div>
+                                                    <div class="col d-flex flex-wrap justify-content-center">
+                                                        <div class="addbtn" style="cursor:pointer;">
+                                                            <i class="fas fa-plus"></i>
+                                                        </div>
+                                                    </div>
+                                                </div> --}}
                                             </div>
                                         </div>
                                     </div>

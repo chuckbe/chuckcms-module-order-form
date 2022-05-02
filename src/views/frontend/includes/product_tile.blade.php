@@ -57,7 +57,7 @@
 							data-product-id="{{ $product->id }}" 
 							data-product-options="{{ json_encode($product->json['options']) }}" 
 							@if(array_key_exists('extras', $product->json)) data-product-extras="{{ json_encode($product->json['extras']) }}" @endif 
-							@if(array_key_exists('subproducts', $product->json)) data-product-subproducts="{{ json_encode($product->json['subproducts']) }}" @endif>
+							@if(array_key_exists('subproducts', $product->json)) data-product-subproducts="{{ ChuckModuleOrderForm::getSubproducts($product->json['subproducts']) }}" @endif>
 							Toevoegen
 						</button>
 					@else
