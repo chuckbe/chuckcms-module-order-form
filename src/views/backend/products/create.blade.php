@@ -398,7 +398,7 @@
 @endsection
 
 @section('scripts')
-<script src="{{ URL::to('vendor/laravel-filemanager/js/filemanager.js') }}"></script>
+<script src="{{ URL::to('vendor/laravel-filemanager/js/lfm.js') }}"></script>
 <script src="//cdn.chuck.be/assets/plugins/jquery-autonumeric/autoNumeric.js"></script>
 <script>
 $( document ).ready(function() { 
@@ -410,7 +410,7 @@ $( document ).ready(function() {
 
 		//init media manager inputs 
 		var domain = "{{ URL::to('dashboard/media')}}";
-		$('.img_lfm_link').lfm('image', {prefix: domain});
+		$('.img_lfm_link').filemanager('image', {prefix: domain});
 	}
 
 	$('body').on('click', '.addAttributeRowButton', function (event) {
