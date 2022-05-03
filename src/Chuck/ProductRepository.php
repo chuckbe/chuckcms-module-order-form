@@ -108,13 +108,13 @@ class ProductRepository
         $subproducts = [];
 
         foreach ($values->get('subproducts') as $key => $subproductGroup) {
-            $products = [];
-
-            foreach ($subproductGroup['products'] as $product) {
-                $products[] = $product;
-            }
-
             if ($values->get('subproducts')[$key]['name'] !== null && $values->get('subproducts')[$key]['label'] !== null) {
+                $products = [];
+
+                foreach ($subproductGroup['products'] as $product) {
+                    $products[] = $product;
+                }
+
                 $subproducts[]  = array(
                     'name'      => $values->get('subproducts')[$key]['name'],
                     'label'     => $values->get('subproducts')[$key]['label'],
@@ -201,13 +201,14 @@ class ProductRepository
         $subproducts = [];
 
         foreach ($values->get('subproducts') as $key => $subproductGroup) {
-            $products = [];
-
-            foreach ($subproductGroup['products'] as $product) {
-                $products[] = $product;
-            }
-
             if ($values->get('subproducts')[$key]['name'] !== null && $values->get('subproducts')[$key]['label'] !== null) {
+
+                $products = [];
+
+                foreach ($subproductGroup['products'] as $product) {
+                    $products[] = $product;
+                }
+
                 $subproducts[]  = array(
                     'name'      => $values->get('subproducts')[$key]['name'],
                     'label'     => $values->get('subproducts')[$key]['label'],
