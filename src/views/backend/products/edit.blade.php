@@ -162,7 +162,7 @@
 											</span>
 											<input id="featured_image_input" name="featured_image" class="img_lfm_input form-control ml-2" accept="image/x-png" value="{{ old('featured_image', $product->json['featured_image']) }}" type="text">
 										</div>
-										<img id="featured_image_holder" src="{{$product->json['featured_image'] ? URL::to('/') . $product->json['featured_image'] : ''}}" style="margin-top:15px;max-height:100px;">
+										<img id="featured_image_holder" src="{{$product->json['featured_image'] ? asset($product->json['featured_image']) : ''}}" style="margin-top:15px;max-height:100px;">
 									</div>
 								</div>
 							</div>
