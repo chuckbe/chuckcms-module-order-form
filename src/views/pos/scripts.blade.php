@@ -4020,7 +4020,19 @@ Number.prototype.padLeft = function(base,chr){
     return len > 0? new Array(len).join(chr || '0')+this : this;
 }
 
+$(function() {
+    $.fn.setMIAH();
+    $(window).resize(function() {
+        $.fn.setMIAH();
+    });
+});
 
+$.fn.setMIAH = function() {
+    let hh = $('#cof_orderFormGlobalSection .main .header').outerHeight();
+    let ma = $('#cof_orderFormGlobalSection .main .menuArea').outerHeight();
+    let ha = $('#cof_orderFormGlobalSection .main .handlerArea').outerHeight();
+    $('#cof_orderFormGlobalSection .main .menuItemArea').css({"maxHeight": 'calc(100vh - '+(hh+ma+ha)+'px)'});
+};
 
 
 

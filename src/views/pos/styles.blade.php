@@ -1,4 +1,24 @@
 <style>
+/* colors */
+:root {
+    /* primary color */
+  --primary-color :  #e72870;
+  /* accent colors */
+  --accent-color-1 : rgba(231, 40, 112, var(--opacity1));   --opacity1 : 0.65;
+  --accent-color-2 : rgba(231, 40, 112, var(--opacity2));   --opacity2 : 0.12;
+
+  /* header color */
+  --header-color : #83D1E5;
+
+  /* tab shadow */
+  --shadow-color : #F7F249;
+
+  /* text colors */
+  --text-color-1: var(--primary-color);
+  --text-color-2: #fff;
+  
+}
+/* colors */
 html, body, row {
     padding: 0;
     margin: 0;
@@ -16,7 +36,7 @@ html, body, row {
     padding: 0;
 }
 .header {
-    background-color: #83D1E5;
+    background-color: var(--header-color);
     width: 100%;
     padding: 1rem 0;
     margin: 0;
@@ -31,7 +51,7 @@ html, body, row {
     display: flex;
 }
 .header .headerSearchArea form input{
-    border-color: #e72870;
+    border-color: var(--primary-color);
     border-radius: 5px;
     font-size: 1rem;
     line-height: 1.5;
@@ -56,19 +76,21 @@ html, body, row {
     padding: 4rem 1.5rem 0;
 }
 .menuArea ul.nav .nav-item {
-    background-color: rgba(231, 40, 112, 0.65)!important;
+    /* background-color: rgba(231, 40, 112, 0.65)!important; */
+    background-color: var(--accent-color-1) !important;
     border-radius: 5px;
 }
 .menuArea ul.nav .nav-item .active {
-    background-color: #e72870 !important;
-    border: 1px solid #F7F249;
+    background-color: var(--primary-color) !important;
+    border: 1px solid var(--shadow-color);
 }
 .menuArea ul.nav .nav-link {
     text-transform: uppercase;
-    color: #fff;
+    color: var(--text-color-2);
 }
 .menuItemArea {
-    height: calc(100vh - 315px);
+    /* height: 100%; */
+    /* height: calc(100vh - 320px); */
     max-width: 100%;
     margin: 0;
 }
@@ -91,6 +113,9 @@ html, body, row {
 }
 .menuItemArea > div.container .tab-content {
     width: 100%;
+}
+#navigationTab::-webkit-scrollbar {
+  display: none;
 }
 /* placeholder shimmer */
 @-webkit-keyframes placeHolderShimmer {
@@ -161,12 +186,16 @@ html, body, row {
     pointer-events: none;
 }
 .handlerArea {
-    height: 18vh;
+    /* height: 18vh; */
     margin: 0;
+    margin-top: auto;
+    position: sticky;
+    bottom: 0;
+    /* background-color: #fff; */
 }
 .handlerArea .kassieriInfomatie,
 .handlerArea .promoInformatie {
-    color: #e72870;
+    color: var(--text-color-1);
     max-height: 85%;
 }
 .handlerArea .kassieriInfomatie .card-title,
@@ -180,8 +209,8 @@ html, body, row {
 }
 .handlerArea .kassieriInfomatie .btn,
 .handlerArea .promoInformatie .btn {
-    background-color: #e72870;
-    color: #fff;
+    background-color: var(--primary-color);
+    color: var(--text-color-2);
     font-size: 20px;
     font-weight: 300;
     text-align: center;
@@ -200,11 +229,11 @@ html, body, row {
     max-width: 100%;
 }
 .bestelHeader .bestelHeaderTitle {
-    color: #E72870;
+    color: var(--text-color-1);
 }
 .bestelHeader .bestelHeaderInstellingen .btn {
-    color: #E72870;
-    background-color: rgba(231, 40, 112, 0.12);
+    color: var(--text-color-1);
+    background-color: var(--accent-color-2);
     font-size: .65rem;
     height: 100%;
 }
@@ -224,8 +253,8 @@ html, body, row {
     border-radius: 0;
     margin-left: .1rem;
     margin-right: .1rem;
-    background-color: rgba(231, 40, 112, 0.12);
-    color: #E72870;
+    background-color: var(--accent-color-2);
+    color: var(--text-color-1);
     min-width: fit-content;
     position: relative;
     display: flex;
@@ -239,8 +268,8 @@ html, body, row {
     min-width: 30px;
 }
 .bestelTabHandler nav .nav-link.active {
-    background-color: #E72870;
-    color: #fff;
+    background-color: var(--primary-color);
+    color: var(--text-color-2);
 }
 .bestelTabHandler nav .nav-link {
     font-size: .8rem;
@@ -290,7 +319,7 @@ html, body, row {
 }
 
 .bestelTabArea .bestelOrder .bestelOrderTitle {
-    color: #E72870;
+    color: var(--text-color-1);
     font-size: 0.8rem;
     font-weight: bold;
     padding-left: .5rem;
@@ -307,7 +336,7 @@ html, body, row {
 }
 .bestelTabArea .bestelOrder .bestelOrderQuantity input{
     max-width: 1.2rem;
-    border: 1px solid #e72870;
+    border: 1px solid var(--primary-color);
     border-radius: 5px;
     color: darkslategrey;
     font-size: 0.8rem;
@@ -324,14 +353,14 @@ html, body, row {
     align-items: center;
 }
 .bestelTabArea .bestelOrder .bestelOrderQuantity .bestelOrderQuantityControl.trash {
-    background-color: #e72870;
+    background-color: var(--primary-color);
 }
 .bestelTabArea .bestelOrder .bestelOrderQuantity .bestelOrderQuantityControl.trash .deletebtn{
-    color: #fff;
+    color: var(--text-color-2);
 }
 .bestelTabArea .bestelOrder .bestelOrderQuantity .bestelOrderQuantityControl a,
 .bestelTabArea .bestelOrder .bestelOrderPrice{
-    color: #E72870;
+    color: var(--text-color-1);
 }
 .bestelTabArea .bestelOrder .bestelOrderPrice {
     font-size: .8rem;
@@ -354,7 +383,7 @@ html, body, row {
     text-align: start;
 }
 .klantArea .container .card .klantIcon {
-    color: #e72870;
+    color: var(--text-color-1);
     padding: 0 0.5rem;
 }
 .klantArea .container .card .klantGegevens {
@@ -364,20 +393,20 @@ html, body, row {
     font-size: 0.6rem;
     padding: 0;
     margin: 0;
-    color: #e72870;
+    color: var(--text-color-1);
 }
 .klantArea .container .card .klantKoppeler .btn {
     font-size: .65rem;
-    background-color: #e72870;
-    color: #fff;
+    background-color: var(--primary-color);
+    color: var(--text-color-2);
     padding: 0.5rem;
 }
 .priceCalculatorArea .container .card {
-    color: #e72870;
+    color: var(--text-color-1);
     font-size: 0.65rem;
 }
 .priceCalculatorArea .container .card .priceCalculatorDivider {
-    border-top: 1px dashed #e72870;
+    border-top: 1px dashed var(--text-color-1);
 }
 .priceCalculatorArea .container .card .totaal {
     font-size: 1.2rem;
@@ -389,8 +418,8 @@ html, body, row {
 }
 
 .betaalArea .btn{
-    background-color: #e72870;
-    color: #fff;
+    background-color: var(--primary-color);
+    color: var(--text-color-2);
     width: 100%; 
     margin: auto;
     padding: 10px;
