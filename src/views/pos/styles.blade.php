@@ -432,12 +432,17 @@ html, body, row {
       display: block !important;
       max-height: unset;
       overflow-x: hidden;
+      overflow-y: visible;
+  }
+  .betaalArea.row{
+      position: relative;
+      bottom: unset;
   }
   .main, .bestelling{
     padding: 0;
     flex: 0 0 100%;
     max-width: 100%;
-    height: unset;
+    /* height: unset; */
   }
   .menuItemArea > div.container .tab-content{
       max-height: 100vh;
