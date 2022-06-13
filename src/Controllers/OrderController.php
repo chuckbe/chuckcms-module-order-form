@@ -19,22 +19,25 @@ use ChuckRepeater;
 
 use Chuckbe\ChuckcmsModuleOrderForm\Chuck\DiscountRepository;
 use Chuckbe\ChuckcmsModuleOrderForm\Chuck\CustomerRepository;
+use Chuckbe\ChuckcmsModuleOrderForm\Chuck\SettingsRepository;
 use Chuckbe\ChuckcmsModuleOrderForm\Exports\OrdersExport;
 use Maatwebsite\Excel\Facades\Excel;
 
 class OrderController extends Controller
 {
     protected $discountRepository;
+    protected $settingsRepository;
     
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(DiscountRepository $discountRepository, CustomerRepository $customerRepository)
+    public function __construct(DiscountRepository $discountRepository, CustomerRepository $customerRepository, SettingsRepository $settingsRepository)
     {
         $this->discountRepository = $discountRepository;
         $this->customerRepository = $customerRepository;
+        $this->settingsRepository = $settingsRepository;
     }
 
     public function index()
@@ -470,6 +473,7 @@ class OrderController extends Controller
                 }
             }
         }
+        $this->generateInvoice($order);
     }
 
 
@@ -640,5 +644,33 @@ class OrderController extends Controller
         }
 
         return response()->json(['status' => 'success', 'discount' => $discount]);
+    }
+
+    public function generateInvoice($order)
+    {
+        $module = $this->settingsRepository->get();
+        $json = $module->json;
+        $settings = $json['admin']['settings'];
+        $prefix = $settings['invoice']['prefix'];
+        $invoiceNumber = intval($settings['invoice']['number']) + 1;
+
+        $orderEntry = $order->entry;
+        $orderEntry['invoice']['prefix'] = $prefix;
+        $orderEntry['invoice']['number'] = $invoiceNumber;
+
+
+        $order->entry = $orderEntry;
+
+
+        $order->save();
+
+
+        $settings['invoice']['prefix'] = $prefix;
+        $settings['invoice']['number'] = $invoiceNumber;
+        $json['admin']['settings'] = $settings;
+        $module->json = $json;
+        $module->update(); //to update the module
+
+        return response()->json(['status' => 'success'], 200);
     }
 }

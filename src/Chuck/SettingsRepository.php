@@ -19,7 +19,8 @@ class SettingsRepository
      */
     public function get()
     {
-
+        $module = Module::where('slug', 'chuckcms-module-order-form')->firstOrFail();
+        return $module;
     }
 
     public function update(Request $values)
