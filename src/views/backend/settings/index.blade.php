@@ -66,6 +66,10 @@
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="pos_setup-tab" data-target="#tab_resource_pos_setup" data-toggle="tab" href="#" role="tab" aria-controls="#pos_setup" aria-selected="false">POS</a>
             </li>
+
+            <li class="nav-item" role="presentation">
+              <a class="nav-link" id="invoice_setup-tab" data-target="#tab_resource_invoice_setup" data-toggle="tab" href="#" role="tab" aria-controls="#pos_setup" aria-selected="false">Invoice</a>
+          </li>
           </ul>
         </div>
       </div>
@@ -294,6 +298,22 @@
         @endforeach
       </div>
       {{-- pos-tab-ends --}}
+
+      {{-- Invoice tab starts --}}
+      <div class="col-sm-12 tab-pane fade" id="tab_resource_invoice_setup" role="tabpanel" aria-labelledby="invoice_setup-tab">
+        {{-- {{dd($settings)}}; --}}
+        @foreach ($settings['invoice'] as $invoiceOption => $invoiceOptionValue)
+          <div class="row column-seperation">
+            <div class="col">
+              <div class="form-group form-group-default required ">
+                <label>{{$invoiceOption}}</label>
+                <input type="text" class="form-control" name="invoice[{{$invoiceOption}}]" value="{{$invoiceOptionValue}}">
+              </div>
+            </div>
+          </div>
+        @endforeach
+      </div>
+      {{-- Invoice tab ends --}}
     </div>
     <div class="row">
       <div class="col">

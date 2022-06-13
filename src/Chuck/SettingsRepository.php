@@ -61,6 +61,10 @@ class SettingsRepository
 
         $settings['pos']['ticket_logo'] = $values->input('pos.ticket_logo');
 
+        $settings['invoice']['prefix'] = $values->input('invoice.prefix');
+        $settings['invoice']['number'] = $values->input('invoice.number');
+
+
         $json['admin']['settings'] = $settings;
         $module->json = $json;
         $module->update();
