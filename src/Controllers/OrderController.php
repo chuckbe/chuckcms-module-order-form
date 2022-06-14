@@ -655,8 +655,7 @@ class OrderController extends Controller
         $invoiceNumber = intval($settings['invoice']['number']) + 1;
 
         $orderEntry = $order->entry;
-        $orderEntry['invoice']['prefix'] = $prefix;
-        $orderEntry['invoice']['number'] = $invoiceNumber;
+        $orderEntry['invoice'] = $prefix.$invoiceNumber;
 
 
         $order->entry = $orderEntry;
