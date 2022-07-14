@@ -10,6 +10,7 @@ Route::group(['middleware' => ['web']], function() {
 		Route::get('/dashboard/order-form/orders/excel', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\OrderController@excel')->name('dashboard.module.order_form.orders.excel');
 		Route::get('/dashboard/order-form/orders/pdf', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\OrderController@pdf')->name('dashboard.module.order_form.orders.pdf');
 		Route::get('/dashboard/order-form/orders/{order}/detail', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\OrderController@detail')->name('dashboard.module.order_form.orders.detail');
+		Route::get('/dashboard/order-form/orders/{order}/invoice', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\OrderController@downloadInvoice')->name('dashboard.module.order_form.orders.invoice');
 		Route::post('/dashboard/order-form/orders/update_date', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\OrderController@updateDate')->name('dashboard.module.order_form.products.update_date');
 		Route::post('/dashboard/order-form/orders/update_address', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\OrderController@updateAddress')->name('dashboard.module.order_form.products.update_address');
 		Route::post('/dashboard/order-form/orders/resend_confirmation', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\OrderController@resendConfirmation')->name('dashboard.module.order_form.orders.resend_confirmation');

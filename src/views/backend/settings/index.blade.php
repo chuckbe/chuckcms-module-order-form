@@ -302,6 +302,7 @@
       {{-- Invoice tab starts --}}
       <div class="col-sm-12 tab-pane fade" id="tab_resource_invoice_setup" role="tabpanel" aria-labelledby="invoice_setup-tab">
         {{-- {{dd($settings)}}; --}}
+        @if(array_key_exists('invoice', $settings))
         @foreach ($settings['invoice'] as $invoiceOption => $invoiceOptionValue)
           <div class="row column-seperation">
             <div class="col">
@@ -312,6 +313,24 @@
             </div>
           </div>
         @endforeach
+        @else
+          <div class="row column-seperation">
+            <div class="col">
+              <div class="form-group form-group-default required ">
+                <label>Prefix</label>
+                <input type="text" class="form-control" name="invoice[prefix]" value="">
+              </div>
+            </div>
+          </div>
+          <div class="row column-seperation">
+            <div class="col">
+              <div class="form-group form-group-default required ">
+                <label>Number</label>
+                <input type="text" class="form-control" name="invoice[number]" value="0">
+              </div>
+            </div>
+          </div>
+        @endif
       </div>
       {{-- Invoice tab ends --}}
     </div>

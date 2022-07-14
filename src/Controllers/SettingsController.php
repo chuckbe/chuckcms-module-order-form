@@ -60,7 +60,7 @@ class SettingsController extends Controller
             "delivery.next_day" => "required|in:0,1",
             "delivery.next_day_until_hour" => "required|numeric|between:1,24",
             "delivery.google_maps_api_key" => "nullable",
-            "invoice.prefex" => "nullable",
+            "invoice.prefix" => "nullable",
             "invoice.number" => "required|numeric"
         ]);
     

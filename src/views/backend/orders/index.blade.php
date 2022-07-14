@@ -113,6 +113,9 @@
 
 									  	<div class="dropdown-menu" aria-labelledby="dropdownMenuLink{{ $order->id }}">
 									    	<a class="dropdown-item resendOrderConfirmationMail" href="#" data-id="{{ $order->id }}"><i class="fa fa-paper-plane-o"></i> Stuur bevestiging</a>
+									    	@if(array_key_exists('invoice', $order->entry))
+									    	<a class="dropdown-item" href="{{ route('dashboard.module.order_form.orders.invoice', ['order' => $order->id]) }}"><i class="fa fa-file-pdf-o"></i> Factuur</a>
+									    	@endif
 									  	</div>
 									</div>
 							    </td>
