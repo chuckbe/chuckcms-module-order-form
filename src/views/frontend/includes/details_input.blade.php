@@ -87,6 +87,12 @@
         </div> <!-- /.col -->
 	</div> <!-- /.row -->
 
+    <div class="row">
+        <div class="col-12">
+            <label>Leveringsadres</label>
+        </div>
+    </div>
+
 	<div class="row">
 		<div class="col-sm-4 col-8">
 			<div class="form-group">
@@ -147,4 +153,99 @@
             </div> <!-- /.form-group -->
         </div> <!-- /.col -->
 	</div> <!-- /.row -->
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group mb-2">
+                <label for="cof_orderInvoice" class="mb-0">
+                    <input type="hidden" name="invoice" value="0">
+                    <input type="checkbox" id="cof_orderInvoice" value="1" name="invoice" required> Ik heb een factuur nodig
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="row cof_invoice_details_row d-none">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for="company">Bedrijfsnaam</label>
+                <input type="text" class="form-control" name="order_company" id="company"> 
+                @if ($errors->has('company'))
+                    <span class="help-block">
+                        <strong>{{ $errors->first('company') }}</strong>
+                    </span>
+                @endif
+            </div> <!-- /.form-group -->
+        </div> <!-- /.col -->
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for="vat">BTW-nummer</label>
+                <input type="text" class="form-control" name="order_vat" id="vat"> 
+                @if ($errors->has('vat'))
+                    <span class="help-block">
+                        <strong>{{ $errors->first('vat') }}</strong>
+                    </span>
+                @endif
+            </div> <!-- /.form-group -->
+        </div> <!-- /.col -->
+
+        <div class="col-sm-12">
+            <div class="form-group mb-2">
+                <label for="cof_orderInvoiceAddress" class="mb-0">
+                    <input type="hidden" name="invoice_address" value="0">
+                    <input type="checkbox" id="cof_orderInvoiceAddress" value="1" name="invoice_address" required> Factuuradres is anders dan leveringsadres
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="row cof_invoice_address_row d-none">
+        <div class="col-12">
+            <label>Factuuradres</label>
+        </div>
+        <div class="col-sm-4 col-8">
+            <div class="form-group">
+                <label for="invoice_street">Straat*</label>
+                <input type="text" class="form-control" name="order_invoice_street" id="invoice_street" data-invoice-address> 
+                @if ($errors->has('invoice_street'))
+                    <span class="help-block">
+                        <strong>{{ $errors->first('invoice_street') }}</strong>
+                    </span>
+                @endif
+            </div> <!-- /.form-group -->
+        </div> <!-- /.col -->
+        <div class="col-sm-2 col-4">
+            <div class="form-group">
+                <label for="invoice_housenumber">Nr*</label>
+                <input type="text" class="form-control" name="order_invoice_housenumber" id="invoice_housenumber" data-invoice-address> 
+                @if ($errors->has('invoice_housenumber'))
+                    <span class="help-block">
+                        <strong>{{ $errors->first('invoice_housenumber') }}</strong>
+                    </span>
+                @endif
+            </div> <!-- /.form-group -->
+        </div> <!-- /.col -->
+        <div class="col-sm-2 col-4">
+            <div class="form-group">
+                <label for="invoice_postalcode">Postcode*</label>
+                <input type="text" class="form-control" name="order_invoice_postalcode" id="invoice_postalcode" data-invoice-address> 
+                @if ($errors->has('invoice_postalcode'))
+                    <span class="help-block">
+                        <strong>{{ $errors->first('invoice_postalcode') }}</strong>
+                    </span>
+                @endif
+            </div> <!-- /.form-group -->
+        </div> <!-- /.col -->
+        <div class="col-sm-4 col-8">
+            <div class="form-group">
+                <label for="invoice_city">Gemeente*</label>
+                <input type="text" class="form-control" name="order_invoice_city" id="invoice_city" data-invoice-address> 
+                @if ($errors->has('invoice_city'))
+                    <span class="help-block">
+                        <strong>{{ $errors->first('invoice_city') }}</strong>
+                    </span>
+                @endif
+            </div> <!-- /.form-group -->
+        </div> <!-- /.col -->
+    </div> <!-- /.row -->
 </div>

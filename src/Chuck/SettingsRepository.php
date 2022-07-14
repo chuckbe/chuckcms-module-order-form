@@ -19,7 +19,8 @@ class SettingsRepository
      */
     public function get()
     {
-
+        $module = Module::where('slug', 'chuckcms-module-order-form')->firstOrFail();
+        return $module;
     }
 
     public function update(Request $values)
@@ -60,6 +61,10 @@ class SettingsRepository
         $settings['delivery']['google_maps_api_key'] = $values->input('delivery.google_maps_api_key');
 
         $settings['pos']['ticket_logo'] = $values->input('pos.ticket_logo');
+
+        $settings['invoice']['prefix'] = $values->input('invoice.prefix');
+        $settings['invoice']['number'] = $values->input('invoice.number');
+
 
         $json['admin']['settings'] = $settings;
         $module->json = $json;

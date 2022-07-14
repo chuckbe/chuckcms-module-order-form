@@ -901,6 +901,30 @@ $(document).ready(function() {
 		isDiscountCodeValid(); 
 	});
 
+	$('body').on('change', '#cof_orderInvoice', function (event) {
+		event.preventDefault();
+
+		if ($(this).is(':checked')) {
+			$('.cof_invoice_details_row').removeClass('d-none');
+			$('.cof_invoice_details_row').find('input').attr('required', 'required');
+		} else {
+			$('.cof_invoice_details_row').addClass('d-none');
+			$('.cof_invoice_details_row').find('input').prop('required', false);
+		}
+	});
+
+	$('body').on('change', '#cof_orderInvoiceAddress', function (event) {
+		event.preventDefault();
+
+		if ($(this).is(':checked')) {
+			$('.cof_invoice_address_row').removeClass('d-none');
+			$('.cof_invoice_address_row').find('input').attr('required', 'required');
+		} else {
+			$('.cof_invoice_address_row').addClass('d-none');
+			$('.cof_invoice_address_row').find('input').prop('required', false);
+		}
+	});
+
 	$('body').on('click', '#cof_placeOrderBtnNow', function (event) {
 		event.preventDefault();
 
@@ -919,6 +943,15 @@ $(document).ready(function() {
 
 		if( $('input[type=text][name=order_housenumber]').val().length > 10 ) {
 			$('.error_span').html(' Uw huisnummer mag maximaal 10 tekens lang zijn.');
+			$('.error_bag').removeClass('hidden');
+
+			$(this).html('Afrekenen');
+    		$(this).prop('disabled', false);
+			return false;
+		}
+
+		if( $('input[type=text][name=order_invoice_housenumber]').val().length > 10 ) {
+			$('.error_span').html(' Uw factuur huisnummer mag maximaal 10 tekens lang zijn.');
 			$('.error_bag').removeClass('hidden');
 
 			$(this).html('Afrekenen');
@@ -987,6 +1020,13 @@ $(document).ready(function() {
             	postalcode: $('input[name=order_postalcode]').val(),
             	city: $('input[name=order_city]').val(),
             	remarks: $('textarea[name=order_remarks]').val(),
+            	invoice: $('input[name=invoice]').is(':checked'),
+            	company: $('input[name=order_company]').val(),
+            	vat: $('input[name=order_vat]').val(),
+            	invoice_street: $('input[name=order_invoice_street]').val(),
+            	invoice_housenumber: $('input[name=order_invoice_housenumber]').val(),
+            	invoice_postalcode: $('input[name=order_invoice_postalcode]').val(),
+            	invoice_city: $('input[name=order_invoice_city]').val(),
             	order: products,
             	subtotal: subtotal,
             	discounts: getAllDiscounts(),
@@ -1009,6 +1049,24 @@ $(document).ready(function() {
         		$('.error_span:first').html(' Er is iets misgelopen, probeer het later nog eens!');
 				$('.error_bag:first').removeClass('hidden');
             }
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+        	$('#cof_placeOrderBtnNow').html('Bestellen');
+    		$('#cof_placeOrderBtnNow').prop('disabled', false);
+
+    		let data = jqXHR.responseJSON;
+    		let errors = '<ul>';
+
+    		for (var item in data.errors) {
+    			for (var q = data.errors[item].length - 1; q >= 0; q--) {
+    				errors += '<li>'+data.errors[item][q]+'</li>';
+    			}
+    		}
+
+    		errors += '</ul>';
+
+    		$('.error_span:first').html('<br>' + errors);
+			$('.error_bag:first').removeClass('hidden');
         });
 	}
 

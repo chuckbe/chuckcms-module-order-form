@@ -1,7 +1,7 @@
 @extends('chuckcms-module-order-form::pos.layout')
 @section('content')
 <div class="wrapper container-fluid p-0 d-flex" id="cof_orderFormGlobalSection" data-site-domain="{{ URL::to('/') }}">
-    <div class="main col-8">
+    <div class="main col-8 position-relative d-flex flex-column">
         
         @include('chuckcms-module-order-form::pos.includes.header')
 

@@ -10,6 +10,7 @@ use ChuckSite;
 use Mollie;
 use URL;
 use Str;
+use PDF;
 use Mail;
 use Illuminate\Support\Carbon;
 use DatePeriod;
@@ -19,22 +20,25 @@ use ChuckRepeater;
 
 use Chuckbe\ChuckcmsModuleOrderForm\Chuck\DiscountRepository;
 use Chuckbe\ChuckcmsModuleOrderForm\Chuck\CustomerRepository;
+use Chuckbe\ChuckcmsModuleOrderForm\Chuck\SettingsRepository;
 use Chuckbe\ChuckcmsModuleOrderForm\Exports\OrdersExport;
 use Maatwebsite\Excel\Facades\Excel;
 
 class OrderController extends Controller
 {
     protected $discountRepository;
+    protected $settingsRepository;
     
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(DiscountRepository $discountRepository, CustomerRepository $customerRepository)
+    public function __construct(DiscountRepository $discountRepository, CustomerRepository $customerRepository, SettingsRepository $settingsRepository)
     {
         $this->discountRepository = $discountRepository;
         $this->customerRepository = $customerRepository;
+        $this->settingsRepository = $settingsRepository;
     }
 
     public function index()
@@ -227,6 +231,13 @@ class OrderController extends Controller
             'postalcode' => 'required|max:4',
             'city' => 'required',
             'remarks' => 'nullable',
+            'invoice' => 'required',
+            'company' => 'nullable',
+            'vat' => 'nullable',
+            'invoice_street' => 'nullable',
+            'invoice_housenumber' => 'nullable|max:10',
+            'invoice_postalcode' => 'nullable|max:4',
+            'invoice_city' => 'nullable',
             'order' => 'required',
             'total' => 'required',
             'shipping' => 'required',
@@ -253,6 +264,23 @@ class OrderController extends Controller
         $all_json['city'] = $request['city'];
         $all_json['remarks'] = $request['remarks'];
 
+        if ($request['invoice']) {
+            $all_json['company'] = $request['company'];
+            $all_json['vat'] = $request['vat'];
+            $all_json['invoice_street'] = !is_null($request['invoice_street'])
+                                         ? $request['invoice_street'] 
+                                         : $request['street'];
+            $all_json['invoice_housenumber'] = !is_null($request['invoice_housenumber'])
+                                         ? $request['invoice_housenumber'] 
+                                         : $request['housenumber'];
+            $all_json['invoice_postalcode'] = !is_null($request['invoice_postalcode'])
+                                         ? $request['invoice_postalcode'] 
+                                         : $request['postalcode'];
+            $all_json['invoice_city'] = !is_null($request['invoice_city'])
+                                         ? $request['invoice_city'] 
+                                         : $request['city'];
+        }
+
         $all_json['location'] = $request['location'];
         $all_json['order_date'] = $request['order_date'];
         $all_json['order_time'] = $request['order_time'];
@@ -275,7 +303,7 @@ class OrderController extends Controller
         foreach($request['order'] as $product){
             $item = [];
             $prodKey = $product['product_id'];
-            
+            //we only need the id and the qty here then we can get everything from products
             $item['id'] = $prodKey;
             $item['name'] = $product['name'];
             $item['price'] = $product['price'];
@@ -470,6 +498,13 @@ class OrderController extends Controller
                 }
             }
         }
+
+        //backup incase webhook doesnt work
+        if (! array_key_exists('invoice', $order->entry) 
+            && array_key_exists('company', $order->entry)
+            && $order->entry['status'] == 'paid') {
+            $this->generateInvoice($order);
+        }
     }
 
 
@@ -543,6 +578,12 @@ class OrderController extends Controller
             $order->entry = $json;
             $order->save();
             $order = $order->fresh();
+
+            if (! array_key_exists('invoice', $order->entry) 
+                && array_key_exists('company', $order->entry)
+                && $order->entry['status'] == 'paid') {
+                $this->generateInvoice($order);
+            }
             
             $this->sendNotification($order);
             $this->sendConfirmation($order);
@@ -578,9 +619,19 @@ class OrderController extends Controller
     public function sendConfirmation(FormEntry $order)
     {
         if( (ChuckSite::module('chuckcms-module-order-form')->getSetting('order.payment_upfront') && $order->entry['status'] == 'paid') || (ChuckSite::module('chuckcms-module-order-form')->getSetting('order.payment_upfront') == false) ){
-            Mail::send('chuckcms-module-order-form::frontend.emails.confirmation', ['order' => $order], function ($m) use ($order) {
+            $pdf = null;
+
+            if (array_key_exists('invoice', $order->entry)) {
+                $pdf = $this->generatePDF($order);
+            } 
+
+            Mail::send('chuckcms-module-order-form::frontend.emails.confirmation', ['order' => $order], function ($m) use ($order, $pdf) {
                 $m->from(ChuckSite::module('chuckcms-module-order-form')->getSetting('emails.from_email'), ChuckSite::module('chuckcms-module-order-form')->getSetting('emails.from_name'));
                 $m->to($order->entry['email'], $order->entry['first_name'].' '.$order->entry['last_name'])->subject(ChuckSite::module('chuckcms-module-order-form')->getSetting('emails.confirmation_subject').$order->entry['order_number']);
+
+                if (!is_null($pdf)) {
+                    $m->attachData($pdf, $order->entry['invoice'].'.pdf', ['mime' => 'application/pdf']);
+                }
             });
         }
     }
@@ -588,7 +639,13 @@ class OrderController extends Controller
     public function sendNotification(FormEntry $order)
     {
         if( (ChuckSite::module('chuckcms-module-order-form')->getSetting('order.payment_upfront') && $order->entry['status'] == 'paid') || (ChuckSite::module('chuckcms-module-order-form')->getSetting('order.payment_upfront') == false) ){
-            Mail::send('chuckcms-module-order-form::frontend.emails.notification', ['order' => $order], function ($m) use ($order) {
+            $pdf = null;
+
+            if (array_key_exists('invoice', $order->entry)) {
+                $pdf = $this->generatePDF($order);
+            } 
+
+            Mail::send('chuckcms-module-order-form::frontend.emails.notification', ['order' => $order], function ($m) use ($order, $pdf) {
                 $m->from(ChuckSite::module('chuckcms-module-order-form')->getSetting('emails.from_email'), ChuckSite::module('chuckcms-module-order-form')->getSetting('emails.from_name'));
                 $m->to(ChuckSite::module('chuckcms-module-order-form')->getSetting('emails.to_email'), ChuckSite::module('chuckcms-module-order-form')->getSetting('emails.to_name'))->subject(ChuckSite::module('chuckcms-module-order-form')->getSetting('emails.notification_subject').$order->entry['order_number']);
                 
@@ -598,6 +655,10 @@ class OrderController extends Controller
 
                 if( ChuckSite::module('chuckcms-module-order-form')->getSetting('emails.to_bcc') !== false && !is_null(ChuckSite::module('chuckcms-module-order-form')->getSetting('emails.to_bcc'))){
                     $m->bcc(ChuckSite::module('chuckcms-module-order-form')->getSetting('emails.to_bcc'));
+                }
+
+                if (!is_null($pdf)) {
+                    $m->attachData($pdf, $order->entry['invoice'].'.pdf', ['mime' => 'application/pdf']);
                 }
             });
         }
@@ -640,5 +701,51 @@ class OrderController extends Controller
         }
 
         return response()->json(['status' => 'success', 'discount' => $discount]);
+    }
+
+    private function generateInvoice($order)
+    {
+        $module = $this->settingsRepository->get();
+        $json = $module->json;
+        $settings = $json['admin']['settings'];
+        $prefix = array_key_exists('prefix', $settings['invoice'])
+            ? $settings['invoice']['prefix']
+            : '';
+        $invoiceNumber = array_key_exists('prefix', $settings['invoice'])
+            ? intval($settings['invoice']['number']) + 1
+            : 1;
+
+        $orderEntry = $order->entry;
+        $orderEntry['invoice'] = $prefix.str_pad($invoiceNumber, 4, '0', STR_PAD_LEFT);
+        $orderEntry['invoice_date'] = now()->format('d/m/Y');
+
+        $order->entry = $orderEntry;
+        $order->save();
+
+        $settings['invoice']['prefix'] = $prefix;
+        $settings['invoice']['number'] = $invoiceNumber;
+        $json['admin']['settings'] = $settings;
+        $module->json = $json;
+        $module->update();
+    }
+
+    private function generatePDF($order)
+    {
+        if (! array_key_exists('invoice', $order->entry)) {
+            return;
+        }
+        
+        $pdf = PDF::loadView('chuckcms-module-order-form::pdf.invoice', compact('order'));
+        return $pdf->output();
+    }
+
+    public function downloadInvoice(FormEntry $order)
+    {
+        if (! array_key_exists('invoice', $order->entry)) {
+            return;
+        }
+
+        $pdf = PDF::loadView('chuckcms-module-order-form::pdf.invoice', compact('order'));
+        return $pdf->download($order->entry['invoice'].'.pdf');
     }
 }
