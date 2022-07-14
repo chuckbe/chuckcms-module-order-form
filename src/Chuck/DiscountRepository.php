@@ -96,7 +96,7 @@ class DiscountRepository
                     );
                 }
 
-                $json['conditions'][] = array(
+                $input['json']['conditions'][] = array(
                     'min_quantity' => (int)$min_quantity,
                     'rules' => $rules
                 );
