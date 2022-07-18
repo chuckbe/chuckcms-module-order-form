@@ -122,7 +122,20 @@ class CouponRepository
 
     public function generateCouponNumber()
     {
-        $uid = rand(1000000000000, 9999999999999);
+        $date = new DateTime();
+        $time = $date->getTimestamp();
+        $code = '20' . str_pad($time, 10, '0');
+        $weightflag = true;
+        $sum = 0;
+
+        for ($i = strlen($code) - 1; $i >= 0; $i--) {
+            $sum += (int)$code[$i] * ($weightflag ? 3 : 1);
+            $weightflag = !$weightflag;
+        }
+        $code .= (10 - ($sum % 10)) % 10;
+
+        // $uid = rand(1000000000000, 9999999999999);
+        $uid = $code;
         $uids = $this->coupon->where('number', $uid)->get();
         if (count($uids) > 0) {
             $this->generateCouponNumber();
