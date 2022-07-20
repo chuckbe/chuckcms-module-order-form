@@ -121,7 +121,7 @@
             <div class="col">
               @if (is_bool($formOptionValue))
                 <div class="form-group form-group-default required ">
-                  <label>{{$formOption}}</label>
+                  <label>{{ __('chuckcms-module-order-form::settings.'.$formOption)}}</label>
                   <select class="full-width select2 form-control" data-init-plugin="select2" name="form[{{$formOption}}]">
                     <option value="1" @if($formOptionValue == true) selected @endif>Ja</option>
                     <option value="0" @if($formOptionValue !== true) selected @endif>Nee</option>
@@ -129,7 +129,7 @@
                 </div>
               @else
                 <div class="form-group form-group-default required ">
-                  <label>{{$formOption}}</label>
+                  <label>{{ __('chuckcms-module-order-form::settings.'.$formOption)}}</label>
                   <input type="text" class="form-control" placeholder="{{$formOption}}" name="form[{{$formOption}}]" value="{{$formOptionValue}}" required>
                 </div>
               @endif
@@ -147,7 +147,7 @@
         <div class="row column-seperation">  
           <div class="col"> 
             <div class="form-group form-group-default required ">
-              <label>Use ui</label>
+              <label>{{ __('chuckcms-module-order-form::settings.use_ui')}}</label>
               <select class="full-width select2 form-control" data-init-plugin="select2" name="cart[use_ui]">
                 <option value="1" @if($settings["cart"]["use_ui"] == true) selected @endif>Ja</option>
                 <option value="0" @if($settings["cart"]["use_ui"] !== true) selected @endif>Nee</option>
@@ -165,7 +165,7 @@
             <div class="row column-seperation">  
               <div class="col"> 
                 <div class="form-group form-group-default required ">
-                  <label>{{$order}}</label>
+                  <label>{{ __('chuckcms-module-order-form::settings.'.$order)}}</label>
                   <select class="full-width select2 form-control" data-init-plugin="select2" name="order[{{$order}}]">
                     <option value="1" @if($orderValue == true) selected @endif>Ja</option>
                     <option value="0" @if($orderValue !== true) selected @endif>Nee</option>
@@ -175,7 +175,7 @@
             </div>
           @else
             <div class="form-group form-group-default required ">
-              <label>{{$order}}</label>
+              <label>{{ __('chuckcms-module-order-form::settings.'.$order)}}</label>
               <input type="text" class="form-control" placeholder="{{$orderValue}}" name="order[{{$order}}]" value="{{$orderValue}}" required>
             </div>
           @endif
@@ -190,7 +190,7 @@
             <div class="row column-seperation">  
               <div class="col"> 
                 <div class="form-group form-group-default required ">
-                  <label>{{$emailOption}}</label>
+                  <label>{{ __('chuckcms-module-order-form::settings.'.$emailOption)}}</label>
                   <select class="full-width select2 form-control" data-init-plugin="select2" name="emails[{{$emailOption}}]">
                     <option value="1" @if($emailOptionValue == true) selected @endif>Ja</option>
                     <option value="0" @if($emailOptionValue !== true) selected @endif>Nee</option>
@@ -200,7 +200,7 @@
             </div>
           @else
             <div class="form-group form-group-default required ">
-              <label>{{$emailOption}}</label>
+              <label>{{ __('chuckcms-module-order-form::settings.'.$emailOption)}}</label>
               <input type="text" class="form-control" placeholder="{{$emailOptionValue}}" name="emails[{{$emailOption}}]" value="{{$emailOptionValue}}" @if($emailOption !== 'to_cc'  && $emailOption !== 'to_bcc') required @endif>
             </div>
           @endif
@@ -257,7 +257,7 @@
             <div class="col">
               @if (is_bool($deliveryOptionValue))
                 <div class="form-group form-group-default required ">
-                  <label>{{$deliveryOption}}</label>
+                  <label>{{ __('chuckcms-module-order-form::settings.'.$deliveryOption)}}</label>
                   <select class="full-width select2 form-control" data-init-plugin="select2" name="delivery[{{$deliveryOption}}]">
                     <option value="1" @if($deliveryOptionValue == true) selected @endif>Ja</option>
                     <option value="0" @if($deliveryOptionValue !== true) selected @endif>Nee</option>
@@ -265,7 +265,7 @@
                 </div>
               @else
                 <div class="form-group form-group-default required ">
-                  <label>{{$deliveryOption}}</label>
+                  <label>{{ __('chuckcms-module-order-form::settings.'.$deliveryOption)}}</label>
                   <input type="text" class="form-control" placeholder="{{$deliveryOption}}" name="delivery[{{$deliveryOption}}]" value="{{$deliveryOptionValue}}" >
                 </div>
               @endif
@@ -281,7 +281,7 @@
             <div class="row column-seperation">  
               <div class="col"> 
                 <div class="form-group form-group-default required ">
-                  <label>{{$posOption}}</label>
+                  <label>{{ __('chuckcms-module-order-form::settings.'.$posOption)}}</label>
                   <select class="full-width select2 form-control" data-init-plugin="select2" name="pos[{{$posOption}}]">
                     <option value="1" @if($posOptionValue == true) selected @endif>Ja</option>
                     <option value="0" @if($posOptionValue !== true) selected @endif>Nee</option>
@@ -291,7 +291,7 @@
             </div>
           @else
             <div class="form-group form-group-default required ">
-              <label>{{$posOption}}</label>
+              <label>{{ __('chuckcms-module-order-form::settings.'.$posOption)}}</label>
               <input type="text" class="form-control" placeholder="{{$posOptionValue}}" name="pos[{{$posOption}}]" value="{{$posOptionValue}}" required>
             </div>
           @endif
@@ -307,7 +307,7 @@
           <div class="row column-seperation">
             <div class="col">
               <div class="form-group form-group-default required ">
-                <label>{{$invoiceOption}}</label>
+                <label>{{ __('chuckcms-module-order-form::settings.'.$invoiceOption)}}</label>
                 <input type="text" class="form-control" name="invoice[{{$invoiceOption}}]" value="{{$invoiceOptionValue}}">
               </div>
             </div>
@@ -317,7 +317,7 @@
           <div class="row column-seperation">
             <div class="col">
               <div class="form-group form-group-default required ">
-                <label>Prefix</label>
+                <label>{{ __('chuckcms-module-order-form::settings.prefix')}}</label>
                 <input type="text" class="form-control" name="invoice[prefix]" value="">
               </div>
             </div>
@@ -325,7 +325,7 @@
           <div class="row column-seperation">
             <div class="col">
               <div class="form-group form-group-default required ">
-                <label>Number</label>
+                <label>{{ __('chuckcms-module-order-form::settings.number')}}</label>
                 <input type="text" class="form-control" name="invoice[number]" value="0">
               </div>
             </div>
