@@ -14,6 +14,8 @@ class ChuckcmsModuleOrderFormServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->loadTranslationsFrom(__DIR__.'/../lang', 'chuckcms-module-order-form');
+
         $this->loadRoutesFrom(__DIR__.'/routes/routes.php');
         
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
