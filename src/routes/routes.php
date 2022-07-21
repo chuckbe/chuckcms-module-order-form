@@ -18,6 +18,8 @@ Route::group(['middleware' => ['web']], function() {
 		
 		//START OF: CATEGORIES ROUTES
 		Route::get('/dashboard/order-form/categories', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\CategoryController@index')->name('dashboard.module.order_form.categories.index');
+		Route::get('/dashboard/order-form/categories/{category}/sorting', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\CategoryController@sorting')->name('dashboard.module.order_form.categories.sorting');
+		Route::post('/dashboard/order-form/categories/{category}/sorting/update', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\CategoryController@updateSort')->name('dashboard.module.order_form.categories.update_sort');
 		Route::post('/dashboard/order-form/categories/save', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\CategoryController@save')->name('dashboard.module.order_form.categories.save');
 		Route::post('/dashboard/order-form/categories/delete', 'Chuckbe\ChuckcmsModuleOrderForm\Controllers\CategoryController@delete')->name('dashboard.module.order_form.categories.delete');
 		//END OF:   CATEGORIES ROUTES

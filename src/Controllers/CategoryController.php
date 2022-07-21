@@ -2,14 +2,17 @@
 
 namespace Chuckbe\ChuckcmsModuleOrderForm\Controllers;
 
+use Chuckbe\ChuckcmsModuleOrderForm\Chuck\ProductRepository;
 use Chuckbe\ChuckcmsModuleOrderForm\Chuck\CategoryRepository;
 
-use Illuminate\Http\Request;
 use App\Http\Requests;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Chuckbe\Chuckcms\Models\Repeater as Category;
 
 class CategoryController extends Controller
 {
+    private $productRepository;
     private $categoryRepository;
 
     /**
@@ -17,8 +20,12 @@ class CategoryController extends Controller
      *
      * @return void
      */
-    public function __construct(CategoryRepository $categoryRepository)
+    public function __construct(
+        ProductRepository $productRepository, 
+        CategoryRepository $categoryRepository
+    )
     {
+        $this->productRepository = $productRepository;
         $this->categoryRepository = $categoryRepository;
     }
 
@@ -26,6 +33,24 @@ class CategoryController extends Controller
     {
         $categories = $this->categoryRepository->get();
         return view('chuckcms-module-order-form::backend.categories.index', compact('categories'));
+    }
+
+    public function sorting(Category $category)
+    {
+        $products = $this->productRepository->forCategory($category);
+
+        return view('chuckcms-module-order-form::backend.categories.sorting', compact('category', 'products'));
+    }
+
+    public function updateSort(Request $request, Category $category)
+    {
+        $this->validate($request, [ 
+            'products' => 'required|array'
+        ]);
+
+        $this->productRepository->sortForCategory($category, $request->products);
+
+        return response()->json(['status' => 'success']);
     }
 
     public function save(Request $request)

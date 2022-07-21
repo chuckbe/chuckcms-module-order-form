@@ -93,14 +93,17 @@ function deleteModal(id, name){
 							<td class="v-align-middle">{{$category->order }}</td>
 							<td class="v-align-middle semi-bold">
 								@can('edit redirects')
-								<a href="#" onclick="editModal({{ $category->id }}, '{{ $category->json['name'] }}', '{{ $category->is_displayed }}', '{{ $category->is_pos_available }}', '{{ $category->order }}')" class="btn btn-default btn-sm btn-rounded m-r-20">
-									<i data-feather="edit-2"></i> edit
+								<a href="{{ route('dashboard.module.order_form.categories.sorting', ['category' => $category->id]) }}" class="btn btn-outline-secondary btn-sm btn-rounded m-r-20">
+									<i class="fa fa-eye"></i>
+								</a>
+								<a href="#" onclick="editModal({{ $category->id }}, '{{ $category->json['name'] }}', '{{ $category->is_displayed }}', '{{ $category->is_pos_available }}', '{{ $category->order }}')" class="btn btn-outline-secondary btn-sm btn-rounded m-r-20">
+									<i class="fa fa-pencil"></i>
 								</a>
 								@endcan
 
 								@can('delete redirects')
-								<a href="#" onclick="deleteModal({{ $category->id }}, '{{ $category->json['name'] }}')" class="btn btn-danger btn-sm btn-rounded m-r-20">
-									<i data-feather="trash"></i> delete
+								<a href="#" onclick="deleteModal({{ $category->id }}, '{{ $category->json['name'] }}')" class="btn btn-outline-danger btn-sm btn-rounded m-r-20">
+									<i class="fa fa-trash"></i>
 								</a>
 								@endcan
 							</td>

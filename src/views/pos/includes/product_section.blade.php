@@ -7,7 +7,7 @@
                 <div class="tab-pane fade show{{ $c == 0 ? ' active' : '' }}" id="category{{$category->id}}Tab" role="tabpanel" aria-labelledby="category{{$category->id}}Tab">
                     <div class="row">
                         @php $tempproducts = $products->where('id','145')->all(); @endphp
-                        @foreach ($products as $product)
+                        @foreach ($products->sortBy('json.order') as $product)
                             @if($product->json['category'] == $category->id && $product->is_pos_available == true)
                                 <div 
                                     class="col-6 col-sm-4 col-md-3 p-1 cof_pos_product_card" 

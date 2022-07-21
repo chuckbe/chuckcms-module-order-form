@@ -27,6 +27,17 @@ class ProductRepository
     }
 
     /**
+     * Get all the products for a category
+     *
+     **/
+    public function forCategory(Repeater $category)
+    {
+        return $this->repeater->where('slug', config('chuckcms-module-order-form.products.slug'))
+            ->where('json->category', $category->id)
+            ->get();
+    }
+
+    /**
      * Get all the products for given array of ids
      *
      * @var string
@@ -235,6 +246,19 @@ class ProductRepository
             return $product;
         }
         return 'false';
+    }
+
+    public function sortForCategory(Repeater $category, array $sort)
+    {
+        $products = $this->forCategory($category);
+
+        for ($q=0; $q < count($sort); $q++) { 
+            $product = $products->where('id', $sort[$q])->first();
+            $json = $product->json;
+            $json['order'] = (int)($q + 1);
+            $product->json = $json;
+            $product->update();
+        }
     }
 
     public function getProductsAvailableForSub()
