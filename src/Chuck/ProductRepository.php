@@ -2,6 +2,7 @@
 
 namespace Chuckbe\ChuckcmsModuleOrderForm\Chuck;
 
+use Chuckbe\ChuckcmsModuleOrderForm\Chuck\CategoryRepository;
 use Chuckbe\Chuckcms\Models\Repeater;
 use ChuckSite;
 use ChuckRepeater;
@@ -9,10 +10,13 @@ use Illuminate\Http\Request;
 
 class ProductRepository
 {
+    protected $categoryRepository;
+
     private $repeater;
 
-    public function __construct(Repeater $repeater)
+    public function __construct(CategoryRepository $categoryRepository, Repeater $repeater)
     {
+        $this->categoryRepository = $categoryRepository;
         $this->repeater = $repeater;
     }
 
@@ -30,11 +34,12 @@ class ProductRepository
      * Get all the products for a category
      *
      **/
-    public function forCategory(Repeater $category)
+    public function forCategory(Repeater $category, $count = false)
     {
-        return $this->repeater->where('slug', config('chuckcms-module-order-form.products.slug'))
-            ->where('json->category', $category->id)
-            ->get();
+        $q = $this->repeater->where('slug', config('chuckcms-module-order-form.products.slug'))
+            ->where('json->category', $category->id);
+
+        return $count ? $q->count() : $q->get();
     }
 
     /**
@@ -64,7 +69,9 @@ class ProductRepository
             $json['description'][$langKey] = $values->get('description')[$langKey];
         }
 
-        $json['category'] = $values->get('category');
+        $category = $this->categoryRepository->find($values->get('category'));
+
+        $json['category'] = $category->id;
         $json['is_displayed'] = ($values->get('is_displayed') == '1' ? true : false);
         $json['is_buyable'] = ($values->get('is_buyable') == '1' ? true : false);
         $json['is_pos_available'] = ($values->get('is_pos_available') == '1' ? true : false);
@@ -137,6 +144,7 @@ class ProductRepository
         }
 
         $json['subproducts'] = $subproducts;
+        $json['order'] = (int)$this->forCategory($category, true) + 1;
 
         $input['json'] = $json;
 

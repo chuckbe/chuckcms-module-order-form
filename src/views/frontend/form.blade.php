@@ -42,7 +42,7 @@ $settings = ChuckSite::module('chuckcms-module-order-form')->settings;
 				<div class="col-sm-12">
 					<h4 class="mt-4">{{ $category->name }}</h4>
 				</div>
-				@foreach($products as $product)
+				@foreach($products->sortBy('json.order') as $product)
 					@if($product->json['category'] == $category->id && $product->json['is_displayed'])
 						@include('chuckcms-module-order-form::frontend.includes.product_tile', ['settings' => $settings])
 					@endif

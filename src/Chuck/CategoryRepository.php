@@ -14,8 +14,14 @@ class CategoryRepository
         $this->repeater = $repeater;
     }
 
+    public function find($id)
+    {
+        return $this->repeater->where('slug', config('chuckcms-module-order-form.categories.slug'))
+            ->find($id);
+    }
+
     /**
-     * Get all the products
+     * Get all the categories
      *
      * @var string
      **/
