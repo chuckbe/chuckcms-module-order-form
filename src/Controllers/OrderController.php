@@ -57,9 +57,20 @@ class OrderController extends Controller
 
         $selectedLocation = !request()->has('location') ? null : ChuckRepeater::find(request()->get('location'));
 
+        $type = !request()->has('type') ? null : request()->get('type');
+        $status = !request()->has('status') ? null : request()->get('status');
+
 
         if (!is_null($selectedLocation)) {
             $orders = $orders->where('entry->location', $selectedLocation->id);
+        }
+
+        if (!is_null($type)) {
+            $orders = $orders->where('entry->type', request()->get('type'));
+        }
+
+        if (!is_null($status)) {
+            $orders = $orders->where('entry->status', request()->get('status'));
         }
 
         if (is_null($endDate)) {
@@ -82,7 +93,7 @@ class OrderController extends Controller
             return round($order->entry['order_price'], 2);
         });
 
-        return view('chuckcms-module-order-form::backend.orders.index', compact('orders', 'startDate', 'endDate', 'selectedLocation', 'total'));
+        return view('chuckcms-module-order-form::backend.orders.index', compact('orders', 'startDate', 'endDate', 'selectedLocation', 'type', 'status', 'total'));
     }
 
     public function detail(FormEntry $order)
@@ -104,8 +115,19 @@ class OrderController extends Controller
 
         $selectedLocation = !request()->has('location') ? null : ChuckRepeater::find(request()->get('location'));
 
+        $type = !request()->has('type') ? null : request()->get('type');
+        $status = !request()->has('status') ? null : request()->get('status');
+
         if (!is_null($selectedLocation)) {
             $orders = $orders->where('entry->location', $selectedLocation->id);
+        }
+
+        if (!is_null($type)) {
+            $orders = $orders->where('entry->type', request()->get('type'));
+        }
+
+        if (!is_null($status)) {
+            $orders = $orders->where('entry->status', request()->get('status'));
         }
 
         if (is_null($endDate)) {
@@ -143,8 +165,19 @@ class OrderController extends Controller
 
         $selectedLocation = !request()->has('location') ? null : ChuckRepeater::find(request()->get('location'));
 
+        $type = !request()->has('type') ? null : request()->get('type');
+        $status = !request()->has('status') ? null : request()->get('status');
+
         if (!is_null($selectedLocation)) {
             $orders = $orders->where('entry->location', $selectedLocation->id);
+        }
+
+        if (!is_null($type)) {
+            $orders = $orders->where('entry->type', request()->get('type'));
+        }
+
+        if (!is_null($status)) {
+            $orders = $orders->where('entry->status', request()->get('status'));
         }
 
         if (is_null($endDate)) {

@@ -48,6 +48,19 @@
 					<option value="{{ $location->id }}" @if(!is_null($selectedLocation) && $selectedLocation->id == $location->id) selected @endif>{{ $location->name }}</option>
 					@endforeach
 				</select>
+				<select name="type" class="custom-select-sm mr-3 mb-3">
+					<option value="0" @if(is_null($type)) selected @endif>Alle types</option>
+					<option value="web" @if(!is_null($type) && $type == 'web') selected @endif>Online</option>
+					<option value="pos" @if(!is_null($type) && $type == 'pos') selected @endif>Winkel</option>
+				</select>
+				<select name="status" class="custom-select-sm mr-3 mb-3">
+					<option value="0" @if(is_null($status)) selected @endif>Alle statussen</option>
+					<option value="paid" @if(!is_null($status) && $status == 'paid') selected @endif>Betaald</option>
+					<option value="expired" @if(!is_null($status) && $status == 'expired') selected @endif>Verlopen</option>
+					<option value="canceled" @if(!is_null($status) && $status == 'canceled') selected @endif>Geannuleerd</option>
+					<option value="awaiting" @if(!is_null($status) && $status == 'awaiting') selected @endif>In afwachting</option>
+					<option value="refunded" @if(!is_null($status) && $status == 'refunded') selected @endif>Terugbetaling</option>
+				</select>
 				<button class="btn btn-sm btn-primary mr-3 mb-3" id="getOrdersForDate">Bekijken</button>
 				<button class="btn btn-sm btn-outline-secondary mr-3 mb-3" id="excelOrdersForDate"><i class="fa fa-file-excel-o"></i></button>
 				<button class="btn btn-sm btn-outline-secondary mb-3" id="pdfOrdersForDate"><i class="fa fa-file-pdf-o"></i></button>
@@ -145,12 +158,30 @@ $(document).ready(function() {
 		let endDate = $('input[name=endDate]').val();
 		
 		let selectedLocation = $('select[name=location]').find('option:selected').first().val();
-
-		if (selectedLocation == 0) {
-			window.location = '//'+location.host+location.pathname+'?date='+startDate+','+endDate;
-		}
+		let type = $('select[name=type]').find('option:selected').first().val();
+		let status = $('select[name=status]').find('option:selected').first().val();
 		
-		window.location = '//'+location.host+location.pathname+'?date='+startDate+','+endDate+'&location='+selectedLocation;
+		let url = '//'+location.host+location.pathname+'?';
+
+		if (startDate == endDate) {
+			url += 'date='+startDate;
+		} else {
+			url += 'date='+startDate+','+endDate;
+		}
+
+		if (selectedLocation != 0) {
+			url += '&location='+selectedLocation;
+		}
+
+		if (type != 0) {
+			url += '&type='+type;
+		}
+
+		if (status != 0) {
+			url += '&status='+status;
+		}
+
+		window.location = url;
 	});
 
 	$('body').on('click', '#excelOrdersForDate', function (event) {
@@ -160,12 +191,30 @@ $(document).ready(function() {
 		let endDate = $('input[name=endDate]').val();
 		
 		let selectedLocation = $('select[name=location]').find('option:selected').first().val();
+		let type = $('select[name=type]').find('option:selected').first().val();
+		let status = $('select[name=status]').find('option:selected').first().val();
+		
+		let url = '//'+location.host+location.pathname+'/excel?';
 
-		if (selectedLocation == 0) {
-			window.location = '//'+location.host+location.pathname+'/excel?date='+startDate+','+endDate;
+		if (startDate == endDate) {
+			url += 'date='+startDate;
+		} else {
+			url += 'date='+startDate+','+endDate;
 		}
 
-		window.location = '//'+location.host+location.pathname+'/excel?date='+startDate+','+endDate+'&location='+selectedLocation;
+		if (selectedLocation != 0) {
+			url += '&location='+selectedLocation;
+		}
+
+		if (type != 0) {
+			url += '&type='+type;
+		}
+
+		if (status != 0) {
+			url += '&status='+status;
+		}
+
+		window.location = url;
 	});
 
 	$('body').on('click', '#pdfOrdersForDate', function (event) {
@@ -175,12 +224,30 @@ $(document).ready(function() {
 		let endDate = $('input[name=endDate]').val();
 		
 		let selectedLocation = $('select[name=location]').find('option:selected').first().val();
+		let type = $('select[name=type]').find('option:selected').first().val();
+		let status = $('select[name=status]').find('option:selected').first().val();
+		
+		let url = '//'+location.host+location.pathname+'/pdf?';
 
-		if (selectedLocation == 0) {
-			window.location = '//'+location.host+location.pathname+'/pdf?date='+startDate+','+endDate;
+		if (startDate == endDate) {
+			url += 'date='+startDate;
+		} else {
+			url += 'date='+startDate+','+endDate;
 		}
 
-		window.location = '//'+location.host+location.pathname+'/pdf?date='+startDate+','+endDate+'&location='+selectedLocation;
+		if (selectedLocation != 0) {
+			url += '&location='+selectedLocation;
+		}
+
+		if (type != 0) {
+			url += '&type='+type;
+		}
+
+		if (status != 0) {
+			url += '&status='+status;
+		}
+
+		window.location = url;
 	});
 
 	$('body').on('click', '.resendOrderConfirmationMail', function (event) {
