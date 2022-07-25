@@ -442,23 +442,25 @@
 													</small>
 												</div>
 											</div>
-											<div class="form-group row subproducts_input_line _input_line d-none">
-												<div class="col-6 col-sm-3">
-													<label class="sr-only">Product naam *</label>
-													<div class="input-group input-group-sm">
-														<div class="input-group-prepend">
-															<button class="btn btn-outline-danger remove_line_button" type="button"><i class="fa fa-trash"></i></button>
+											<div class="subproducts_input_line_wrapper">
+												<div class="form-group row subproducts_input_line _input_line d-none">
+													<div class="col-6 col-sm-3">
+														<label class="sr-only">Product naam *</label>
+														<div class="input-group input-group-sm">
+															<div class="input-group-prepend">
+																<button class="btn btn-outline-danger remove_line_button" type="button"><i class="fa fa-trash"></i></button>
+															</div>
+															<select class="custom-select subproduct_input" name="subproducts[1][products][]" disabled required>
+																@foreach ($subproducts as $subproduct)
+																	<option value="{{$subproduct->id}}" data-productid="{{$subproduct->id}}">{{$subproduct->json['name']['nl']}}</option>
+																@endforeach
+															</select>
 														</div>
-														<select class="custom-select subproduct_input" name="subproducts[1][products][]" disabled required>
-															@foreach ($subproducts as $subproduct)
-																<option value="{{$subproduct->id}}" data-productid="{{$subproduct->id}}">{{$subproduct->json['name']['nl']}}</option>
-															@endforeach
-														</select>
 													</div>
-												</div>
-												<div class="col-12 col-sm-6">
-													<label class="sr-only">extra prijs *</label>
-													<input type="text" class="form-control h-auto subproducts_extra_price" style="padding-top: 3px; padding-bottom: 3px;" placeholder="€0,00" value="0" aria-label="extraprijs" aria-describedby="extra prijs" readonly required>
+													<div class="col-12 col-sm-6">
+														<label class="sr-only">extra prijs *</label>
+														<input type="text" class="form-control h-auto subproducts_extra_price" style="padding-top: 3px; padding-bottom: 3px;" placeholder="€0,00" value="0" aria-label="extraprijs" aria-describedby="extra prijs" readonly required>
+													</div>
 												</div>
 											</div>
 										</div>
@@ -493,6 +495,7 @@
 														</small>
 													</div>
 												</div>
+												<div class="subproducts_input_line_wrapper">
 												@foreach ($subproduct['products'] as $inputProduct)
 													<div class="form-group row subproducts_input_line _input_line">
 														<div class="col-6 col-sm-3">
@@ -514,6 +517,7 @@
 														</div>
 													</div>
 												@endforeach
+												</div>
 											</div>
 										@endforeach
 									@endif
@@ -691,6 +695,8 @@ $(document).ready(function() {
       $('.removeExtraRowButton').hide();
     }
   }
+
+  $( ".subproducts_input_line_wrapper" ).sortable({revert: true,forcePlaceholderSize: true});
   
 });
 $('body').on('click', '#addNewSubproductsGroupBtn', function (event) {
@@ -712,6 +718,8 @@ $('body').on('click', '#addNewSubproductsGroupBtn', function (event) {
 		$('.subproducts_wrapper:last').find('.remove_line_button').trigger('click');
 		$('.subproducts_wrapper:last').find('.subproducts_input_line:first').remove();
 	}
+
+	$( ".subproducts_input_line_wrapper" ).sortable({revert: true,forcePlaceholderSize: true});
 });
 $('body').on('click', '.remove_subproducts_group_btn', function (event) {
 	event.preventDefault()
@@ -772,7 +780,7 @@ $('body').on('click', '#new_subproduct_button', function(event) {
 		$('.subproducts_input_line:first').removeClass('d-none');
 		$('.subproducts_input_line:first').find('select').prop('disabled', false);
 	} else {
-		$('.subproducts_input_line:first').clone().appendTo('.subproducts_wrapper[data-group="'+group_id+'"]');
+		$('.subproducts_input_line:first').clone().appendTo('.subproducts_wrapper[data-group="'+group_id+'"] .subproducts_input_line_wrapper');
 		$('.subproducts_wrapper[data-group="'+group_id+'"]')
 			.find('.subproducts_input_line:last')
 			.removeClass('d-none');
