@@ -59,6 +59,11 @@ $('body').on('click', '#cof_fullScreenToggleBtn', function (event) {
     }
 });
 
+$('body').on('click', '#cof_refreshToggleBtn', function (event) {
+    window.location = window.location;
+    return;
+});
+
 $('body').on('click', '.locationDropdownSelect', function (event) {
     event.preventDefault();
 
