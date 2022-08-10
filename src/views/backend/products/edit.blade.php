@@ -427,7 +427,7 @@
 												</div>
 												<div class="col-sm-2">
 													<label>Minimale waarde</label>
-													<input type="number" class="form-control subproductgroupmin" min="1" name="subproducts[1][min]">
+													<input type="number" class="form-control subproductgroupmin" min="0" name="subproducts[1][min]">
 												</div>
 												<div class="col-sm-2">
 													<label>Maximale waarde</label>
@@ -480,7 +480,7 @@
 													</div>
 													<div class="col-sm-2">
 														<label>Minimale waarde</label>
-														<input type="number" class="form-control subproductgroupmin" value="{{$subproduct['min']}}" min="1" name="subproducts[{{$group_id}}][min]">
+														<input type="number" class="form-control subproductgroupmin" value="{{$subproduct['min']}}" min="0" name="subproducts[{{$group_id}}][min]">
 													</div>
 													<div class="col-sm-2">
 														<label>Maximale waarde</label>

@@ -315,7 +315,7 @@
 											</div>
 											<div class="col-sm-2">
 												<label>Minimale waarde</label>
-												<input type="number" class="form-control subproductgroupmin" min="1" value="1" name="subproducts[1][min]">
+												<input type="number" class="form-control subproductgroupmin" min="0" value="1" name="subproducts[1][min]">
 											</div>
 											<div class="col-sm-2">
 												<label>Maximale waarde</label>

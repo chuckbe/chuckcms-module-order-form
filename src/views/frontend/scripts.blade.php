@@ -272,9 +272,14 @@ $(document).ready(function() {
 
 
 	$('body').on('change', '.extras_item_checkbox', function(event){
+		//@TODO: better thing to do here is run a re-eval function of the whole modal
 		event.preventDefault();
 		let extra_price = parseFloat($(this).attr('data-product-extra-item-price'));
 		let current_total = parseFloat($('#subproduct_group_total_price').attr('data-current-price'));
+		
+		if (Number.isNaN(current_total)) {
+			current_total = 0;
+		}
 		
 		if($(this).is(":checked")){
 			$('#subproduct_group_total_price').attr('data-current-price', current_total + extra_price);
@@ -291,7 +296,7 @@ $(document).ready(function() {
 	$('body').on('click', '.subproduct_group_product_qty .addbtn', function(event){
 		event.preventDefault();
 		
-		let upperLimit = parseInt($(this).closest('.subproduct_group_modal_row').find('.subproduct_product_group_max').text()) - parseInt($(this).closest('.subproduct_group_modal_row').find('.subproduct_product_group_selected').text());
+		let upperLimit = parseInt($(this).closest('.subproduct_group_modal_row').find('.subproduct_product_group_max').attr('data-group-max')) - parseInt($(this).closest('.subproduct_group_modal_row').find('.subproduct_product_group_selected').text());
 		let max = $(this).closest('.subproduct_group_product').attr('data-max-qty');
 		let current_total_price = $('#optionsModal #addProductWithOptionsToCartButton').attr('data-total-price');
 		let this_extra_price = parseFloat($(this).closest('.subproduct_group_product').attr('data-extra-price'));
@@ -590,11 +595,15 @@ $(document).ready(function() {
 					$(this).find(".subproduct_product_group_selected").text()
 				);
 
+				let minimum = parseInt(
+					$(this).find(".subproduct_product_group_max").attr('data-group-min')
+				);
+
 				let maximum = parseInt(
-					$(this).find(".subproduct_product_group_max").text()
+					$(this).find(".subproduct_product_group_max").attr('data-group-max')
 				);
 				
-				if (selected !== maximum){
+				if (selected < minimum || selected > maximum){
 					
 					checker.push(false);
 					$(this)
@@ -622,7 +631,16 @@ $(document).ready(function() {
 			$('#cof_emptyCartNotice').hide();
 			$('#cof_CartProductList').show();
 			selector = '.cof_cartProductListItem:first';
-
+console.log('ayy',selector, 
+				product_id, 
+				product_name, 
+				attribute_name, 
+				product_options_json, 
+				product_extras_json,
+				product_subproducts_json, 
+				quantity, 
+				current_price, 
+				total_price);
 			updateProductListItemAttributes(
 				selector, 
 				product_id, 
@@ -798,7 +816,7 @@ $(document).ready(function() {
 		resetOptionsModal();
 		setOptionsModal(product_id, product_name, current_price, quantity, total_price, product_options, product_extras, product_subproducts);
 
-		$('#optionsModal').modal();
+		$('#optionsModal').modal('show');
 	});
 
 	$('body').on('click', '.cof_btnAddProductAttributeOptionsToCart', function (event) {
@@ -1372,6 +1390,12 @@ $(document).ready(function() {
 			$(''+selector+'').find('.cof_cartProductListItemSubproducts:last').addClass('d-block').removeClass('d-none');
 
 			for (var i = 0; i < product_subproducts.length; i++) {
+				if (product_subproducts[i]['products'].length == 0) {
+					$(''+selector+'').find('.cof_cartProductListItemSubproducts:last').removeClass('d-block').addClass('d-none');
+				} else {
+					$(''+selector+'').find('.cof_cartProductListItemSubproducts:last').addClass('d-block').removeClass('d-none');
+				}
+
 				if(i > 0) {
 					$(''+selector+'').find('.cof_cartProductListItemSubproducts:first').clone().appendTo($(''+selector+'').find('.cof_cartProductListDetails:first'));
 				}
@@ -1380,6 +1404,9 @@ $(document).ready(function() {
 
 				$(''+selector+'').find('.cof_cartProductListItemSubproducts:last').find('.cof_cartProductListItemSubproductGroupName').text(product_subproducts[i]['name']);
 				
+				if (product_subproducts[i]['products'].length == 0) {
+					$(''+selector+'').find('.cof_cartProductListItemSubproducts:last').removeClass('d-block').addClass('d-none');
+				}
 
 				for(var p=0; p<product_subproducts[i]['products'].length; p++) {
 					if (p > 0){
@@ -1737,6 +1764,8 @@ $(document).ready(function() {
 					.attr('id', 'group_'+i);
 				$('#subproductModalBody .subproduct_group_modal_row#group_'+i)
 					.attr('data-product-group-name', group_name);
+				$('#group_'+i+' .subproduct_product_group_max').attr('data-group-min', group_min);
+				$('#group_'+i+' .subproduct_product_group_max').attr('data-group-max', group_max);
 				$('#group_'+i+' .subproduct_product_group_max').text(group_max);
 
 				$.each(group_products, function(index, product) {
