@@ -46,9 +46,19 @@ class POSController extends Controller
         $categories = $this->categoryRepository->get();
         $locations = $this->locationRepository->getForUser(\Auth::user()->id);
         $customers = $this->customerRepository->get();
+
+        $locationIds = $locations->pluck('id')->flatten()->toArray();
+        $now = now();
+        $orders = FormEntry::where('slug', config('chuckcms-module-order-form.products.slug'))
+            ->orderByDesc('created_at')
+            ->whereIn('entry->location', $locationIds)
+            ->where('entry->order_date', $now->format('d').'/'.$now->format('m').'/'.$now->format('Y'))
+            ->where('entry->type', 'pos')
+            ->get();
+
         $guest = $customers->where('email', 'guest@guest.com')->first();
 
-        return view('chuckcms-module-order-form::pos.index')->with(compact('settings','products','categories','locations','customers','guest'));
+        return view('chuckcms-module-order-form::pos.index')->with(compact('settings','products','categories','locations','customers','guest','orders'));
     }
 
     public function list()
@@ -303,14 +313,25 @@ class POSController extends Controller
                 $customer->incrementLoyaltyPoints(floor(round($request['total'], 2)));
                 $customer->useCoupons($request['coupons']);
             }
-            //No Payment upfront so send confirmation
-            //$this->sendConfirmation($order);
-            //@todo : sendNotification - printer
-            //$this->sendNotification($order);
+
+            $locations = $this->locationRepository->getForUser(\Auth::user()->id);
+            $locationIds = $locations->pluck('id')->flatten()->toArray();
+            $now = now();
+            $ordersCount = FormEntry::where('slug', config('chuckcms-module-order-form.products.slug'))
+                ->orderByDesc('created_at')
+                ->whereIn('entry->location', $locationIds)
+                ->where('entry->order_date', $now->format('d').'/'.$now->format('m').'/'.$now->format('Y'))
+                ->where('entry->type', 'pos')
+                ->count();
+
+            $orderLine = view('chuckcms-module-order-form::pos.includes.order_table_line')
+                ->with(compact('ordersCount','order'))->render();
+
             return response()->json([
                 'status' => 'success',
                 'order_number' => $all_json['order_number'],
-                'url' => route('cof.followup', ['order_number' => $order->entry['order_number']])
+                'url' => route('cof.followup', ['order_number' => $order->entry['order_number']]),
+                'order_table_line' => $orderLine
             ]);
         } else {
             return response()->json([

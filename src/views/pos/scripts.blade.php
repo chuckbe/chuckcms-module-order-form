@@ -64,6 +64,11 @@ $('body').on('click', '#cof_refreshToggleBtn', function (event) {
     return;
 });
 
+$('body').on('click', '#cof_listOrdersBtn', function (event) {
+    $('#ordersModal').modal('show');
+    return;
+});
+
 $('body').on('click', '.locationDropdownSelect', function (event) {
     event.preventDefault();
 
@@ -1156,7 +1161,8 @@ function placeOrderFromCart(cartId) {
     })
     .done(function(data) {
         if (data.status == "success"){
-            orderSuccesfullyPlacedFromCart(cartId, data.order_number, order_date, order_time);
+            console.log('html for order table line :: ', data.order_table_line);
+            orderSuccesfullyPlacedFromCart(cartId, data.order_number, order_date, order_time, data.order_table_line);
         }
         else{
             $('#cof_placeOrderBtnNow').html('Bestellen');
@@ -1168,13 +1174,19 @@ function placeOrderFromCart(cartId) {
     });
 }
 
-function orderSuccesfullyPlacedFromCart(cartId, order_number, order_date, order_time) {
+function orderSuccesfullyPlacedFromCart(cartId, order_number, order_date, order_time, order_table_line) {
     cof_pos_processing_order = false;
     addCustomerPointsAndCoupons(cartId);
     printTicketFromCart(cartId, order_number, order_date, order_time);
     resetPaymentModal();
+    addOrderLineToTable(order_table_line);
     //addCartToOrder(cartId, order_number);
     //removeCart(cartId);
+}
+
+function addOrderLineToTable(order_table_line) {
+    console.log('start prepending :: ',order_table_line);
+    $('#ordersModal').find('tbody').prepend(order_table_line);
 }
 /* END OF CART FUNCTIONS */
 /* END OF CART FUNCTIONS */
