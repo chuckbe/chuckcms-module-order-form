@@ -3,11 +3,15 @@
 namespace Chuckbe\ChuckcmsModuleOrderForm\Chuck;
 
 use Chuckbe\ChuckcmsModuleOrderForm\Chuck\CustomerRepository;
+use Chuckbe\ChuckcmsModuleOrderForm\Chuck\LocationRepository;
 use Chuckbe\Chuckcms\Models\FormEntry;
 use Chuckbe\Chuckcms\Models\Repeater;
 use ChuckSite;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use DateInterval;
+use DatePeriod;
+use DateTime;
 use Auth;
 
 class OrderFormRepository
@@ -15,9 +19,15 @@ class OrderFormRepository
 	private $formEntry;
     private $repeater;
 
-	public function __construct(CustomerRepository $customerRepository, FormEntry $formEntry, Repeater $repeater)
+	public function __construct(
+        CustomerRepository $customerRepository, 
+        LocationRepository $locationRepository, 
+        FormEntry $formEntry, 
+        Repeater $repeater
+    )
     {
         $this->customerRepository = $customerRepository;
+        $this->locationRepository = $locationRepository;
         $this->formEntry = $formEntry;
         $this->repeater = $repeater;
     }
@@ -61,64 +71,30 @@ class OrderFormRepository
 
     public function firstAvailableDateInDaysFromNow($locationId)
     {
-        $initial_day = 0;
         $location = $this->repeater->where('id', $locationId)->first();
-        $days_of_week_disabled = is_null($location->days_of_week_disabled) ? '' : $location->days_of_week_disabled;
-        
+
         $settings = ChuckSite::module('chuckcms-module-order-form')->settings;
-        //is same day delivery possible?
-        if($settings['delivery']['same_day'] == true) {
-            //yes see until what hour
-            $until_hour = $settings['delivery']['same_day_until_hour']; /// 15 (now: 18)
-            if(date('H') < $until_hour) { ////////// fail (18 < 15)
-                //nice, same day delivery is possible and it's not too late
-                $starting_day = $initial_day;
-            } elseif (date('H') >= $until_hour) { ////////// pass (18 >= 15)
-                //oh snap, we're too late for same day delivery...
-                //let's see if next_day delivery is possible
-                if ($settings['delivery']['next_day'] == true) {
-                    //yay next day delivery is possible, let's see until what hour
-                    $nd_until_hour = $settings['delivery']['next_day_until_hour'];
-                    if(date('H') < $nd_until_hour) { ////////// fail (18 < 15)
-                        //nice, not too late for next day delivery
-                        $starting_day = $initial_day + 1;
-                    } elseif (date('H') >= $nd_until_hour) {
-                        //snap, too late for next day delivery so set the day after tomorrow
-                        $starting_day = $initial_day + 2;
-                    }
-                } else {
-                    //Snap, too late for same day delivery and no orders for next day deliveries so set the day after tomorrow
-                    $starting_day = $initial_day + 2;
-                }
+
+        $from = now()->toDateString();
+        $until = now()->addDays(60)->toDateString();
+        
+        $periodToCheck = $this->getDatesBetween($from, $until);
+
+        foreach ($periodToCheck as $date) {
+            if (!$this->locationRepository->isDateAvailable($location, $date, $settings)) {
+                continue;
             }
-        } elseif ($settings['delivery']['next_day'] == true) {
-            //woops, same day deliveries not possible, but yay next day deliveries are, let's see until when
-            $nd_until_hour = $settings['delivery']['next_day_until_hour'];
-            if(date('H') < $nd_until_hour) { ////////// fail (18 < 15)
-                //nice, just in time for next day delivery
-                $starting_day = $initial_day + 1;
-            } elseif (date('H') >= $nd_until_hour) {
-                //snap, too late for next day delivery so set the day after tomorrow
-                $starting_day = $initial_day + 2;
-            }
-        } else {
-            //damn, nor same day nor next day deliveries possible so set the day after tomorrow
-            $starting_day = $initial_day + 2;
+
+            $now = date_create(now()->format('Y-m-d'));
+            $date = date_create($date->format('Y-m-d'));
+
+            return date_diff($now, $date)->format('%a');
         }
 
-        if($days_of_week_disabled == '') {
-            return (string) $starting_day;
-        }
-
-        if($starting_day == 0 && strpos($days_of_week_disabled, date('w')) !== false) {
-            return '0';
-        }
-
-        for ($i=$starting_day; $i < 9; $i++) { 
-            if(strpos($days_of_week_disabled, date('w', strtotime('+'.$i.' day'))) === false) {
-                return ''.$i.'';
-            }
-        }
+        return 0; //@TODO: find alternative for this 
+                //maybe loop the function but make sure 
+                //it actually ends too and doesn't create 
+                //an infinite loop
     }
 
     public function followup($order_number)
@@ -165,6 +141,36 @@ class OrderFormRepository
         } else {
             return $this->formEntry->where('slug', config('chuckcms-module-order-form.products.slug'))->where('entry->status', 'awaiting')->where('entry->order_date', '>', Carbon::today()->subDays(7))->count();
         }
+    }
+
+    /**
+     * Get all dates between two dates.
+     *
+     * @return \DatePeriod
+     */
+    public function getDatesBetween($start, $end)
+    {
+        return $this->getPeriodBetween($start, $end, '1 day');
+    }
+
+    /**
+     * Get period between two datetimes by given interval.
+     *
+     * @param $start
+     * @param $end
+     * @param $interval
+     *
+     * @return DatePeriod
+     */
+    public function getPeriodBetween($start, $end, $interval)
+    {
+        $startDate = new DateTime($start);
+        $endDate = new DateTime($end);
+
+        $interval = DateInterval::createFromDateString($interval);
+        $period = new DatePeriod($startDate, $interval, $endDate);
+
+        return $period;
     }
 
 }

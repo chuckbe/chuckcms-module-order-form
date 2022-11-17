@@ -557,6 +557,27 @@ class OrderController extends Controller
     public function orderPay($order_number)
     {
         $order = FormEntry::where('entry->order_number', $order_number)->first();
+
+        $mollie = Mollie::api()->payments()->get($order->entry['payment_id']);
+
+        if ($mollie->isPaid()) {
+            $json = $order->entry;
+            $json['status'] = 'paid';
+            $order->entry = $json;
+            $order->save();
+            $order = $order->fresh();
+
+            if (! array_key_exists('invoice', $order->entry) 
+                && array_key_exists('company', $order->entry)
+                && $order->entry['status'] == 'paid') {
+                $this->generateInvoice($order);
+            }
+            
+            $this->sendNotification($order);
+            $this->sendConfirmation($order);
+
+            return redirect()->route('cof.followup', ['order_number' => $order_number]);
+        }
         
         if($order->entry['status'] == 'paid') {
             return redirect()->route('cof.followup', ['order_number' => $order_number]);
@@ -621,6 +642,26 @@ class OrderController extends Controller
             $this->sendNotification($order);
             $this->sendConfirmation($order);
         } else {
+            if (array_key_exists('old_payment_id', $order->entry)) {
+                $mollie = Mollie::api()->payments()->get($order->entry['old_payment_id']);
+
+                if ($mollie->isPaid()) {
+                    $json = $order->entry;
+                    $json['status'] = 'paid';
+                    $order->entry = $json;
+                    $order->save();
+                    $order = $order->fresh();
+
+                    if (! array_key_exists('invoice', $order->entry) 
+                        && array_key_exists('company', $order->entry)
+                        && $order->entry['status'] == 'paid') {
+                        $this->generateInvoice($order);
+                    }
+                    
+                    $this->sendNotification($order);
+                    $this->sendConfirmation($order);
+                }
+            }
             if($order->entry['status'] !== 'paid') {
                 $json = $order->entry;
                 $json['status'] = $payment->status;

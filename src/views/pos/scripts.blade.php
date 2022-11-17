@@ -1161,7 +1161,6 @@ function placeOrderFromCart(cartId) {
     })
     .done(function(data) {
         if (data.status == "success"){
-            console.log('html for order table line :: ', data.order_table_line);
             orderSuccesfullyPlacedFromCart(cartId, data.order_number, order_date, order_time, data.order_table_line);
         }
         else{
@@ -1185,7 +1184,6 @@ function orderSuccesfullyPlacedFromCart(cartId, order_number, order_date, order_
 }
 
 function addOrderLineToTable(order_table_line) {
-    console.log('start prepending :: ',order_table_line);
     $('#ordersModal').find('tbody').prepend(order_table_line);
 }
 /* END OF CART FUNCTIONS */

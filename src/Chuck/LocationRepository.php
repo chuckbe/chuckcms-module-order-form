@@ -4,6 +4,8 @@ namespace Chuckbe\ChuckcmsModuleOrderForm\Chuck;
 
 use Chuckbe\Chuckcms\Models\Repeater;
 use Illuminate\Http\Request;
+use DateTime;
+use ChuckSite;
 
 class LocationRepository
 {
@@ -145,6 +147,40 @@ class LocationRepository
         }
 
         return 'error';    
+    }
+
+    public function isDateAvailable(Repeater $location, DateTime $date, array $settings = []) :bool
+    {
+        if (count($settings) == 0) {
+            $settings = ChuckSite::module('chuckcms-module-order-form')->settings;
+        }
+
+        $days_disabled = explode(',', $location->days_of_week_disabled);
+        $dates_disabled = explode(',', $location->dates_disabled);
+
+        if (in_array($date->format('d/m/Y'), $dates_disabled)) {
+            return false;
+        }
+
+        if (in_array(date('w', $date->getTimestamp()), $days_disabled)) {
+            return false;
+        }
+
+        $now = now();
+
+        if ($now->format('Ymd') == $date->format('Ymd') 
+            && $settings['delivery']['same_day'] 
+            && date('H') >= $settings['delivery']['same_day_until_hour']) {
+            return false;
+        }
+
+        if ($now->addDay()->format('Ymd') == $date->format('Ymd') 
+            && $settings['delivery']['next_day'] 
+            && date('H') >= $settings['delivery']['next_day_until_hour']) {
+            return false;
+        }
+
+        return true;
     }
 
 }
