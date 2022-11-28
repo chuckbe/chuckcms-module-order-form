@@ -169,15 +169,26 @@ class LocationRepository
         $now = now();
 
         if ($now->format('Ymd') == $date->format('Ymd') 
+            && !$settings['delivery']['same_day']) {
+            return false;
+        }
+
+        if ($now->format('Ymd') == $date->format('Ymd') 
             && $settings['delivery']['same_day'] 
-            && date('H') >= $settings['delivery']['same_day_until_hour']) {
+            && date('H') < $settings['delivery']['same_day_until_hour']) {
+            return true;
+        }
+
+        if ($now->addDay()->format('Ymd') == $date->format('Ymd') 
+            && !$settings['delivery']['next_day'] 
+            && date('H') >= $settings['delivery']['next_day_until_hour']) {
             return false;
         }
 
         if ($now->addDay()->format('Ymd') == $date->format('Ymd') 
             && $settings['delivery']['next_day'] 
-            && date('H') >= $settings['delivery']['next_day_until_hour']) {
-            return false;
+            && date('H') < $settings['delivery']['next_day_until_hour']) {
+            return true;
         }
 
         return true;
