@@ -167,6 +167,7 @@ class LocationRepository
         }
 
         $now = now();
+        $tomorrow = now()->addDay();
 
         if ($now->format('Ymd') == $date->format('Ymd') 
             && !$settings['delivery']['same_day']) {
@@ -175,20 +176,19 @@ class LocationRepository
 
         if ($now->format('Ymd') == $date->format('Ymd') 
             && $settings['delivery']['same_day'] 
-            && date('H') < $settings['delivery']['same_day_until_hour']) {
-            return true;
-        }
-
-        if ($now->addDay()->format('Ymd') == $date->format('Ymd') 
-            && !$settings['delivery']['next_day'] 
-            && date('H') >= $settings['delivery']['next_day_until_hour']) {
+            && date('H') >= $settings['delivery']['same_day_until_hour']) {
             return false;
         }
 
-        if ($now->addDay()->format('Ymd') == $date->format('Ymd') 
+        if ($tomorrow->format('Ymd') == $date->format('Ymd') 
+            && !$settings['delivery']['next_day']) {
+            return false;
+        }
+
+        if ($tomorrow->format('Ymd') == $date->format('Ymd') 
             && $settings['delivery']['next_day'] 
-            && date('H') < $settings['delivery']['next_day_until_hour']) {
-            return true;
+            && date('H') >= $settings['delivery']['next_day_until_hour']) {
+            return false;
         }
 
         return true;
