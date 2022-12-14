@@ -31,6 +31,7 @@ $settings = ChuckSite::module('chuckcms-module-order-form')->settings;
 @endforeach
 <script type="text/javascript">
 var active_customer_id = "{{ is_null($customer) ? 'false' : $customer->id }}";
+var globalDatesDisabled = "{{ array_key_exists('dates_disabled', $settings['delivery']) ? implode(',',$settings['delivery']['dates_disabled']) : '' }}".split(',');
 var order_url = "{{ route('cof.place_order') }}";
 var check_discount_code_url = "{{ route('cof.check_discount_code') }}";
 var is_address_eligible_url = "{{ route('cof.is_address_eligible') }}";
@@ -49,6 +50,7 @@ $(document).ready(function() {
 	var OGlocationKey = $('.cof_location_radio:checked').attr('data-location-key');
 	var OGlocationDate = $('.cof_location_radio:checked').attr('data-first-available-date');
 	var OGlocationDatesDisabled = $('.cof_location_radio:checked').attr('data-dates-disabled') !== undefined ? $('.cof_location_radio:checked').attr('data-dates-disabled').split(',') : [];
+	OGlocationDatesDisabled = OGlocationDatesDisabled.concat(globalDatesDisabled);
 
 	$('.cof_datepicker').val(OGlocationDate);
 
@@ -93,6 +95,7 @@ $(document).ready(function() {
 		var locationDate = $('.cof_location_radio:checked').attr('data-first-available-date');
 		var locationDaysOfWeekDisabled = $('.cof_location_radio:checked').attr('data-days-of-week-disabled');
 		var locationDatesDisabled = ($('.cof_location_radio:checked').attr('data-dates-disabled') !== undefined ? $('.cof_location_radio:checked').attr('data-dates-disabled').split(',') : []);
+		locationDatesDisabled = locationDatesDisabled.concat(globalDatesDisabled);
 		var deliveryTimeRequired = $('.cof_location_radio:checked').attr('data-time-required');
 
 		$('.cof_datepicker').bootstrapDP('destroy');
@@ -950,6 +953,15 @@ console.log('ayy',selector,
 		$(this).html('Even geduld ...');
         $(this).prop('disabled', true);
 
+        if( !checkForDates() ) {
+			$('.error_span').html(checkForDates(true));
+			$('.error_bag').removeClass('hidden');
+
+			$(this).html('Afrekenen');
+    		$(this).prop('disabled', false);
+			return false;
+		}
+
 		if( !validateForm() ) {
 			$('.error_span:first').html(' Niet alle verplichte velden zijn ingevuld...');
 			$('.error_bag:first').removeClass('hidden');
@@ -1104,6 +1116,57 @@ console.log('ayy',selector,
 	    	$('.legal_label').first().css('color', 'red');
 	    }
 	    return valid
+	}
+
+	function checkForDates(message = false) {
+		isLimitedProductInCart = false;
+
+		products = getProducts();
+		limited_products = [];
+		for (var i = 0; i < products.length; i++) {
+			let dates_enabled = $('.chuck_ofm_product_tile[data-product-id='+products[i].id+']').attr('data-dates-enabled');
+
+			if (typeof dates_enabled !== 'undefined' && dates_enabled !== false) {
+				dates_enabled = dates_enabled.split(',');
+			} else {
+				dates_enabled = [];
+			}
+
+			if (dates_enabled.length > 0) {
+				isLimitedProductInCart = true;
+				limited_products.push({
+					id: products[i].product_id,
+					name: products[i].name,
+					dates_enabled: dates_enabled
+				});
+			}
+		};
+		
+		if(!isLimitedProductInCart) {
+			return true;
+		}
+
+		selectedDate = $('input[name=order_date]').val();
+		errorString = ' Je kan volgende producten beperkt bestellen: <br><br><ul class="text-left text-start">';
+
+		for (var q = 0; q < limited_products.length; q++) {
+			if ( !limited_products[q].dates_enabled.includes(selectedDate) ) {
+				if (!message) {
+					return false;
+				}
+
+				errorString += '<li>'+limited_products[q].name;
+				errorString += ' enkel op '
+				errorString += limited_products[q].dates_enabled.join(' of ')+'</li>';
+			}
+		}
+
+		if (isLimitedProductInCart && message) {
+			errorString += '</ul>Pas je datum aan of wijzig je bestelling.';
+			return errorString;
+		}
+		
+		return true;
 	}
 
 	function getProducts() {
