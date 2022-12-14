@@ -58,6 +58,7 @@ class SettingsRepository
         $settings['delivery']['same_day_until_hour'] = (int)$values->input('delivery.same_day_until_hour');
         $settings['delivery']['next_day'] = (bool)$values->input('delivery.next_day');
         $settings['delivery']['next_day_until_hour'] = (int)$values->input('delivery.next_day_until_hour');
+        $settings['delivery']['dates_disabled'] = is_null($values->input('delivery.dates_disabled')) ? [] : explode(',', $values->input('delivery.dates_disabled'));
         $settings['delivery']['google_maps_api_key'] = $values->input('delivery.google_maps_api_key');
 
         $settings['pos']['ticket_logo'] = $values->input('pos.ticket_logo');

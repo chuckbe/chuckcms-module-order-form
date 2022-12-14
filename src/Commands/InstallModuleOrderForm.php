@@ -253,6 +253,7 @@ class InstallModuleOrderForm extends Command
                 'same_day_until_hour' => 1,
                 'next_day' => true,
                 'next_day_until_hour' => 24,
+                'dates_disabled' => array(),
                 'google_maps_api_key' => env('GOOGLE_MAPS_API_KEY', ''),
             ),
             'invoice' => array(

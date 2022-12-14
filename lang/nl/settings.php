@@ -30,6 +30,7 @@ return [
 	'same_day_until_hour'		=> 'Bestellen voor levering op zelfde dag mogelijk tot volgend uur',
 	'next_day'					=> 'Bestellen voor levering op volgende dag mogelijk?',
 	'next_day_until_hour'		=> 'Bestellen voor levering op volgende dag mogelijk tot volgend uur',
+	'dates_disabled'			=> 'Uitgesloten data',
 	'google_maps_api_key'		=> 'Google Maps API Key (nodig voor beperking op radius)',
 
 	'ticket_logo'				=> 'Logo voor gebruik op kasticket (base64 formaat)',

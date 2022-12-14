@@ -30,6 +30,7 @@ return [
 	'same_day_until_hour'		=> 'Ordering for delivery on same day is possible until',
 	'next_day'					=> 'Is ordering for delivery on next day possible?',
 	'next_day_until_hour'		=> 'Ordering for delivery on next day is possible until',
+	'dates_disabled'			=> 'Disabled dates',
 	'google_maps_api_key'		=> 'Google Maps API Key (needed for limitation on radius)',
 
 	'ticket_logo'				=> 'Logo for use on receipt (base64 format)',
