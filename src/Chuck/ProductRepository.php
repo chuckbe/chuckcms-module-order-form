@@ -82,6 +82,8 @@ class ProductRepository
         $json['price']['vat_takeout'] = $values->get('price')['vat_takeout'];
         $json['price']['vat_on_the_spot'] = $values->get('price')['vat_on_the_spot'];
 
+        $json['dates_enabled'] = is_null($values->get('dates_enabled')) ? [] : explode(',', $values->get('dates_enabled'));
+
         $quantity = [];
         foreach (ChuckRepeater::for(config('chuckcms-module-order-form.locations.slug')) as $location) {
             $quantity[$location->id] = $values->get('quantity')['' . $location->id . ''];
@@ -176,6 +178,8 @@ class ProductRepository
         $json['price']['vat_delivery'] = $values->get('price')['vat_delivery'];
         $json['price']['vat_takeout'] = $values->get('price')['vat_takeout'];
         $json['price']['vat_on_the_spot'] = $values->get('price')['vat_on_the_spot'];
+
+        $json['dates_enabled'] = is_null($values->get('dates_enabled')) ? [] : explode(',', $values->get('dates_enabled'));
 
         $quantity = [];
         foreach (ChuckRepeater::for(config('chuckcms-module-order-form.locations.slug')) as $location) {

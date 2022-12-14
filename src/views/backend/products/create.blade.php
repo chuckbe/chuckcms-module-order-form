@@ -141,6 +141,15 @@
 							<div class="row">
 								<div class="col-sm-12">
 									<div class="form-group">
+										<label>Enkel beschikbaar op volgende data (dd/mm/yyyy,dd/mm/yyyy,...)</label>
+										<input type="text" class="form-control" placeholder="dd/mm/yyyy,dd/mm/yyyy,..." name="dates_enabled" value="{{ old('dates_enabled') }}">
+									</div>
+								</div>
+							</div>
+							<hr>
+							<div class="row">
+								<div class="col-sm-12">
+									<div class="form-group">
 										<label>Beschikbare hoeveelheid?</label> <br>
 										@foreach(ChuckRepeater::for(config('chuckcms-module-order-form.locations.slug')) as $location)
 											<label class="mt-2">Locatie: <b>{{ $location->name }}</b></label>

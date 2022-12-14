@@ -1,4 +1,9 @@
-<div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 mb-4 chuck_ofm_product_tile" data-product-id="{{ $product->id }}" data-category-id="{{ $category->id }}" data-product-name="{{ $product->json['name'][app()->getLocale()] }}"@if(array_key_exists('subproducts', $product->json) && count($product->json['subproducts']) > 0) data-product-description="{{$product->json['description'][app()->getLocale()]}}"@endif>
+<div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 mb-4 chuck_ofm_product_tile" 
+    data-product-id="{{ $product->id }}" 
+    data-category-id="{{ $category->id }}" 
+    data-product-name="{{ $product->json['name'][app()->getLocale()] }}"
+    @if(array_key_exists('subproducts', $product->json) && count($product->json['subproducts']) > 0) data-product-description="{{$product->json['description'][app()->getLocale()]}}"@endif
+    @if(is_array($product->dates_enabled) && count($product->dates_enabled) > 0) data-dates-enabled="{{implode(',', $product->dates_enabled)}}"@endif>
 	<div class="thumbnail d-flex align-items-start flex-column" style="border: 1px solid #ddd;border-radius: 4px;padding:10px;height:100%;">
 		@if($settings['form']['display_images'])
 		<img src="{{ $product->json['featured_image'] ?? 'https://via.placeholder.com/500x333.jpg?text=No+Image+Found' }}" class="cof_productImage img-fluid" data-product-id="{{ $product->id }}" alt="">
