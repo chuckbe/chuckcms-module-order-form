@@ -263,7 +263,14 @@
                     <option value="0" @if($deliveryOptionValue !== true) selected @endif>Nee</option>
                   </select>
                 </div>
-              @else
+                @elseif (is_array($deliveryOptionValue))
+                  <div class="form-group form-group-default required ">
+                    <label>{{ __('chuckcms-module-order-form::settings.'.$deliveryOption)}}</label>
+                    <input type="text" class="form-control" placeholder="voer elke datum in met een komma" name="delivery[{{$deliveryOption}}]" 
+                    value="{{implode(",", $deliveryOptionValue)}}"
+                    >
+                  </div>
+                @else
                 <div class="form-group form-group-default required ">
                   <label>{{ __('chuckcms-module-order-form::settings.'.$deliveryOption)}}</label>
                   <input type="text" class="form-control" placeholder="{{$deliveryOption}}" name="delivery[{{$deliveryOption}}]" value="{{$deliveryOptionValue}}" >
