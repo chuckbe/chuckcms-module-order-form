@@ -2,10 +2,10 @@
 
 ### Requirements 
 
+- Laravel v6.2 or higher
+- ChuckCMS v0.1.39 or higher
 - Bootstrap v4.0 or higher
 - jQuery v3.2.1 or higher
-- ChuckCMS v0.1.39 or higher
-- Laravel v5.8 or higher
 
 ### Installation
 
@@ -15,23 +15,23 @@ composer require chuckbe/chuckcms-module-order-form
 ```
 - Publish config
 ``` 
-php artisan vendor:publish --provider="Chuckcms\Addresses\AddressesServiceProvider" --tag=order-form-config 
+php artisan vendor:publish --provider="Chuckbe\ChuckcmsModuleOrderForm\ChuckcmsModuleOrderFormServiceProvider" --tag=order-form-config 
 ```
 - Publish migrations
 ``` 
-php artisan vendor:publish --provider="Chuckcms\Addresses\AddressesServiceProvider" --tag=order-form-migrations 
+php artisan vendor:publish --provider="Chuckbe\ChuckcmsModuleOrderForm\ChuckcmsModuleOrderFormServiceProvider" --tag=order-form-migrations 
 ```
 - Publish assets
 ``` 
-php artisan vendor:publish --provider="Chuckcms\Addresses\AddressesServiceProvider" --tag=order-form-assets 
+php artisan vendor:publish --provider="Chuckbe\ChuckcmsModuleOrderForm\ChuckcmsModuleOrderFormServiceProvider" --tag=order-form-assets 
 ```
 - Publish views
 ``` 
-php artisan vendor:publish --provider="Chuckcms\Addresses\AddressesServiceProvider" --tag=order-form-views 
+php artisan vendor:publish --provider="Chuckbe\ChuckcmsModuleOrderForm\ChuckcmsModuleOrderFormServiceProvider" --tag=order-form-views 
 ```
 > Or publish all at once!
 > ``` 
-> php artisan vendor:publish --provider="Chuckcms\Addresses\AddressesServiceProvider" --tag=order-form-config 
+> php artisan vendor:publish --provider="Chuckbe\ChuckcmsModuleOrderForm\ChuckcmsModuleOrderFormServiceProvider" --tag=order-form-config 
 > ```
 
 - Run migrations
