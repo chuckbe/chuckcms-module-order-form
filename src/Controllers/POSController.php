@@ -360,10 +360,17 @@ class POSController extends Controller
 
             $json = $product->json;
 
+            if ($json['quantity'][$location] === '-1' || 
+                $json['quantity'][$location] === -1 ||
+                $json['quantity'][$location] === '0' ||
+                $json['quantity'][$location] === 0) {
+                continue;
+            }
+
             $json['quantity'][$location] = (round($json['quantity'][$location], 1) - round($item['qty'], 1));
 
             $product->json = $json;
-            
+
             $product->update();
         }
     }
