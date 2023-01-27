@@ -314,6 +314,8 @@ class POSController extends Controller
                 $customer->useCoupons($request['coupons']);
             }
 
+            $this->updateProductQuantity($order);
+
             $locations = $this->locationRepository->getForUser(\Auth::user()->id);
             $locationIds = $locations->pluck('id')->flatten()->toArray();
             $now = now();
@@ -337,6 +339,39 @@ class POSController extends Controller
             return response()->json([
                 'status' => 'error'
             ]);
+        }
+    }
+
+    private function updateProductQuantity(FormEntry $order)
+    {
+        $items = $order->entry['items'];
+        $location = $order->entry['location'];
+
+        $productIds = [];
+
+        foreach ($items as $item) {
+            $productIds[] = $item['id'];
+        }
+
+        $products = $this->productRepository->whereIn($productIds);
+
+        foreach ($items as $item) {
+            $product = $products->where('id', $item['id'])->first();
+
+            $json = $product->json;
+
+            if ($json['quantity'][$location] === '-1' || 
+                $json['quantity'][$location] === -1 ||
+                $json['quantity'][$location] === '0' ||
+                $json['quantity'][$location] === 0) {
+                continue;
+            }
+
+            $json['quantity'][$location] = (round($json['quantity'][$location], 1) - round($item['qty'], 1));
+
+            $product->json = $json;
+
+            $product->update();
         }
     }
 }
