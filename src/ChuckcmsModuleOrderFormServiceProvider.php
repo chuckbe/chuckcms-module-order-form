@@ -2,48 +2,31 @@
 
 namespace Chuckbe\ChuckcmsModuleOrderForm;
 
-use Chuckbe\ChuckcmsModuleOrderForm\Commands\InstallModuleOrderForm;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 
 class ChuckcmsModuleOrderFormServiceProvider extends ServiceProvider
 {
-    /**
-     * Bootstrap the application services.
-     *
-     * @return void
-     */
     public function boot()
     {
+        $this->doPublishing();
+
+        $this->registerCommands();
+
+        //$this->loadRoutesFrom(__DIR__.'/routes/routes.php');
+
         $this->loadTranslationsFrom(__DIR__.'/../lang', 'chuckcms-module-order-form');
-
-        $this->loadRoutesFrom(__DIR__.'/routes/routes.php');
         
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-        
-        //php artisan vendor:publish --tag=chuckcms-module-order-form-public --force
-        $this->publishes([
-            __DIR__.'/../assets' => public_path('chuckbe/chuckcms-module-order-form'),
-        ], 'chuckcms-module-order-form-public');
-
-        $this->publishes([
-            __DIR__ . '/../config/chuckcms-module-order-form.php' => config_path('chuckcms-module-order-form.php'),
-        ], 'chuckcms-module-order-form-config');
-
-        if ($this->app->runningInConsole()) {
-            $this->commands([
-                InstallModuleOrderForm::class,
-            ]);
-        }
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'chuckcms-module-order-form');
     }
 
-    /**
-     * Register the application services.
-     *
-     * @return void
-     */
     public function register()
-    {   
-        $this->loadViewsFrom(__DIR__.'/views', 'chuckcms-module-order-form');
+    {
+        $this->mergeConfigFrom(
+            __DIR__.'/../config/order-form.php',
+            'chuckcms-module-order-form'
+        );
 
         $this->app->register(
             'Chuckbe\ChuckcmsModuleOrderForm\Providers\ChuckModuleOrderFormServiceProvider'
@@ -51,9 +34,52 @@ class ChuckcmsModuleOrderFormServiceProvider extends ServiceProvider
 
         $loader = \Illuminate\Foundation\AliasLoader::getInstance();
         $loader->alias('ChuckModuleOrderForm', 'Chuckbe\ChuckcmsModuleOrderForm\Facades\ChuckModuleOrderForm');
+    }
 
-        $this->mergeConfigFrom(
-            __DIR__ . '/../config/chuckcms-module-order-form.php', 'chuckcms-module-order-form'
-        );
+    protected function doPublishing()
+    {
+        $this->publishes([
+            __DIR__ . '/../config/order-form.php' => config_path('chuckcms-module-order-form.php'),
+        ], 'order-form-config');
+
+        $this->publishes([
+            __DIR__.'/../database/migrations/create_coupons_tables.php.stub' => $this->getMigrationFileName('create_coupons_tables.php'),
+            __DIR__.'/../database/migrations/create_customers_tables.php.stub' => $this->getMigrationFileName('create_customers_tables.php'),
+        ], 'order-form-migrations');
+
+        //php artisan vendor:publish --tag=order-form-views --force
+        $this->publishes([
+            __DIR__.'/../assets' => public_path('chuckbe/chuckcms-module-order-form'),
+        ], 'order-form-views');
+
+        $this->publishes([
+            __DIR__.'/../resources/views' => resource_path('views/vendor/media-library'),
+        ], 'views');
+    }
+
+    protected function registerCommands()
+    {
+        $this->commands([
+            Commands\InstallModuleOrderForm::class,
+        ]);
+    }
+
+    /**
+     * Returns existing migration file if found, else uses the current timestamp.
+     *
+     * @return string
+     */
+    protected function getMigrationFileName($migrationFileName): string
+    {
+        $timestamp = date('Y_m_d_His');
+
+        $filesystem = $this->app->make(Filesystem::class);
+
+        return Collection::make($this->app->databasePath().DIRECTORY_SEPARATOR.'migrations'.DIRECTORY_SEPARATOR)
+            ->flatMap(function ($path) use ($filesystem, $migrationFileName) {
+                return $filesystem->glob($path.'*_'.$migrationFileName);
+            })
+            ->push($this->app->databasePath()."/migrations/{$timestamp}_{$migrationFileName}")
+            ->first();
     }
 }
