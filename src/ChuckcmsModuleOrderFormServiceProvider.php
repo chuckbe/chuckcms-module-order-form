@@ -50,11 +50,11 @@ class ChuckcmsModuleOrderFormServiceProvider extends ServiceProvider
         //php artisan vendor:publish --tag=order-form-views --force
         $this->publishes([
             __DIR__.'/../assets' => public_path('chuckbe/chuckcms-module-order-form'),
-        ], 'order-form-views');
+        ], 'order-form-assets');
 
         $this->publishes([
-            __DIR__.'/../resources/views' => resource_path('views/vendor/media-library'),
-        ], 'views');
+            __DIR__.'/../resources/views' => resource_path('views/vendor/chuckcms-module-order-form'),
+        ], 'order-form-views');
     }
 
     protected function registerCommands()

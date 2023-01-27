@@ -13,22 +13,39 @@
 ``` 
 composer require chuckbe/chuckcms-module-order-form 
 ```
+- Publish config
+``` 
+php artisan vendor:publish --provider="Chuckcms\Addresses\AddressesServiceProvider" --tag=order-form-config 
+```
+- Publish migrations
+``` 
+php artisan vendor:publish --provider="Chuckcms\Addresses\AddressesServiceProvider" --tag=order-form-migrations 
+```
+- Publish assets
+``` 
+php artisan vendor:publish --provider="Chuckcms\Addresses\AddressesServiceProvider" --tag=order-form-assets 
+```
+- Publish views
+``` 
+php artisan vendor:publish --provider="Chuckcms\Addresses\AddressesServiceProvider" --tag=order-form-views 
+```
+> Or publish all at once!
+> ``` 
+> php artisan vendor:publish --provider="Chuckcms\Addresses\AddressesServiceProvider" --tag=order-form-config 
+> ```
+
+- Run migrations
+``` 
+php artisan migrate 
+```
 - Install module in ChuckCMS
 ``` 
 php artisan chuckcms-module-order-form:install 
 ```
-- Publish assets
-``` 
-php artisan vendor:publish --tag=chuckcms-module-order-form-public --force 
-```
-- Publish config
-``` 
-php artisan vendor:publish --tag=chuckcms-module-order-form-config --force 
-```
 
 ### Usage
 
-- After installing and publishing the config file, fill in the required details
+- After installation make sure to add a location, add a category and a product.
 - Create a page for the order form in ChuckCMS and use a custom template file
 - Inside that custom template file you can use the following method to call the necessary files
 ``` 
